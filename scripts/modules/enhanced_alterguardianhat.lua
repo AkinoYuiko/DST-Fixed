@@ -50,7 +50,7 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 
 		if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
 		    local target = data.target
-			if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasTag("structure") and not target:HasTag("wall")) then
+			if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and (target:HasTag("spiderden") or not target:HasTag("structure")) and not target:HasTag("wall")) then
 
                 -- In combat, this is when we're just launching a projectile, so don't spawn a gestalt yet
                 if data.weapon ~= nil and data.projectile == nil 

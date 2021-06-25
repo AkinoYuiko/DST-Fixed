@@ -1,21 +1,18 @@
-version = "1.38.7"
+version = "1.38.8"
 -- local cnlang = {"zh","chs","cht"}
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
-description = locale == "zh" and
+description = locale == "zh" and 
 [[
-- 当前版本更新说明 -
 
-• 物品栏换皮肤：提灯和正在装备的物品不能在物品栏里换.
+更新内容:
+- 修复月灵刀攻击蜘蛛巢不产生月灵的问题
 ]]
 or
 [[
--  Changelog for Current Version  -
-
-• New module: Reskin From Inventory.
-• New module: Disable Ghost Hounded.
-• Block Pooping From Beefalos module new feature: Also blocks beefalo from breeding.
-• Reskin From Inventory: No sweeping canes.
+	
+Changelog: 
+- Fixed issue that Gestalt not be summoned on attacking Spider Dens.
 ]]
 
 api_version = 10
