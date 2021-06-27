@@ -1,4 +1,4 @@
-version = "1.38.8"
+version = "1.39"
 -- local cnlang = {"zh","chs","cht"}
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
@@ -6,13 +6,13 @@ description = locale == "zh" and
 [[
 
 更新内容:
-- 修复月灵刀攻击蜘蛛巢不产生月灵的问题
+- 新增模块：固定/sit动画
 ]]
 or
 [[
 	
 Changelog: 
-- Fixed issue that Gestalt not be summoned on attacking Spider Dens.
+- New Module: Static /sit emote
 ]]
 
 api_version = 10
@@ -228,7 +228,7 @@ configuration_options = {
     },
 	{
 		name = "SITEMOTE",
-		label = locale == "zh" and "固定坐下表情" or "Static Sit Smote",
+		label = locale == "zh" and "固定坐下表情" or "Static Sit Emote",
         hover = "Static anim for /sit",
         options = boolean,
         default = false
