@@ -9,6 +9,12 @@ PrefabFiles = {
 	"townportal_shadow",
 }
 
+local function ImportModuleForConfig(config, module)
+	if GetModConfigData(config) then
+		modimport("scripts/modules/"..module)
+	end
+end
+
 if GetModConfigData("BUNDLE") then modimport("scripts/modules/show_bundle.lua") end
 if GetModConfigData("EQUIPMENT") then modimport("scripts/modules/repairable_equipment.lua") end
 if GetModConfigData("SEED") then modimport("scripts/modules/disable_seedrots.lua") end
@@ -39,3 +45,4 @@ if GetModConfigData("POCKETRESKIN") then modimport("scripts/modules/pocket_reski
 if GetModConfigData("NOGHOSTHOUNDED") then modimport("scripts/modules/no_ghost_hounded.lua") end
 if GetModConfigData("SITEMOTE") then modimport("scripts/modules/static_sit_emote.lua") end
 if GetModConfigData("NODARTWASTE") then modimport("scripts/modules/no_lost_blowdart.lua") end
+if GetModConfigData("GATHERMOONGLASS") then modimport("scripts/modules/gather_moonglass.lua") end

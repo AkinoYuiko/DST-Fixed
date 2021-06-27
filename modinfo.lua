@@ -24,6 +24,10 @@ icon = "modicon.tex"
 
 priority = 17
 
+folder_name = folder_name or "workshop-"
+if not folder_name:find("workshop-") then
+	name = name .. " - DEV"
+end
 local boolean = {
 	{description = locale == "zh" and "启用" or "Yes", data = true},
 	{description = locale == "zh" and "禁用" or "No",  data = false}
@@ -237,6 +241,13 @@ configuration_options = {
 		name = "NODARTWASTE",
 		label = locale == "zh" and "吹箭不浪费" or "No Blow Dart Waste",
         hover = "No blow dart waste when hitting a dead target",
+        options = boolean,
+        default = false
+	},
+	{
+		name = "GATHERMOONGLASS",
+		label = locale == "zh" and "月相盘在出生门掉落" or "Gather Moon Glass from Moon Dial",
+        hover = "Moon Glass dropped from Moon Dials will be teleported to Celestial Portal.",
         options = boolean,
         default = false
 	}
