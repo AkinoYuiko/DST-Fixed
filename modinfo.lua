@@ -1,4 +1,4 @@
-version = "1.39"
+version = "1.40"
 -- local cnlang = {"zh","chs","cht"}
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
@@ -10,7 +10,7 @@ description = locale == "zh" and
 ]]
 or
 [[
-	
+
 Changelog: 
 - New Module: Static /sit emote
 ]]
@@ -230,6 +230,13 @@ configuration_options = {
 		name = "SITEMOTE",
 		label = locale == "zh" and "固定坐下表情" or "Static Sit Emote",
         hover = "Static anim for /sit",
+        options = boolean,
+        default = false
+	},
+	{
+		name = "NODARTWASTE",
+		label = locale == "zh" and "吹箭不浪费" or "No Blow Dart Waste",
+        hover = "No blow dart waste when hitting a dead target",
         options = boolean,
         default = false
 	}

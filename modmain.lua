@@ -38,3 +38,4 @@ if GetModConfigData("NOFORESTRESOURCEREGEN") then modimport("scripts/modules/dis
 if GetModConfigData("POCKETRESKIN") then modimport("scripts/modules/pocket_reskin.lua") end
 if GetModConfigData("NOGHOSTHOUNDED") then modimport("scripts/modules/no_ghost_hounded.lua") end
 if GetModConfigData("SITEMOTE") then modimport("scripts/modules/static_sit_emote.lua") end
+if GetModConfigData("NODARTWASTE") then modimport("scripts/modules/no_lost_blowdart.lua") end
