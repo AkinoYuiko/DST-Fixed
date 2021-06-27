@@ -37,3 +37,4 @@ if GetModConfigData("BLOCKABLEPOOPING") then modimport("scripts/modules/blockabl
 if GetModConfigData("NOFORESTRESOURCEREGEN") then modimport("scripts/modules/disable_forestresouce_regen.lua") end
 if GetModConfigData("POCKETRESKIN") then modimport("scripts/modules/pocket_reskin.lua") end
 if GetModConfigData("NOGHOSTHOUNDED") then modimport("scripts/modules/no_ghost_hounded.lua") end
+if GetModConfigData("SITEMOTE") then modimport("scripts/modules/static_sit_emote.lua") end
