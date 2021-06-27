@@ -225,5 +225,12 @@ configuration_options = {
         hover = "",
         options = boolean,
         default = false
-    }
+    },
+	{
+		name = "SITEMOTE",
+		label = locale == "zh" and "固定坐下表情" or "Static Sit Smote",
+        hover = "Static anim for /sit",
+        options = boolean,
+        default = false
+	}
 }

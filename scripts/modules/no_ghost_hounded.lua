@@ -1,5 +1,3 @@
-local UpvalueHacker = require("tools/upvaluehacker")
-
 AddComponentPostInit("hounded", function(self, inst)
 
     local result_fns = {}
