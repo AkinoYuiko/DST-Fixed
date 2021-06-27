@@ -1,17 +1,5 @@
 modimport("scripts/actions/repairable_equipment.lua")
 
--- local block_list = {
---   "eyebrellahat",
---   -- "molehat",
---   -- "minerhat",
---   -- "yellowamulet",
-
---   -- Island Adventures
---   -- "bottlelantern",
---   -- "boat_lantern",
---   "ironwind",
--- }
-
 local function MakeRepairable(inst)
     if not GLOBAL.TheWorld.ismastersim then return end
     if not inst.components.inventoryitem then return end
