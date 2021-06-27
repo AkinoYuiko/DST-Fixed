@@ -1,6 +1,5 @@
-local _G = GLOBAL
-
 AddPrefabPostInit("birdcage", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then return end
 	local function DoWakeUp(inst)
 		if inst.components.sleeper then
 			inst.components.sleeper:WakeUp()
