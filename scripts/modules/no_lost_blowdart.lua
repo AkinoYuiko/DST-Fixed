@@ -6,7 +6,8 @@ local allowed_prefabs = {
 }
 for _, v in ipairs(allowed_prefabs) do
     AddPrefabPostInit(v, function(inst)
-        local onprehit = inst.components.projectile.onprehit or function() end
+        if not GLOBAL.TheWorld.ismastersim then return end
+        local onprehit = inst.components.projectile and inst.components.projectile.onprehit or function() end
         inst.components.projectile.onprehit = function(inst, attacker, target, ...)
             if target and target:IsValid() and target.components.health and target.components.health:IsDead() then
                 local new_dart = GLOBAL.SpawnPrefab(inst.prefab)
