@@ -1,4 +1,4 @@
-version = "1.40.1"
+version = "1.40.2"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
@@ -256,6 +256,13 @@ configuration_options = {
 		name = "GATHERMOONGLASS",
 		label = locale == "zh" and "月相盘在出生门掉落" or "Gather Moon Dial's Glass",
         hover = "Moon Glass dropped from Moon Dials will be teleported to Celestial Portal.",
+        options = boolean,
+        default = false
+	},
+	{
+		name = "CUSTOMFAILSTR",
+		label = locale == "zh" and "个性化动作失败台词" or "Custom Action Fail String",
+        hover = "",
         options = boolean,
         default = false
 	}

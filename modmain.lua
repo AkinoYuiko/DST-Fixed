@@ -11,7 +11,7 @@ PrefabFiles = {
 
 local function ImportModuleForConfig(config, module)
 	if GetModConfigData(config) then
-		modimport("scripts/modules/"..module)
+		modimport("main/modules/"..module)
 	end
 end
 
@@ -47,6 +47,7 @@ local config_table = {
 	SITEMOTE = "static_sit_emote",
 	NODARTWASTE = "no_lost_blowdart",
 	GATHERMOONGLASS = "gather_moonglass",
+	CUSTOMFAILSTR = "custom_actionfail_strings",
 }
 
 for k, v in pairs(config_table) do
