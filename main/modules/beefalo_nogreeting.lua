@@ -1,6 +1,5 @@
-AddPrefabPostInit("beefalo",function(inst)
-    if not GLOBAL.TheWorld.ismastersim then
-        return inst
+AddPrefabPostInit("beefalo", function(inst)
+    if GLOBAL.TheWorld.ismastersim then
+        inst:SetBrain(require("brains/newbeefalobrain"))
     end
-    inst:SetBrain(GLOBAL.require("brains/newbeefalobrain"))
 end)
