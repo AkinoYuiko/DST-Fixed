@@ -1,4 +1,4 @@
-version = "1.40.2"
+version = "1.41"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
@@ -6,21 +6,13 @@ description = locale == "zh" and
 [[
 
 更新内容:
-- 修复一个崩溃
-
-- 新增模块：固定/sit动画.
-- 新增模块：吹箭打到已经死亡的目标上不消耗.
-- 新增模块：月相盘在出生门掉落.
+- 新增模块：个性化失败动作台词
 ]]
 or
 [[
 
 Changelog: 
-- Fixed a crash.
-
-- New Module: Static /sit emote
-- New Module: Blow Darts drop on hit deads.
-- New Module: Gather Moon Glass from Moon Dial to Celestial Portal.
+- New Module: Custom Action-fail String.
 ]]
 
 api_version = 10
