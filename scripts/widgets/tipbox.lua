@@ -1,7 +1,7 @@
 local Widget = require "widgets/widget"
 local Text = require "widgets/text"
 local Image = require "widgets/image"
-local MyItemTile = require "widgets/myitemtile"
+local SBItemTile = require "widgets/sbitemtile"
 local ItemSlot= require "widgets/itemslot"
 local UIAnim = require "widgets/uianim"
 local containers = require("containers")
@@ -116,7 +116,7 @@ function Tipbox:SetData(data, force)
     if not force and data == self.items then return end
     self.items = data or {}
     for i, slot in ipairs(self.itemslots) do
-        slot:SetTile(self.items[i] and MyItemTile(self.items[i]) or nil)
+        slot:SetTile(self.items[i] and SBItemTile(self.items[i]) or nil)
     end
 end
 

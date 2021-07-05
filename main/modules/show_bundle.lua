@@ -47,7 +47,7 @@ local function make_itemdata(items)
                 data.atlas = _G.GetInventoryItemAtlas(data.image, true)
             end
 
-            data.iswet = item:GetIsWet()
+            data.iswet = item:GetIsWet() or nil
             if c.stackable then
                 data.stack = c.stackable:StackSize()
             end
@@ -65,7 +65,6 @@ local function make_itemdata(items)
             end
 
             -- spoil check
-            data.spoil = false
             if item:HasTag("fresh") or item:HasTag("stale") or item:HasTag("spoiled") then
                 if item:HasTag("show_spoilage") then
                     data.spoil = true
