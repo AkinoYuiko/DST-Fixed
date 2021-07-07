@@ -2,14 +2,13 @@ version = "1.42"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
-description = locale == "zh" and 
-[[
+description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
 - 新模块: 漂浮的烧毁茶几.
 ]]
 or
-[[
+"Version: "..version..[[
 
 Changelog: 
 - New Module: Floating burnt End Tables.
