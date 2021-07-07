@@ -1,4 +1,4 @@
-version = "1.41"
+version = "1.42"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
@@ -6,13 +6,13 @@ description = locale == "zh" and
 [[
 
 更新内容:
-- 新增模块：个性化失败动作台词
+- 新模块: 漂浮的烧毁茶几.
 ]]
 or
 [[
 
 Changelog: 
-- New Module: Custom Action-fail String.
+- New Module: Floating burnt End Tables.
 ]]
 
 api_version = 10
@@ -257,5 +257,12 @@ configuration_options = {
         hover = "",
         options = boolean,
         default = false
+	},
+	{
+		name = "ENDTABLE",
+		label = locale == "zh" and "漂浮的烧毁茶几" or "Floating burnt End Table",
+		hover = "",
+		options = boolean,
+		default = false
 	}
 }

@@ -1,4 +1,5 @@
 Assets = {
+	Asset( "ANIM", "anim/stagehand_fix.zip" ),
 	Asset( "ANIM", "anim/ui_showbundle.zip" ),
 	Asset( "ANIM", "anim/ui_showbundle_3x2.zip" ),
 	Asset( "ATLAS", "images/light_builder.xml" ),
@@ -48,6 +49,7 @@ local config_table = {
 	NODARTWASTE = "no_lost_blowdart",
 	GATHERMOONGLASS = "gather_moonglass",
 	CUSTOMFAILSTR = "custom_actionfail_strings",
+	ENDTABLE = "floating_burnt_endtable",
 }
 
 for k, v in pairs(config_table) do
