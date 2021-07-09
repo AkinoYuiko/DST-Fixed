@@ -6,14 +6,14 @@ description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
 - 调整模块: 强化启迪之冠月灵范围缩小.
-- 新模块: 合成拍人小木牌.
+- 新模块: 合成拍人小木牌 (魔法二本).
 ]]
 or
 "Version: "..version..[[
 
 Changelog: 
 - Adjust Module: Gestalt Range is smaller on Enlightened Crown.
-- New Module: Craftable Prop Sign.
+- New Module: Craftable Prop Sign (Magic Tab).
 ]]
 
 api_version = 10
