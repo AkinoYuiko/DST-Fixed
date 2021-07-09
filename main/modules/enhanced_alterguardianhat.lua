@@ -80,7 +80,7 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 						end)
                     end
                 end
-				local r = _G.GetRandomMinMax(3, 5)
+				local r = _G.GetRandomMinMax(2, 4)
 				local delta_angle = _G.GetRandomMinMax(-90, 90)
 				local angle = (owner:GetAngleToPoint(x, y, z) + delta_angle) * _G.DEGREES
 				gestalt.Transform:SetPosition(x + r * math.cos(angle), y, z + r * -math.sin(angle))

@@ -50,6 +50,7 @@ local config_table = {
 	GATHERMOONGLASS = "gather_moonglass",
 	CUSTOMFAILSTR = "custom_actionfail_strings",
 	ENDTABLE = "floating_burnt_endtable",
+	PROPSIGN = "craftable_prop_sign",
 }
 
 for k, v in pairs(config_table) do

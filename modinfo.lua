@@ -1,17 +1,19 @@
-version = "1.42.2"
+version = "1.43"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 新模块: 漂浮的烧毁茶几.
+- 调整模块: 强化启迪之冠月灵范围缩小.
+- 新模块: 合成拍人小木牌.
 ]]
 or
 "Version: "..version..[[
 
 Changelog: 
-- New Module: Floating burnt End Tables.
+- Adjust Module: Gestalt Range is smaller on Enlightened Crown.
+- New Module: Craftable Prop Sign.
 ]]
 
 api_version = 10
@@ -263,5 +265,13 @@ configuration_options = {
 		hover = "",
 		options = boolean,
 		default = false
+	},
+	{
+		name = "PROPSIGN",
+		label = locale == "zh" and "合成拍人小木牌" or "Craftable Prop Sign",
+		hover = "",
+		options = boolean,
+		default = false
 	}
+
 }
