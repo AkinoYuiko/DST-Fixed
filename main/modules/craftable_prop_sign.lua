@@ -1,0 +1,10 @@
+local ENV = env
+GLOBAL.setfenv(1, GLOBAL)
+local AddRecipe = ENV.AddRecipe
+
+AddRecipe("propsign",
+{Ingredient("log", 1), Ingredient("twigs", 1)},
+RECIPETABS.MAGIC, TECH.MAGIC_THREE)
+
+STRINGS.NAMES.PROPSIGN = "Prop Sign"
+STRINGS.RECIPE_DESC.PROPSIGN = STRINGS.CHARACTERS.GENERIC.DESCRIBE.HOMESIGN.GENERIC
