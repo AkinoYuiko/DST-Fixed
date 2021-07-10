@@ -1,10 +1,12 @@
-version = "1.43"
+version = "1.43.1"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
+- 调整模块: 合成拍人小木牌更改配方.
+
 - 调整模块: 强化启迪之冠月灵范围缩小.
 - 新模块: 合成拍人小木牌 (魔法二本).
 ]]
@@ -12,6 +14,8 @@ or
 "Version: "..version..[[
 
 Changelog: 
+- Adjust Module: Reworkde Prop Sign's recipe.
+
 - Adjust Module: Gestalt Range is smaller on Enlightened Crown.
 - New Module: Craftable Prop Sign (Magic Tab).
 ]]
