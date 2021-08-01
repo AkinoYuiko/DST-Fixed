@@ -5,19 +5,17 @@ author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 调整模块: 合成拍人小木牌更改配方.
+- 修复: 堵住牛屁股的崩溃
 
-- 调整模块: 强化启迪之冠月灵范围缩小.
-- 新模块: 合成拍人小木牌 (魔法二本).
+- 新模块: 异世界召唤魔法.
 ]]
 or
 "Version: "..version..[[
 
 Changelog: 
-- Adjust Module: Reworkde Prop Sign's recipe.
+- Fixed: Block Pooping From Beefalos's crash
 
-- Adjust Module: Gestalt Range is smaller on Enlightened Crown.
-- New Module: Craftable Prop Sign (Magic Tab).
+- New Module: Isekai Summon Magic.
 ]]
 
 api_version = 10
@@ -273,6 +271,13 @@ configuration_options = {
 	{
 		name = "PROPSIGN",
 		label = locale == "zh" and "合成拍人小木牌" or "Craftable Prop Sign",
+		hover = "",
+		options = boolean,
+		default = false
+	},
+	{
+		name = "SUMMONMAGIC",
+		label = locale == "zh" and "异世界召唤魔法" or "Isekai Summon Magic",
 		hover = "",
 		options = boolean,
 		default = false

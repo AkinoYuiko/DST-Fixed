@@ -40,7 +40,7 @@ local function setval(fn, path, new)
 end
 
 AddPrefabPostInit("pigking", function(inst)
-    if not _G.TheWorld.ismastersim then return inst end
+    if not _G.TheWorld.ismastersim then return end
     inst:DoTaskInTime(0, function(inst) -- Compatible with Mio the Nightmare Eater
         local ontradeforgold = getval(inst.components.trader.onaccept, "ontradeforgold")
         setval(inst.components.trader.onaccept, "ontradeforgold", function(inst, item, giver)
