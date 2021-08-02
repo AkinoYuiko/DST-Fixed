@@ -281,6 +281,13 @@ configuration_options = {
 		hover = "",
 		options = boolean,
 		default = false
+	},
+	{
+		name = "BETTERFOSSIL",
+		label = locale == "zh" and "修骨架必定成功" or "Better Fossil Repairing",
+		hover = "",
+		options = boolean,
+		default = false
 	}
 
 }

@@ -51,7 +51,8 @@ local config_table = {
 	CUSTOMFAILSTR = "custom_actionfail_strings",
 	ENDTABLE = "floating_burnt_endtable",
 	PROPSIGN = "craftable_prop_sign",
-	SUMMONMAGIC = "summon_magic"
+	SUMMONMAGIC = "summon_magic",
+	BETTERFOSSIL = "easy_fossil_stalker",
 }
 
 for k, v in pairs(config_table) do
