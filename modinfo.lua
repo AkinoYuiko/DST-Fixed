@@ -1,21 +1,19 @@
-version = "1.44"
+version = "1.45"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 修复: 堵住牛屁股的崩溃
+- 百分百成功拼好骨架.
 
-- 新模块: 异世界召唤魔法.
 ]]
 or
-"Version: "..version..[[
+"[Version: "..version..[[]
 
 Changelog: 
-- Fixed: Block Pooping From Beefalos's crash
+- New module: Better fossil repairing.
 
-- New Module: Isekai Summon Magic.
 ]]
 
 api_version = 10
