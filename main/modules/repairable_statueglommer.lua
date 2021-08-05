@@ -4,42 +4,35 @@ GLOBAL.setfenv(1, GLOBAL)
 MATERIALS.MARBLE = "marble"
 
 local function OnRepaired(inst)
-    local workable = inst.components.workable
-	local workleft = workable.workleft
-    if workleft then
-        if workleft >= workable.maxwork then
-            inst:RemoveComponent("repairable")
-        end
-        if inst.components.lootdropper.chanceloottable == nil and workleft >= 0 then
-            inst.components.lootdropper:SetChanceLootTable("statueglommer")
-        end
+	local workleft = inst.components.workable.workleft
+    if inst.components.lootdropper.chanceloottable == nil and workleft >= 0 then
+        inst.components.lootdropper:SetChanceLootTable("statueglommer")
     end
+    if workleft <= 0 then
+        inst.AnimState:PlayAnimation("low")
+    else
+        inst.AnimState:PlayAnimation(workleft < TUNING.ROCKS_MINE * .5 and "med" or "full")
+    end
+    inst.SoundEmitter:PlaySound("dontstarve/common/together/moonbase/repair")
 end
 
 local function MakeRepairable(inst)
-	print("MakeRepairable", inst.components.repairable)
     if inst.components.repairable == nil then
         inst:AddComponent("repairable")
-        inst.components.repairable.repairmaterial = "marble"
+        inst.components.repairable.repairmaterial = MATERIALS.MARBLE
         inst.components.repairable.onrepaired = OnRepaired
         inst.components.repairable.noannounce = true
     end
 end
 
 local function OnWorked(inst, data)
-	print("fuck klei", data.workleft < 6)
-	print("fucking klei: workleft", data.workleft)
-	-- print("fucking klei: maxwork", 6)
-	if data.workleft < 6 then
+	if data.workleft < inst.components.workable.maxwork then
 		MakeRepairable(inst)
 	end
 end
 
 local function RemoveComponentProxy(inst, name, ...)
     if name == "workable" then
-        inst.components.workable:SetOnWorkCallback(nil)
-        inst.components.workable:SetOnFinishCallback(nil)
-        inst.components.workable:SetWorkable(false)
         return true
     elseif name == "lootdropper" then
         inst.components.lootdropper:SetChanceLootTable(nil)
@@ -63,9 +56,8 @@ ENV.AddPrefabPostInit("statueglommer", function(inst)
     if not TheWorld.ismastersim then return end
 
     inst:ListenForEvent("worked", OnWorked)
-
-	inst._onworked = OnWorked
     inst.components.workable:SetMaxWork(inst.components.workable.workleft)
+
     inst.components.workable:SetOnWorkCallback(MakeRemoveComponentProxy(inst.components.workable.onwork))
     inst.components.workable:SetOnLoadFn(MakeRemoveComponentProxy(inst.components.workable.onloadfn))
     inst.OnLoad = MakeRemoveComponentProxy(inst.OnLoad)
@@ -77,6 +69,6 @@ ENV.AddPrefabPostInit("marble", function(inst)
     if not inst.components.repairer then
         inst:AddComponent("repairer")
     end
-    inst.components.repairer.repairmaterial = "marble"
+    inst.components.repairer.repairmaterial = MATERIALS.MARBLE
     inst.components.repairer.workrepairvalue = 2
 end)
