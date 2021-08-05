@@ -1,59 +1,82 @@
-local _G = GLOBAL
-local Action = _G.Action
-local ACTIONS = _G.ACTIONS
-local ActionHandler = _G.ActionHandler
-local STRINGS = _G.STRINGS
-local TUNING = _G.TUNING
+local ENV = env
+GLOBAL.setfenv(1, GLOBAL)
 
-local STATUEGLOMMERREPAIR = Action({mount_valid=false})
-STATUEGLOMMERREPAIR.id = "STATUEGLOMMERREPAIR"
-STATUEGLOMMERREPAIR.str = STRINGS.ACTIONS.REPAIR.GENERIC
+MATERIALS.MARBLE = "marble"
 
-STATUEGLOMMERREPAIR.fn = function(act)
-    local _d = act.doer
-    local _t = act.target
-    if _d.components.inventory then
-	    local _i = _d.components.inventory:RemoveItem(act.invobject)
-    	if _t.components.workable == nil then
-    		local statue = _G.SpawnPrefab("statueglommer")
-    		statue.Transform:SetPosition(_t.Transform:GetWorldPosition())
-    		if statue.components.workable then
-    			statue.components.workable.workleft = 2
-				statue.AnimState:PlayAnimation("med")
-			end
-			_t:Remove()
-		else
-			local _w = _t.components.workable.workleft
-			_t.components.workable.workleft = math.min(6, (_w + 2))
-			_t.AnimState:PlayAnimation(_w < 3 and "med" or "full")
-		end
-		_i:Remove()
-		return true
+local function OnRepaired(inst)
+    local workable = inst.components.workable
+	local workleft = workable.workleft
+    if workleft then
+        if workleft >= workable.maxwork then
+            inst:RemoveComponent("repairable")
+        end
+        if inst.components.lootdropper.chanceloottable == nil and workleft >= 0 then
+            inst.components.lootdropper:SetChanceLootTable("statueglommer")
+        end
+    end
+end
+
+local function MakeRepairable(inst)
+	print("MakeRepairable", inst.components.repairable)
+    if inst.components.repairable == nil then
+        inst:AddComponent("repairable")
+        inst.components.repairable.repairmaterial = "marble"
+        inst.components.repairable.onrepaired = OnRepaired
+        inst.components.repairable.noannounce = true
+    end
+end
+
+local function OnWorked(inst, data)
+	print("fuck klei", data.workleft < 6)
+	print("fucking klei: workleft", data.workleft)
+	-- print("fucking klei: maxwork", 6)
+	if data.workleft < 6 then
+		MakeRepairable(inst)
 	end
 end
 
-AddAction(STATUEGLOMMERREPAIR)
-
-function SetupActionMarbleRepairing(inst, doer, target, actions, right)
-	if target.prefab == "statueglommer" then
-		if target.components.workable == nil then
-			table.insert(actions,1,ACTIONS.STATUEGLOMMERREPAIR)
-		else
-			if target.components.workable.workleft < 6 then
-				table.insert(actions,1,ACTIONS.STATUEGLOMMERREPAIR)
-			end
-		end
-	else
-		return
-	end
+local function RemoveComponentProxy(inst, name, ...)
+    if name == "workable" then
+        inst.components.workable:SetOnWorkCallback(nil)
+        inst.components.workable:SetOnFinishCallback(nil)
+        inst.components.workable:SetWorkable(false)
+        return true
+    elseif name == "lootdropper" then
+        inst.components.lootdropper:SetChanceLootTable(nil)
+        return true
+    end
 end
 
-AddComponentAction("USEITEM","marblerepair",SetupActionMarbleRepairing)
+local function MakeRemoveComponentProxy(fn)
+    return function(inst, ...)
+        local remove_component = inst.RemoveComponent
+        inst.RemoveComponent = function(...)
+            if RemoveComponentProxy(...) then return end
+            return remove_component(...)
+        end
+        fn(inst, ...)
+        inst.RemoveComponent = remove_component
+    end
+end
 
-AddStategraphActionHandler("wilson", ActionHandler(STATUEGLOMMERREPAIR, "dolongaction"))
-AddStategraphActionHandler("wilson_client", ActionHandler(STATUEGLOMMERREPAIR, "dolongaction"))
+ENV.AddPrefabPostInit("statueglommer", function(inst)
+    if not TheWorld.ismastersim then return end
 
-AddPrefabPostInit("marble",function(inst) inst:AddComponent("marblerepair") end)
+    inst:ListenForEvent("worked", OnWorked)
 
+	inst._onworked = OnWorked
+    inst.components.workable:SetMaxWork(inst.components.workable.workleft)
+    inst.components.workable:SetOnWorkCallback(MakeRemoveComponentProxy(inst.components.workable.onwork))
+    inst.components.workable:SetOnLoadFn(MakeRemoveComponentProxy(inst.components.workable.onloadfn))
+    inst.OnLoad = MakeRemoveComponentProxy(inst.OnLoad)
+end)
 
+ENV.AddPrefabPostInit("marble", function(inst)
+	if not TheWorld.ismastersim then return end
 
+    if not inst.components.repairer then
+        inst:AddComponent("repairer")
+    end
+    inst.components.repairer.repairmaterial = "marble"
+    inst.components.repairer.workrepairvalue = 2
+end)
