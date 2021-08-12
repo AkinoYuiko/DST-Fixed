@@ -16,21 +16,6 @@ local function OnRepaired(inst)
     inst.SoundEmitter:PlaySound("dontstarve/common/together/moonbase/repair")
 end
 
-local function MakeRepairable(inst)
-    if inst.components.repairable == nil then
-        inst:AddComponent("repairable")
-        inst.components.repairable.repairmaterial = MATERIALS.MARBLE
-        inst.components.repairable.onrepaired = OnRepaired
-        inst.components.repairable.noannounce = true
-    end
-end
-
-local function OnWorked(inst, data)
-	if data.workleft < inst.components.workable.maxwork then
-		MakeRepairable(inst)
-	end
-end
-
 local function RemoveComponentProxy(inst, name, ...)
     if name == "workable" then
         return true
@@ -55,7 +40,13 @@ end
 ENV.AddPrefabPostInit("statueglommer", function(inst)
     if not TheWorld.ismastersim then return end
 
-    inst:ListenForEvent("worked", OnWorked)
+    if not inst.components.repairable then
+        inst:AddComponent("repairable")
+    end
+    inst.components.repairable.repairmaterial = MATERIALS.MARBLE
+    inst.components.repairable.onrepaired = OnRepaired
+    inst.components.repairable.noannounce = true
+
     inst.components.workable:SetMaxWork(inst.components.workable.workleft)
 
     inst.components.workable:SetOnWorkCallback(MakeRemoveComponentProxy(inst.components.workable.onwork))
