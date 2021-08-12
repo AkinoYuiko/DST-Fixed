@@ -1,18 +1,18 @@
-version = "1.46"
+version = "1.47"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 重写了大理石修复格罗姆雕像模块.
+- 更新Show Bundle模块.
 
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog: 
-- Reworked module: Repairable Glommer Statue.
+- Update Module: Show Bundle
 
 ]]
 
