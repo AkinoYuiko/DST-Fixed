@@ -13,13 +13,14 @@ modimport("main/showbundle_widgetcreation.lua")
 -- slot_scale:  1
 -- bg_scale:    1
 
-SB.allowed_items = {
+SB.supported_items = {
     bundle = {},
     gift = {},
     redpouch = {},
     redpouch_yotp = {},
     redpouch_yotc = {},
     redpouch_yotb = {},
+    myth_bundle = {}, -- For Myth mod
     alterguardianhat = {
         widget_override = {
             prefab = "showbundle_alterguardianhat"
@@ -140,7 +141,7 @@ local last_update = {
 local function draw_tipbox(data, target)
     if SB.tipbox then
         if target then
-            local widget_override = SB.allowed_items[target.prefab] and SB.allowed_items[target.prefab].widget_override
+            local widget_override = SB.supported_items[target.prefab] and SB.supported_items[target.prefab].widget_override
             if widget_override then
                 SB.tipbox:WidgetSetup(widget_override.prefab, widget_override)
             else
@@ -168,7 +169,7 @@ local function show_tip(target)
         last_update.target.showbundle_itemdata = {}
         last_update.target = nil
     end
-    if target and SB.allowed_items[target.prefab]
+    if target and SB.supported_items[target.prefab]
             and not (target.replica.container and target.replica.container:IsOpenedBy(_G.ThePlayer)) then
         if target.showbundle_itemdata then
             draw_tipbox(target.showbundle_itemdata, target)
