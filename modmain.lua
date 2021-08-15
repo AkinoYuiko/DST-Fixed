@@ -58,3 +58,14 @@ local config_table = {
 for k, v in pairs(config_table) do
 	ImportModuleForConfig(k, v)
 end
+
+
+-- Some temp fixes, since klei is too down bad
+local Inventory = require("components/inventory")
+function Inventory:DropActiveItem()
+    if self.activeitem ~= nil then
+        local active_item = self:DropItem(self.activeitem, true) -- Do whole stack
+        self:SetActiveItem(nil)
+		return active_item
+    end
+end
