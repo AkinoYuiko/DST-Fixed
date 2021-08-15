@@ -61,6 +61,7 @@ end
 
 
 -- Some temp fixes, since klei is too down bad
+-- Wang wang wang!
 local Inventory = require("components/inventory")
 function Inventory:DropActiveItem()
     if self.activeitem ~= nil then

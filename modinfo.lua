@@ -1,21 +1,23 @@
-version = "1.47.1"
+version = "1.48"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 更新模块：可修复格罗姆雕像.
+- 帮Klei擦屁股: 鼠标上的物品在人物掉海里时保持堆叠数.
 
-- 更新模块：显示包裹内容.
+- 更新模块: 可修复格罗姆雕像.
+- 更新模块: 显示包裹内容.
 
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog: 
-- Update Module: Repairable Glommer Statue.
+- Fix for KLEI: Keep stacks for active items when players sinking.
 
+- Update Module: Repairable Glommer Statue.
 - Update Module: Show Bundle
 
 ]]
