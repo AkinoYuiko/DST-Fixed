@@ -70,3 +70,26 @@ function Inventory:DropActiveItem()
 		return active_item
     end
 end
+
+AddStategraphPostInit("wilson", function(self)
+    local onenter = self.states["abandon_ship_pre"].onenter
+    self.states["abandon_ship_pre"].onenter = function(inst, ...)
+		if inst.bufferedaction and inst.bufferedaction.action == GLOBAL.ACTIONS.ABANDON_SHIP then
+			inst.sg.statemem.action = inst.bufferedaction
+		end
+		if onenter then
+        	return onenter(inst, ...)
+		end
+    end
+
+    local onexit = self.states["abandon_ship_pre"].onexit
+    self.states["abandon_ship_pre"].onexit = function(inst, ...)
+		local bufferedaction = inst.sg.statemem.action
+		if bufferedaction and bufferedaction:IsValid() then
+			bufferedaction:Do()
+		end
+		if onexit then
+        	return onexit(inst, ...)
+		end
+    end
+end)
