@@ -7,6 +7,7 @@ description = locale == "zh" and "版本: "..version..[[
 更新内容:
 - 新模块: 拆包裹智能进入物品栏/容器.
 - 新模块: 档案馆地皮可以合成.
+- 热修复: 船板动画问题.
 
 ]]
 or
@@ -15,6 +16,7 @@ or
 Changelog: 
 - New Module: Smart Unwrap.
 - New Module: Craftable Ancient Stonework Turfs.
+- Hot Fix: Boat SG fix.
 
 ]]
 
