@@ -54,6 +54,7 @@ local config_table = {
 	SUMMONMAGIC = "summon_magic",
 	BETTERFOSSIL = "easy_fossil_stalker",
 	SMARTUNWRAP = "smart_unwrap",
+	TURFARCHIVE = "turf_archive_recipe",
 }
 
 for k, v in pairs(config_table) do

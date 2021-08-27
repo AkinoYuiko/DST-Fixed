@@ -1,24 +1,20 @@
-version = "1.48"
+version = "1.49"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 帮Klei擦屁股: 鼠标上的物品在人物掉海里时保持堆叠数.
-
-- 更新模块: 可修复格罗姆雕像.
-- 更新模块: 显示包裹内容.
+- 新模块: 拆包裹智能进入物品栏/容器.
+- 新模块: 档案馆地皮可以合成.
 
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog: 
-- Fix for KLEI: Keep stacks for active items when players sinking.
-
-- Update Module: Repairable Glommer Statue.
-- Update Module: Show Bundle
+- New Module: Smart Unwrap.
+- New Module: Craftable Ancient Stonework Turfs.
 
 ]]
 
@@ -295,9 +291,14 @@ configuration_options = {
 	},
 	{
 		name = "SMARTUNWRAP",
-		label = locale == "zh" and "拆包进身上" or "Unwrap To Inventory",
+		label = locale == "zh" and "拆包进物品栏" or "Unwrap To Inventory",
 		options = boolean,
 		default = false
 	},
-
+	{
+		name = "TURFARCHIVE",
+		label = locale == "zh" and "档案馆地皮配方" and " Craftable Archive Turf",
+		options = boolean,
+		default = false
+	}
 }
