@@ -22,9 +22,7 @@ SB.supported_items = {
     redpouch_yotb = {},
     myth_bundle = {}, -- For Myth mod
     alterguardianhat = {
-        widget_override = {
-            prefab = "showbundle_alterguardianhat"
-        }
+        prefab = "showbundle_alterguardianhat"
     }
 }
 
@@ -133,6 +131,26 @@ local function refresh_all_bundle_data()
     end
 end
 
+-- Override Unwrappable:WrapItems() to record extra data while making bundle
+local Unwrappable = require("components/unwrappable")
+
+local wrap_items = Unwrappable.WrapItems
+function Unwrappable:WrapItems(items, doer, ...)
+    wrap_items(self, items, doer, ...)
+    if #items > 0 and self.itemdata then
+        self.itemdata.showbundle_itemdata = make_itemdata(items)
+    end
+end
+
+local onload = Unwrappable.OnLoad or function() end
+function Unwrappable:OnLoad(data, ...)
+    local ret = onload(self, data, ...)
+    if self.itemdata and not self.itemdata.showbundle_itemdata then
+        make_itemdata_for_unwrappable(self)
+    end
+    return ret
+end
+
 local last_update = {
     target = nil,
     time = 0
@@ -141,12 +159,7 @@ local last_update = {
 local function draw_tipbox(data, target)
     if SB.tipbox then
         if target then
-            local widget_override = SB.supported_items[target.prefab] and SB.supported_items[target.prefab].widget_override
-            if widget_override then
-                SB.tipbox:WidgetSetup(widget_override.prefab, widget_override)
-            else
-                SB.tipbox:WidgetSetup(nil)
-            end
+            SB.tipbox:WidgetSetup(SB.supported_items[target.prefab])
         end
         SB.tipbox:SetData(data)
         if target and target.replica.container and (not data or _G.IsTableEmpty(data)) then
@@ -222,27 +235,6 @@ AddClassPostConstruct("widgets/hoverer", function(self)
     end
 end)
 
--- Override Unwrappable:WrapItems() to record extra data while making bundle
-AddComponentPostInit("unwrappable", function(self, inst)
-    local _WrapItems = self.WrapItems
-    self.WrapItems = function(self, items, doer, ...)
-        _WrapItems(self, items, doer, ...)
-        -- Only after original data complete
-        if #items > 0 and self.itemdata then
-            self.itemdata.showbundle_itemdata = make_itemdata(items)
-        end
-    end
-
-    local onload = self.OnLoad or function() end
-    self.OnLoad = function(self, data, ...)
-        local rt = onload(self, data, ...)
-        if self.itemdata and not self.itemdata.showbundle_itemdata then
-            make_itemdata_for_unwrappable(self)
-        end
-        return rt
-    end
-end)
-
 -- RPC data handler
 AddClientModRPCHandler(modname, "ShowBundleCallback", function(target, data)
     target.showbundle_itemdata = SB.unserialize(data) or {}
@@ -276,7 +268,7 @@ if ShowMe_Hint then
                 and ent and (ent.prefab == "bundle" or ent.prefab == "gift") then
             return
         end
-        Old_SendModRPCToServer(id_table, GUID, ...)
+        return Old_SendModRPCToServer(id_table, GUID, ...)
     end
 end
 

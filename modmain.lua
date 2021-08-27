@@ -53,6 +53,7 @@ local config_table = {
 	PROPSIGN = "craftable_prop_sign",
 	SUMMONMAGIC = "summon_magic",
 	BETTERFOSSIL = "easy_fossil_stalker",
+	SMARTUNWRAP = "smart_unwrap",
 }
 
 for k, v in pairs(config_table) do

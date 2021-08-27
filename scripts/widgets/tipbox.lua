@@ -44,23 +44,21 @@ local Tipbox = Class(Widget, function(self, data, widget_override)
         pos = Vector3(0, 92),
     }
 
-    self:WidgetSetup(nil, widget_override, true)
+    self:WidgetSetup(widget_override, true)
     self:UpdateScales()
     self:SetData(data, true)
 end)
 
 
-function Tipbox:WidgetSetup(prefab, override_data, force)
+function Tipbox:WidgetSetup(override_data, force)
 
+    override_data = override_data or {}
+
+    local prefab = override_data.prefab
     if not force and prefab == self.widget_prefabname then return end
     self.widget_prefabname = prefab
 
-    local widget = prefab and containers.params[prefab] and containers.params[prefab].widget
-    if not widget then
-        widget = self.default_widget_data
-    end
-
-    override_data = override_data or {}
+    local widget = prefab and containers.params[prefab] and containers.params[prefab].widget or self.default_widget_data
 
     if override_data.animbuild ~= nil then
         self.bg:GetAnimState():SetBank(override_data.animbank)

@@ -292,6 +292,12 @@ configuration_options = {
 		hover = "",
 		options = boolean,
 		default = false
-	}
+	},
+	{
+		name = "SMARTUNWRAP",
+		label = locale == "zh" and "拆包进身上" or "Unwrap To Inventory",
+		options = boolean,
+		default = false
+	},
 
 }
