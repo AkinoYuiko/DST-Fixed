@@ -1,4 +1,4 @@
-version = "1.49"
+version = "1.49.1"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
@@ -299,7 +299,7 @@ configuration_options = {
 	},
 	{
 		name = "TURFARCHIVE",
-		label = locale == "zh" and "档案馆地皮配方" and " Craftable Archive Turf",
+		label = locale == "zh" and "档案馆地皮配方" or "Craftable Archive Turf",
 		options = boolean,
 		default = false
 	}

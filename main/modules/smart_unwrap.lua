@@ -37,7 +37,7 @@ function Unwrappable:Unwrap(doer)
                     local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem:GetGrandOwner()
                     local container = owner and (owner.components.container or owner.components.inventory)
                     if container then
-                        container:GiveItem(item)
+                        container:GiveItem(item, nil, owner:GetPosition())
                     else
                         item.components.inventoryitem:OnDropped(true, .5)
                     end
