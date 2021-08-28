@@ -6,8 +6,9 @@ Assets = {
 }
 
 PrefabFiles = {
-	"winter_light_builder",
-	"townportal_shadow",
+	-- "honor_hound",
+	-- "winter_light_builder",
+	-- "townportal_shadow",
 }
 
 local function ImportModuleForConfig(config, module)
@@ -26,13 +27,23 @@ local config_table = {
 	BAT = "bats_attack_eyeturret",
 	STAFF = "caller_staff_use_on_equip",
 	FIREFLIES = "fireflies_into_lamp",
-	RANDOMLIGHTS = "random_winter_lights",
+	RANDOMLIGHTS = {
+		module = "random_winter_lights",
+		prefabfiles = {
+			"winter_light_builder"
+		}
+	},
 	GLOMMER = "repairable_statueglommer",
 	MHATS = "glowing_mushroom_hats",
 	BEEFALO = "beefalo_nogreeting",
 	COOKPOT = "no_dismantle_cookpot",
 	TENTACLE = "tentacle_pillar_noloot",
-	SANDSTONE = "enhanced_sandstone",
+	SANDSTONE = {
+		module = "enhanced_sandstone",
+		prefabfiles = {
+			"townportal_shadow"
+		}
+	},
 	CHECKSKINOWNERSHIP = "check_skin_ownership",
 	HALLOWEEN = "disable_halloween_candies",
 	BEEQUEENHAT = "facking_hivehat",
@@ -55,10 +66,23 @@ local config_table = {
 	BETTERFOSSIL = "easy_fossil_stalker",
 	SMARTUNWRAP = "smart_unwrap",
 	TURFARCHIVE = "turf_archive_recipe",
+	HONORMOUND = {
+		module = "honor_mound",
+		prefabfiles = {
+			"honor_mound"
+		}
+	}
 }
 
 for k, v in pairs(config_table) do
-	ImportModuleForConfig(k, v)
+	if type(v) == "string" then
+		ImportModuleForConfig(k, v)
+	elseif type(v) == "table" then
+		ImportModuleForConfig(k, v["module"])
+		for _, prefab in ipairs(v["prefabfiles"]) do
+			table.insert(PrefabFiles, prefab)
+		end
+	end
 end
 
 
