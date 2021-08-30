@@ -34,9 +34,9 @@ function Unwrappable:Unwrap(doer)
                 item:SetPersistData(v.data)
                 -- Changed Part
                 if item.components.inventoryitem ~= nil then
+                    local container = doer and (doer.components.container or doer.components.inventory)
                     local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem:GetGrandOwner()
-                    local container = owner and (owner.components.container or owner.components.inventory)
-                    if container then
+                    if container and owner then
                         container:GiveItem(item, nil, owner:GetPosition())
                     else
                         item.components.inventoryitem:OnDropped(true, .5)
