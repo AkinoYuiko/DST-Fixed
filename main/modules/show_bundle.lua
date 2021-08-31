@@ -22,7 +22,8 @@ SB.supported_items = {
     redpouch_yotb = {},
     myth_bundle = {}, -- For Myth mod
     alterguardianhat = {
-        prefab = "showbundle_alterguardianhat"
+        prefab = "showbundle_alterguardianhat",
+        is_container = true,
     }
 }
 
@@ -158,16 +159,25 @@ local last_update = {
 
 local function draw_tipbox(data, target)
     if SB.tipbox then
-        if target then
-            SB.tipbox:WidgetSetup(SB.supported_items[target.prefab])
-        end
+        local widget_settings = _G.FunctionOrValue(SB.supported_items[target.prefab], target) or {}
+        SB.tipbox:WidgetSetup(widget_settings)
         SB.tipbox:SetData(data)
-        if target and target.replica.container and (not data or _G.IsTableEmpty(data)) then
+        if target.replica.container
+                and (not data or (_G.IsTableEmpty(data) and not widget_settings.show_on_empty)) then
             SB.tipbox:Hide()
         elseif not SB.tipbox.shown or target ~= last_update.target then
             SB.tipbox:Show()
         end
    end
+end
+
+local function should_show_tip(target)
+    local data = target and _G.FunctionOrValue(SB.supported_items[target.prefab], target)
+    return data ~= nil
+        and (
+            not data.is_container or
+            target.replica.container ~= nil and not target.replica.container:IsOpenedBy(_G.ThePlayer)
+        )
 end
 
 local function send_showbundle_request(target)
@@ -182,8 +192,7 @@ local function show_tip(target)
         last_update.target.showbundle_itemdata = {}
         last_update.target = nil
     end
-    if target and SB.supported_items[target.prefab]
-            and not (target.replica.container and target.replica.container:IsOpenedBy(_G.ThePlayer)) then
+    if should_show_tip(target) then
         if target.showbundle_itemdata then
             draw_tipbox(target.showbundle_itemdata, target)
             if last_update.target ~= target
