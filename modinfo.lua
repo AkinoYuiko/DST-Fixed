@@ -1,10 +1,12 @@
-version = "1.49.4"
+version = "1.49.5"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
+
 更新内容:
 - 优化拆包进物品栏.
+
 - 新功能：显示包裹内容新增客户端接口用于处理其他容器.
 - 新模块: 哀悼荣耀可以填坟.
 - 新模块: 拆包裹智能进入物品栏/容器.
@@ -13,8 +15,10 @@ description = locale == "zh" and "版本: "..version..[[
 ]]
 or
 "[Version: "..version..[[]
+
 Changelog: 
-- Rework Inventory Unwrap.
+- Improved Inventory Unwrap.
+
 - Show Bundle API for client.
 - New Module: Mourning Glory into Graves.
 - New Module: Smart Unwrap.
