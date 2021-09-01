@@ -173,11 +173,8 @@ end
 
 local function should_show_tip(target)
     local data = target and _G.FunctionOrValue(SB.supported_items[target.prefab], target)
-    return data ~= nil
-        and (
-            not data.is_container or
-            target.replica.container ~= nil and not target.replica.container:IsOpenedBy(_G.ThePlayer)
-        )
+    return data and (not data.is_container
+            or target.replica.container ~= nil and not target.replica.container:IsOpenedBy(_G.ThePlayer))
 end
 
 local function send_showbundle_request(target)
