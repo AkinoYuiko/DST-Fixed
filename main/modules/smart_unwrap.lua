@@ -20,6 +20,7 @@ function Unwrappable:Unwrap(doer, ...)
     end
 
     local owner_container = self.inst.components.inventoryitem:GetContainer()
+    local grandowner_container = owner.components.container or owner.components.inventory
     local removed_from_inv = false
     
     local pos = self.inst:GetPosition()
@@ -55,7 +56,9 @@ function Unwrappable:Unwrap(doer, ...)
                 item:SetPersistData(v.data)
                 -- Changed Part
                 if item.components.inventoryitem ~= nil then
-                    doer_container:GiveItem(item, nil, owner_pos)
+                    if not (grandowner_container and grandowner_container:GiveItem(item, nil, owner_pos)) then
+                        doer_container:GiveItem(item, nil, owner_pos)
+                    end
                 end
                 -- Changed Part
             end
@@ -63,7 +66,7 @@ function Unwrappable:Unwrap(doer, ...)
         self.itemdata = nil
     end
     if self.onunwrappedfn ~= nil then
-        self.onunwrappedfn(self.inst, pos, doer, true) -- Added a new param: should_drop
+        self.onunwrappedfn(self.inst, pos, doer, true, grandowner_container) -- Added two new params: should_give, grandowner_container
     end
 
     if removed_from_inv and self.inst:IsValid() and owner:IsValid() then
@@ -75,8 +78,8 @@ ENV.AddPrefabPostInit("bundle", function(inst)
     if not TheWorld.ismastersim then return end
 
     local onunwrappedfn = inst.components.unwrappable.onunwrappedfn
-    inst.components.unwrappable:SetOnUnwrappedFn(function(inst, pos, doer, should_drop) -- Last param is from our overrided Unwrappable.Unwrap
-        if not should_drop then
+    inst.components.unwrappable:SetOnUnwrappedFn(function(inst, pos, doer, should_give, grandowner_container) -- Last two params are from our overrided Unwrappable.Unwrap
+        if not should_give then
             return onunwrappedfn(inst, pos, doer)
         end
 
@@ -87,16 +90,18 @@ ENV.AddPrefabPostInit("bundle", function(inst)
             local iswet = inst.components.inventoryitem:IsWet()
             local item = SpawnPrefab("waxpaper")
             if item ~= nil then
-                local doer_container = doer ~= nil and (doer.components.container or doer.components.inventory)
-                if doer_container then
-                    doer_container:GiveItem(item, nil, pos)
-                elseif item.Physics ~= nil then
-                    item.Physics:Teleport(pos:Get())
-                else
-                    item.Transform:SetPosition(pos:Get())
-                end
-                if item.components.inventoryitem ~= nil then
-                    item.components.inventoryitem:InheritMoisture(moisture, iswet)
+                if not (grandowner_container and grandowner_container:GiveItem(item, nil, pos)) then
+                    local doer_container = doer ~= nil and (doer.components.container or doer.components.inventory)
+                    if doer_container then
+                        doer_container:GiveItem(item, nil, pos)
+                    elseif item.Physics ~= nil then
+                        item.Physics:Teleport(pos:Get())
+                    else
+                        item.Transform:SetPosition(pos:Get())
+                    end
+                    if item.components.inventoryitem ~= nil then
+                        item.components.inventoryitem:InheritMoisture(moisture, iswet)
+                    end
                 end
             end
             SpawnPrefab("bundle_unwrap").Transform:SetPosition(pos:Get())

@@ -71,7 +71,8 @@ local config_table = {
 		prefabfiles = {
 			"honor_mound"
 		}
-	}
+	},
+	NOOCEANTREESTRIKEDROP = "no_oceantree_strike_drop",
 }
 
 for k, v in pairs(config_table) do

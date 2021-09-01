@@ -311,5 +311,11 @@ configuration_options = {
 		label = locale == "zh" and "哀悼荣耀填坟" or "Mourning Glory into Grave",
 		options = boolean,
 		default = false
-	}
+	},
+	{
+		name = "NOOCEANTREESTRIKEDROP",
+		label = locale == "zh" and "巨树被劈无掉落" or "No Ocean Tree Stike Drops",
+		options = boolean,
+		default = false
+	},
 }
