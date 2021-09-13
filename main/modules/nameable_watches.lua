@@ -67,9 +67,7 @@ local function OnWritten(inst, text)
     inst.watch_record_name:set(text and text ~= "" and table.concat({"(", text, ")"}) or "nil")
 end
 
-ENV.AddPrefabPostInitAny(function(inst)
-    if not table.contains(SUPPORTED_WATCHES, inst.prefab) then return end
-
+local function WatchPostInit(inst)
     inst.watch_record_name = net_string(inst.GUID, "watch_record_name")
 
     local displaynamefn = inst.displaynamefn
@@ -96,7 +94,8 @@ ENV.AddPrefabPostInitAny(function(inst)
 
     local on_save = inst.OnSave
     inst.OnSave = function(inst, data, ...)
-        data.watch_record_name = inst.watch_record_name:value()
+        local watch_record_name = inst.watch_record_name:value()
+        data.watch_record_name = watch_record_name ~= "" and watch_record_name or nil
         if on_save then
             return on_save(inst, data, ...)
         end
@@ -111,4 +110,8 @@ ENV.AddPrefabPostInitAny(function(inst)
             return on_load(inst, data, ...)
         end
     end
-end)
+end
+
+for _, v in ipairs(SUPPORTED_WATCHES) do
+    ENV.AddPrefabPostInit(v, WatchPostInit)
+end
