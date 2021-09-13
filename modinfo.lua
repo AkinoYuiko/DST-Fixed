@@ -323,4 +323,10 @@ configuration_options = {
 		options = boolean,
 		default = false
 	},
+	{
+		name = "NAMEABLE_WATCHES",
+		label = locale == "zh" and "表可以命名" or "Nameable Watches",
+		options = boolean,
+		default = false
+	},
 }

@@ -73,6 +73,7 @@ local config_table = {
 		}
 	},
 	NOOCEANTREESTRIKEDROP = "no_oceantree_strike_drop",
+	NAMEABLE_WATCHES = "nameable_watches",
 }
 
 for k, v in pairs(config_table) do
