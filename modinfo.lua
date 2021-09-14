@@ -1,30 +1,17 @@
-version = "1.49.6"
+version = "1.50"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 新模块: 巨树被劈无掉落.
-
-- 优化拆包进物品栏.
-- 新功能：显示包裹内容新增客户端接口用于处理其他容器.
-- 新模块: 哀悼荣耀可以填坟.
-- 新模块: 拆包裹智能进入物品栏/容器.
-- 新模块: 档案馆地皮可以合成.
-- 热修复: 船板动画问题.
+- 新模块：可命名溯源表.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog: 
-- New Module: No Ocean Tree Stike Drops.
-
-- Show Bundle API for client.
-- New Module: Mourning Glory into Graves.
-- New Module: Smart Unwrap.
-- New Module: Craftable Ancient Stonework Turfs.
-- Hot Fix: Boat SG fix.
+- New Module: Nameable Backtrek Watch.
 
 ]]
 
@@ -325,7 +312,7 @@ configuration_options = {
 	},
 	{
 		name = "NAMEABLE_WATCHES",
-		label = locale == "zh" and "表可以命名" or "Nameable Watches",
+		label = locale == "zh" and "表可以命名" or "Nameable Backtrek Watch",
 		options = boolean,
 		default = false
 	},
