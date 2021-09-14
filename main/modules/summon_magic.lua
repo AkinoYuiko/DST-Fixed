@@ -4,23 +4,6 @@ GLOBAL.setfenv(1, GLOBAL)
 local RPC_NAMESPACE = "summon_magic"
 local CAN_SUMMON_HAND_ITEMS = {"cane", "orangestaff"}
 
-local UpvalueHacker = require("tools/upvaluehacker")
-
-ENV.AddComponentPostInit("playerspawner", function(self)
-    local GetDestinationPortalLocation, i, prev = UpvalueHacker.GetUpvalue(self.SpawnAtLocation, "GetDestinationPortalLocation")
-    if not GetDestinationPortalLocation then
-        print("Warning! Summon Magic CAN NOT gets GetDestinationPortalLocation function!")
-        return
-    end
-    debug.setupvalue(prev, i, function(player, ...)
-        local portalid = player.migration.portalid
-        if type(portalid) == "table" and portalid.x and portalid.z then
-            return portalid.x, 0, portalid.z
-        end
-        return GetDestinationPortalLocation(player, ...)
-    end)
-end)
-
 ENV.AddShardModRPCHandler(RPC_NAMESPACE, "Summon", function(shardid, summoner_id, x, z)
     for _, player in ipairs(AllPlayers) do
         if player:IsValid() then
@@ -28,8 +11,10 @@ ENV.AddShardModRPCHandler(RPC_NAMESPACE, "Summon", function(shardid, summoner_id
             if table.contains(CAN_SUMMON_HAND_ITEMS, hand_item and hand_item.prefab) then
                 TheWorld:PushEvent("ms_playerdespawnandmigrate", {
                     player = player,
-                    portalid = {x = x, z = z},
-                    worldid = shardid
+                    worldid = shardid,
+                    x = x,
+                    y = 0,
+                    z = z
                 })
                 SendModRPCToShard(SHARD_MOD_RPC[RPC_NAMESPACE]["Feedback"], shardid, summoner_id, "Hahahaha")
                 return
@@ -49,7 +34,7 @@ ENV.AddShardModRPCHandler(RPC_NAMESPACE, "Feedback", function(shardid, summoner_
 end)
 
 ENV.AddComponentAction("EQUIPPED", "spellcaster", function(inst, doer, target, actions, right)
-    if right and not TheWorld:HasTag("cave") and target:HasTag("telebase") then
+    if right and inst.prefab == "telestaff" and not TheWorld:HasTag("cave") and target:HasTag("telebase") then
         table.insert(actions, ACTIONS.CASTSPELL)
     end
 end)
