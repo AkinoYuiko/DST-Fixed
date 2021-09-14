@@ -37,6 +37,22 @@ for _, v in ipairs(SUPPORTED_WATCHES) do
 end
 
 
+local RecallMark = require("components/recallmark")
+
+local Copy = RecallMark.Copy
+function RecallMark:Copy(rhs, ...)
+	if rhs
+        and table.contains(SUPPORTED_WATCHES, self.inst.prefab)
+        and table.contains(SUPPORTED_WATCHES, rhs.prefab)
+        and self.inst.watch_record_name
+        and rhs.watch_record_name then
+
+        self.inst.watch_record_name:set(rhs.watch_record_name:value())
+    end
+    return Copy(self, rhs, ...)
+end
+
+
 local RENAME_WATCH = Action({ mount_valid = true })
 
 RENAME_WATCH.id = "RENAME_WATCH"
@@ -46,7 +62,12 @@ RENAME_WATCH.str = STRINGS.ACTIONS.WRITE
 RENAME_WATCH.fn = function(act)
     if act.target.components.writeable then
         act.target.components.writeable:BeginWriting(act.doer)
-        act.invobject:Remove()
+
+        if act.invobject.components.stackable then
+            act.invobject.components.stackable:Get():Remove()
+        else
+            act.invobject:Remove()
+        end
         return true
     end
 end
@@ -54,7 +75,7 @@ end
 ENV.AddAction(RENAME_WATCH)
 
 ENV.AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, actions, right)
-    if right and table.contains(SUPPORTED_WATCHES, target.prefab) and target.watch_record_name then
+    if table.contains(SUPPORTED_WATCHES, target.prefab) and target.watch_record_name then
         table.insert(actions, ACTIONS.RENAME_WATCH)
     end
 end)
