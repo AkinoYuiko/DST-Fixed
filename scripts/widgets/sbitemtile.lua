@@ -5,105 +5,137 @@ local UIAnim = require "widgets/uianim"
 
 local SBItemTile = Class(Widget, function(self, itemt)
     Widget._ctor(self, "Tipbox")
-    self.t = itemt
-
-    self.isactivetile = false
-    self.ispreviewing = false
-    self.movinganim = nil
-    self.ignore_stacksize_anim = nil
 
     self.bg = self:AddChild(Image())
     self.bg:SetTexture(HUD_ATLAS, "inv_slot_spoiled.tex")
-    self.bg:Hide()
     self.bg:SetClickable(false)
-    self.basescale = 1
+    self.bg:Hide()
 
     self.spoilage = self:AddChild(UIAnim())
     self.spoilage:GetAnimState():SetBank("spoiled_meter")
     self.spoilage:GetAnimState():SetBuild("spoiled_meter")
-    self.spoilage:Hide()
     self.spoilage:SetClickable(false)
+    self.spoilage:Hide()
 
     self.wetness = self:AddChild(UIAnim())
     self.wetness:GetAnimState():SetBank("wet_meter")
     self.wetness:GetAnimState():SetBuild("wet_meter")
     self.wetness:GetAnimState():PlayAnimation("idle")
-    self.wetness:Hide()
     self.wetness:SetClickable(false)
+    self.wetness:Hide()
 
-	-- Fix spiced foods texture
-    if self.t.nameoverride ~= nil then
-		local inv_image_bg = { image = self.t.nameoverride ..".tex" }
-		inv_image_bg.atlas = GetInventoryItemAtlas(inv_image_bg.image)
-        self.imagebg = self:AddChild(Image(inv_image_bg.atlas, inv_image_bg.image, "default.tex"))
-        self.imagebg:SetClickable(false)
-		self.imagebg:Hide()
-    end
+    self.imagebg = self:AddChild(Image())
+    self.imagebg:SetClickable(false)
+    self.imagebg:Hide()
 
-    self.image = self:AddChild(Image(self.t.atlas or GetInventoryItemAtlas(self.t.image), self.t.image, "default.tex"))
+    self.image = self:AddChild(Image())
 	self.image:Hide()
 
-    if self.t.prefab == "spoiled_food" or self.t.spoil then
-        self.bg:Show()
-    end
+    self.rechargeframe = self:AddChild(UIAnim())
+    self.rechargeframe:GetAnimState():SetBank("recharge_meter")
+    self.rechargeframe:GetAnimState():SetBuild("recharge_meter")
+    self.rechargeframe:GetAnimState():PlayAnimation("frame")
+    self.rechargeframe:SetClickable(false)
+    self.rechargeframe:Hide()
 
-    if self.t.spoil then
-        self.spoilage:Show()
-    end
+    self.recharge = self:AddChild(UIAnim())
+    self.recharge:GetAnimState():SetBank("recharge_meter")
+    self.recharge:GetAnimState():SetBuild("recharge_meter")
+    self.recharge:SetClickable(false)
+    self.recharge:Hide()
 
-    self:Refresh()
+    self.quantity = self:AddChild(Text(NUMBERFONT, 42))
+    self.quantity:SetPosition(2, 16, 0)
+    self.quantity:Hide()
+
+    self.percent = self:AddChild(Text(NUMBERFONT, 42))
+    if JapaneseOnPS4() then
+        self.percent:SetHorizontalSqueeze(0.7)
+    end
+    self.percent:SetPosition(5, -32 + 15, 0)
+    self.percent:Hide()
+
+    self:SetItemData(itemt)
 end)
 
-function SBItemTile:Refresh()
-    self.ispreviewing = false
-    self.ignore_stacksize_anim = nil
+function SBItemTile:SetItemData(data)
+    self.data = data
 
-    if self.movinganim == nil and self.t.stack ~= nil then
-        self:SetQuantity(self.t.stack)
+    if self.data.show_spoiled then
+        self.bg:Show()
+    else
+        self.bg:Hide()
     end
 
-    if self.t.fuel ~= nil then
-        self:SetPercent(self.t.fuel)
+    if self.data.iswet then
+        self.wetness:Show()
+    else
+        self.wetness:Hide()
     end
 
-    if self.t.uses ~= nil then
-        self:SetPercent(self.t.uses)
+    if self.data.nameoverride then
+        local inv_image_bg = { image = self.data.nameoverride ..".tex" }
+        inv_image_bg.atlas = GetInventoryItemAtlas(inv_image_bg.image)
+        self.imagebg:SetTexture(inv_image_bg.atlas, inv_image_bg.image)
+        self.imagebg:Show()
+    else
+        self.imagebg:Hide()
     end
-
-    if self.t.perish ~= nil then
-        if self.t.spoil then
-            self:SetPerishPercent(self.t.perish)
-        else
-            self:SetPercent(self.t.perish)
-        end
-    end
-
-    if self.t.armor ~= nil then
-        self:SetPercent(self.t.armor)
-    end
-
-    if not self.isactivetile then
-        if self.t.iswet then
-            self.wetness:Show()
-        else
-            self.wetness:Hide()
-        end
-    end
-
-	if self.imagebg then
-		self.imagebg:Show()
-	end
+    
+    self.image:SetTexture(self.data.atlas or GetInventoryItemAtlas(self.data.image), self.data.image)
     self.image:Show()
+    
+    if self.data.recharge then
+        self:SetChargePercent(self.data.recharge)
+        self.rechargeframe:Show()
+        self.recharge:Show()
+    else
+        self.rechargeframe:Hide()
+        self.recharge:Hide()
+    end
+
+    if self.data.stack then
+        self:SetQuantity(self.data.stack)
+        self.quantity:Show()
+    else
+        self.quantity:Hide()
+    end
+
+    if self.data.fuel then
+        self:SetPercent(self.data.fuel)
+        self.percent:Show()
+
+    elseif self.data.uses then
+        self:SetPercent(self.data.uses)
+        self.percent:Show()
+
+    elseif self.data.armor then
+        self:SetPercent(self.data.armor)
+        self.percent:Show()
+
+    else
+        self.percent:Hide()
+
+    end
+
+    if self.data.perish then
+        if self.data.spoil then
+            self:SetPerishPercent(self.data.perish)
+        else
+            self:SetPercent(self.data.perish)
+            self.percent:Show()
+        end
+    end
+
+    if self.data.spoil then -- hasspoilage
+        self.spoilage:Show()
+    else
+        self.spoilage:Hide()
+    end
 end
 
 function SBItemTile:SetQuantity(quantity)
-    if not self.quantity then
-        self.quantity = self:AddChild(Text(NUMBERFONT, 42))
-        self.quantity:SetPosition(2,16,0)
-    end
-    -- if quantity > 1 then
-        self.quantity:SetString(tostring(quantity))
-    -- end
+    self.quantity:SetString(tostring(quantity))
 end
 
 function SBItemTile:SetPerishPercent(percent)
@@ -111,24 +143,18 @@ function SBItemTile:SetPerishPercent(percent)
 end
 
 function SBItemTile:SetPercent(percent)
-
-    if not self.percent then
-        self.percent = self:AddChild(Text(NUMBERFONT, 42))
-        if JapaneseOnPS4() then
-            self.percent:SetHorizontalSqueeze(0.7)
-        end
-        self.percent:SetPosition(5,-32+15,0)
-    end
-    local val_to_show = percent*100
+    local val_to_show = percent * 100
     if val_to_show > 0 and val_to_show < 1 then
         val_to_show = 1
     end
     self.percent:SetString(string.format("%2.0f%%", val_to_show))
+end
 
+function SBItemTile:SetChargePercent(percent)
+    self.recharge:GetAnimState():SetPercent("recharge", percent)
 end
 
 function SBItemTile:SetBaseScale(sc)
-    self.basescale = sc
     self:SetScale(sc)
 end
 

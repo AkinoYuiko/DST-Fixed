@@ -27,7 +27,7 @@ SB.supported_items = {
     }
 }
 
-local Tipbox = require("widgets/tipbox")
+local Tipbox = require("widgets/sbtipbox")
 
 local function make_itemdata(items)
     local itemdata = {}
@@ -63,15 +63,24 @@ local function make_itemdata(items)
             if c.perishable then
                 data.perish = c.perishable:GetPercent()
             end
+            if c.rechargeable then
+                local percent = c.rechargeable:GetPercent()
+                data.recharge = percent ~= 1 and percent or nil
+            end
 
-            -- spoil check
+            -- Spoil check
+            if item:HasTag("show_spoiled") then
+                data.show_spoiled = true
+            end
             if item:HasTag("fresh") or item:HasTag("stale") or item:HasTag("spoiled") then
                 if item:HasTag("show_spoilage") then
                     data.spoil = true
-                end
-                for _, t in pairs(_G.FOODTYPE) do
-                    if item:HasTag("edible_"..t) then
-                        data.spoil = true
+                else
+                    for _, t in pairs(_G.FOODTYPE) do
+                        if item:HasTag("edible_"..t) then
+                            data.spoil = true
+                            break
+                        end
                     end
                 end
             end
@@ -268,17 +277,24 @@ end)
 local ShowMe_Hint = _G.MOD_RPC.ShowMeSHint and _G.MOD_RPC.ShowMeSHint.Hint
 if ShowMe_Hint then
     local Old_SendModRPCToServer = _G.SendModRPCToServer
-    _G.SendModRPCToServer = function(id_table, GUID, ...)
+    _G.SendModRPCToServer = function(code, GUID, ...)
         local ent = _G.Ents[GUID]
-        if id_table == ShowMe_Hint
+        if code == ShowMe_Hint
                 and ent and (ent.prefab == "bundle" or ent.prefab == "gift") then
             return
         end
-        return Old_SendModRPCToServer(id_table, GUID, ...)
+        return Old_SendModRPCToServer(code, GUID, ...)
     end
 end
 
 SB.make_itemdata = make_itemdata
+SB.MakeItemData = make_itemdata
+
 SB.make_itemdata_for_unwrappable = make_itemdata_for_unwrappable
+SB.MakeItemDataForUnwrappable = make_itemdata_for_unwrappable
+
 SB.refresh_all_bundle_data = refresh_all_bundle_data
+SB.RefreshAllBundleData = refresh_all_bundle_data
+
 SB.send_showbundle_request = send_showbundle_request
+SB.SendShowBundleRequest = send_showbundle_request
