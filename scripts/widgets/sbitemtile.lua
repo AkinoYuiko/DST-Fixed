@@ -61,7 +61,7 @@ end)
 function SBItemTile:SetItemData(data)
     self.data = data
 
-    if self.data.show_spoiled then
+    if self.data.show_spoiled or self.data.spoil then
         self.bg:Show()
     else
         self.bg:Hide()
