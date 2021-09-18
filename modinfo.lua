@@ -1,16 +1,20 @@
-version = "1.50"
+version = "1.50.1"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
+- 显示包裹内容现在可以显示表的冷却时间了.
+
 - 新模块：可命名溯源表.
 ]]
 or
 "[Version: "..version..[[]
 
-Changelog: 
+Changelog:
+- Show Bundle now shows CD of watches.
+
 - New Module: Nameable Backtrek Watch.
 
 ]]
