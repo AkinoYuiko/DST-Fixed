@@ -60,14 +60,16 @@ RENAME_WATCH.id = "RENAME_WATCH"
 RENAME_WATCH.str = STRINGS.ACTIONS.WRITE
 
 RENAME_WATCH.fn = function(act)
-    if act.target.components.writeable then
-        act.target.components.writeable:BeginWriting(act.doer)
-
+    if act.doer and act.doer.sg and act.target.components.writeable then
         if act.invobject.components.stackable then
             act.invobject.components.stackable:Get():Remove()
         else
             act.invobject:Remove()
         end
+
+        act.target.components.writeable:BeginWriting(act.doer)
+        act.doer.sg.statemem.tool_prefab = act.invobject.prefab
+        act.doer.sg.statemem.target = act.target
         return true
     end
 end
@@ -80,12 +82,147 @@ ENV.AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, ac
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(RENAME_WATCH, "doshortaction"))
-ENV.AddStategraphActionHandler("wilson_client", ActionHandler(RENAME_WATCH, "doshortaction"))
+
+local states = {
+    State{
+        name = "rename_watch",
+        tags = { "doing", "busy" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:OverrideSymbol("book_cook", "pocketwatch_recall", "watchprop")
+            inst.AnimState:PlayAnimation("action_uniqueitem_pre")
+            inst.AnimState:PushAnimation("reading_in", false)
+            inst.AnimState:PushAnimation("reading_loop", true)
+        end,
+
+        timeline =
+        {
+            TimeEvent(7 * FRAMES, function(inst)
+                inst.sg:RemoveStateTag("busy")
+            end),
+            TimeEvent(8 * FRAMES, function(inst)
+                inst:PerformBufferedAction()
+            end),
+        },
+
+        events =
+        {
+            EventHandler("end_rename_watch", function(inst, data)
+                inst.sg.statemem.chain_end = true
+                inst.sg:GoToState("rename_watch_pst", data)
+            end),
+        },
+
+        onupdate = function(inst)
+            if inst.sg.statemem.target and not CanEntitySeeTarget(inst, inst.sg.statemem.target) then
+                inst.sg:GoToState("idle", true)
+            end
+        end,
+
+        onexit = function(inst)
+            inst.AnimState:ClearOverrideSymbol("book_cook")
+            if not inst.sg.statemem.chain_end then
+                inst.AnimState:PlayAnimation("reading_pst")
+                if inst.sg.statemem.tool_prefab then
+                    inst.components.inventory:GiveItem(SpawnPrefab(inst.sg.statemem.tool_prefab))
+                end
+                local target = inst.sg.statemem.target
+                if target and target:IsValid() and target.components.writeable then
+                    target.components.writeable:EndWriting()
+                end
+            end
+        end,
+    },
+
+    State{
+        name = "rename_watch_pst",
+        tags = { "doing", "busy", "nodangle" },
+
+        onenter = function(inst, data)
+            inst.sg.statemem.cb = data.cb
+            inst.sg.statemem.params = data.params
+            inst.sg.statemem.writeable = data.writeable
+            inst.components.locomotor:Stop()
+            inst.SoundEmitter:PlaySound("dontstarve/wilson/make_trap", "make")
+            inst.AnimState:PlayAnimation("build_pre")
+            inst.AnimState:PushAnimation("build_loop", true)
+            inst.sg:SetTimeout(1)
+        end,
+
+        ontimeout = function(inst)
+            inst.sg:RemoveStateTag("busy")
+            inst.SoundEmitter:KillSound("make")
+            inst.AnimState:PlayAnimation("build_pst")
+            inst.sg.statemem.cb(unpack(inst.sg.statemem.params))
+        end,
+
+        events =
+        {
+            EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
+        },
+
+        onexit = function(inst)
+            inst.SoundEmitter:KillSound("make")
+            local writeable = inst.sg.statemem.writeable
+            if writeable and writeable:IsBeingWritten() then
+                writeable:EndWriting()
+            end
+        end,
+    },
+}
+
+local states_client = {
+    State{
+        name = "rename_watch",
+        tags = { "doing", "busy" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.SoundEmitter:PlaySound("dontstarve/wilson/make_trap", "make_preview")
+            inst.AnimState:PlayAnimation("build_pre")
+            inst.AnimState:PushAnimation("build_loop", true)
+
+            inst:PerformPreviewBufferedAction()
+        end,
+
+        timeline =
+        {
+            TimeEvent(7 * FRAMES, function(inst)
+                inst.sg:RemoveStateTag("busy")
+            end),
+        },
+
+        onexit = function(inst)
+            inst.SoundEmitter:KillSound("make_preview")
+        end,
+    },
+}
+
+for _, state in pairs(states) do
+    ENV.AddStategraphState("wilson", state)
+end
+for _, state in pairs(states_client) do
+    ENV.AddStategraphState("wilson_client", state)
+end
+
+local actionhandlers = {
+    ActionHandler(RENAME_WATCH, "rename_watch")
+}
+
+for _, actionhandler in pairs(actionhandlers) do
+    ENV.AddStategraphActionHandler("wilson", actionhandler)
+    ENV.AddStategraphActionHandler("wilson_client", actionhandler)
+end
 
 
 local function OnWritten(inst, text)
-    inst.watch_record_name:set(text and text ~= "" and table.concat({"(", text, ")"}) or "nil")
+    inst.watch_record_name:set(text and text ~= "" and text or "")
+    inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
 end
 
 local function WatchPostInit(inst)
@@ -95,7 +232,7 @@ local function WatchPostInit(inst)
     inst.displaynamefn = function(inst, ...)
         local name = inst.watch_record_name:value()
         if name ~= "" then
-            return table.concat({STRINGS.NAMES[string.upper(inst.prefab)], " ", name})
+            return table.concat({STRINGS.NAMES[string.upper(inst.prefab)], " (", name, ")"})
         end
         if displaynamefn then
             return displaynamefn(inst, ...)
@@ -108,10 +245,29 @@ local function WatchPostInit(inst)
 
     if not inst.components.writeable then
         inst:AddComponent("writeable")
-        inst.components.writeable:SetDefaultWriteable(false)
-        inst.components.writeable:SetAutomaticDescriptionEnabled(false)
-        inst.components.writeable:SetOnWrittenFn(OnWritten)
     end
+    inst.components.writeable:SetDefaultWriteable(false)
+    inst.components.writeable:SetAutomaticDescriptionEnabled(false)
+    local Write = inst.components.writeable.Write
+    inst.components.writeable.Write = function(self, doer, text, ...)
+        if self.writer == doer and doer and doer.sg and doer.sg.currentstate.name == "rename_watch"
+            and (text == nil or text:utf8len() <= MAX_WRITEABLE_LENGTH) then
+
+            local record_name = self.inst.watch_record_name:value()
+            if text == record_name or text == nil and record_name == "" then
+                doer.sg:GoToState("idle", true)
+            else
+                doer:PushEvent("end_rename_watch", {
+                    writeable = self,
+                    cb = Write,
+                    params = {self, doer, text, ...},
+                })
+            end
+        else
+            return Write(self, doer, text, ...)
+        end
+    end
+    inst.components.writeable:SetOnWrittenFn(OnWritten)
 
     local on_save = inst.OnSave
     inst.OnSave = function(inst, data, ...)
