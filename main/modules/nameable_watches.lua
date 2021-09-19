@@ -125,7 +125,7 @@ local states = {
             if not inst.sg.statemem.chain_end then
                 inst.AnimState:PlayAnimation("reading_pst")
                 if inst.sg.statemem.tool_prefab then
-                    inst.components.inventory:GiveItem(SpawnPrefab(inst.sg.statemem.tool_prefab))
+                    inst.components.inventory:GiveItem(SpawnPrefab(inst.sg.statemem.tool_prefab), nil, inst:GetPosition())
                 end
                 local target = inst.sg.statemem.target
                 if target and target:IsValid() and target.components.writeable then
@@ -147,7 +147,7 @@ local states = {
             inst.SoundEmitter:PlaySound("dontstarve/wilson/make_trap", "make")
             inst.AnimState:PlayAnimation("build_pre")
             inst.AnimState:PushAnimation("build_loop", true)
-            inst.sg:SetTimeout(1)
+            inst.sg:SetTimeout(15 * FRAMES)
         end,
 
         ontimeout = function(inst)
@@ -254,7 +254,8 @@ local function WatchPostInit(inst)
             and (text == nil or text:utf8len() <= MAX_WRITEABLE_LENGTH) then
 
             local record_name = self.inst.watch_record_name:value()
-            if text == record_name or text == nil and record_name == "" then
+            -- if text == record_name or text == nil and record_name == "" then
+            if text == nil then
                 doer.sg:GoToState("idle", true)
             else
                 doer:PushEvent("end_rename_watch", {
