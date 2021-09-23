@@ -66,12 +66,7 @@ local config_table = {
 	BETTERFOSSIL = "easy_fossil_stalker",
 	SMARTUNWRAP = "smart_unwrap",
 	TURFARCHIVE = "turf_archive_recipe",
-	HONORMOUND = {
-		module = "honor_mound",
-		prefabfiles = {
-			"honor_mound"
-		}
-	},
+	HONORMOUND = "honor_mound",
 	NOOCEANTREESTRIKEDROP = "no_oceantree_strike_drop",
 	NAMEABLE_WATCHES = "nameable_watches",
 }

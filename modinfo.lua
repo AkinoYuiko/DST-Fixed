@@ -1,25 +1,17 @@
-version = "1.50.3"
+version = "1.51"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 更新可命名溯源表的动作.
-
-- 修复新鲜度背景显示问题.
-- 显示包裹内容现在可以显示表的冷却时间了.
-- 新模块：可命名溯源表.
+- 重写模块: 哀悼荣耀填坟.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- Update SG for Module "Nameable Backtrek Watch".
-
-- Fixed issue for the bg image of perishable items in bundles.
-- Show Bundle now shows CD of watches.
-- New Module: Nameable Backtrek Watch.
+- Rework Module: Mourning Glory into Grave.
 
 ]]
 
