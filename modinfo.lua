@@ -1,16 +1,20 @@
-version = "1.51"
+version = "1.51.1"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
+- 优化结构提升性能.
+
 - 重写模块: 哀悼荣耀填坟.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
+- Performance improved.
+
 - Rework Module: Mourning Glory into Grave.
 
 ]]
