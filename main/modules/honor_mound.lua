@@ -102,7 +102,7 @@ ENV.AddPrefabPostInit("mound", function(inst)
         if on_load then
             on_load(inst, data, ...)
         end
-        if data.is_honored then
+        if data and data.is_honored then
             inst:StartHonored()
         end
     end
