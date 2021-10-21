@@ -1,3 +1,5 @@
+GLOBAL.setfenv(1, GLOBAL)
+
 local CHARACTERLIST =
 {
     "wilson",
@@ -20,44 +22,50 @@ local CHARACTERLIST =
     "walter"
 }
 
-local _G = GLOBAL
-local InventoryProxy = _G.InventoryProxy
-
 local CheckClientOwnership = InventoryProxy.CheckClientOwnership
 InventoryProxy.CheckClientOwnership = function(self, ...)
-    local arg = {...}
+    local args = {...}
     for _, character in ipairs(CHARACTERLIST) do
-        if arg[2] == character.."_none" then
+        if args[2] == character.."_none" then
             return true
         end
     end
-    return CheckClientOwnership(self, _G.unpack(arg))
+    return CheckClientOwnership(self, unpack(args))
 end
 
-local ValidateSpawnPrefabRequest = _G.ValidateSpawnPrefabRequest
-_G.ValidateSpawnPrefabRequest = function(user_id, prefab_name, skin_base, clothing_body, clothing_hand, clothing_legs, clothing_feet, ...)
-    local characterlist = {}
-    for _, v in ipairs(_G.DST_CHARACTERLIST) do
-        table.insert(characterlist, v)
-    end
-    for _, v in ipairs(_G.MODCHARACTERLIST) do
-        table.insert(characterlist, v)
-    end
-    local GLOBAL_PREFAB_SKINS = _G.PREFAB_SKINS
-    local PREFAB_SKINS = _G.deepcopy(_G.PREFAB_SKINS)
+local OldValidateSpawnPrefabRequest = ValidateSpawnPrefabRequest
+ValidateSpawnPrefabRequest = function(...)
+    local REAL_PREFAB_SKINS = deepcopy(PREFAB_SKINS)
+    local characterlist = GetActiveCharacterList()
     for _, character in ipairs(characterlist) do
-        if _G.PREFAB_SKINS[character] then
+        if PREFAB_SKINS[character] then
             for _, _character in ipairs(characterlist) do
-                if _G.PREFAB_SKINS[_character] then
-                    for _, skin in ipairs(_G.PREFAB_SKINS[_character]) do
+                if REAL_PREFAB_SKINS[_character] then
+                    for _, skin in ipairs(REAL_PREFAB_SKINS[_character]) do
                         table.insert(PREFAB_SKINS[character], skin)
                     end
                 end
             end
         end
     end
-    _G.PREFAB_SKINS = PREFAB_SKINS
-    local validated_prefab, validated_skin_base, validated_clothing_body, validated_clothing_hand, validated_clothing_legs, validated_clothing_feet = ValidateSpawnPrefabRequest(user_id, prefab_name, skin_base, clothing_body, clothing_hand, clothing_legs, clothing_feet, ...)
-    _G.PREFAB_SKINS = GLOBAL_PREFAB_SKINS
-    return validated_prefab, validated_skin_base, validated_clothing_body, validated_clothing_hand, validated_clothing_legs, validated_clothing_feet
+    local ret = { OldValidateSpawnPrefabRequest(...) }
+    PREFAB_SKINS = REAL_PREFAB_SKINS
+    return unpack(ret)
+end
+
+local Wardrobe = require("components/wardrobe")
+
+local ActivateChanging = Wardrobe.ActivateChanging
+function Wardrobe:ActivateChanging(doer, skins, ...)
+    local get_character_skin_bases = GetCharacterSkinBases
+    GetCharacterSkinBases = function()
+        local skins = {}
+        for _, character in ipairs(GetActiveCharacterList()) do
+            shallowcopy(get_character_skin_bases(character), skins)
+        end
+        return skins
+    end
+    local ret = { ActivateChanging(self, doer, skins, ...) }
+    GetCharacterSkinBases = get_character_skin_bases
+    return unpack(ret)
 end
