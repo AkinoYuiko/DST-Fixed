@@ -1,23 +1,17 @@
-version = "1.51.2"
+version = "1.52"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 修复一个可能导致崩溃的问题.
-
-- 优化结构提升性能.
-- 重写模块: 哀悼荣耀填坟.
+- 【玩家拥有原皮】:衣柜可以套皮.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- Fixed crash on mound loading.
-
-- Performance improved.
-- Rework Module: Mourning Glory into Grave.
+- "Players OWN Default Skins" allows players to apply other characters' skin.
 
 ]]
 
