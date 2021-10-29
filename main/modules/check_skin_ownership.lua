@@ -69,3 +69,28 @@ function Wardrobe:ActivateChanging(doer, skins, ...)
     GetCharacterSkinBases = get_character_skin_bases
     return unpack(ret)
 end
+
+local Skinner = require("components/skinner")
+
+function Skinner:SetSkinMode(skintype, default_build, ...)
+    skintype = skintype or self.skintype
+	local base_skin = ""
+
+	self.skintype = skintype
+
+	if self.skin_data == nil then
+		--fix for legacy saved games with already spawned players that don't have a skin_name set
+		self:SetSkinName(self.inst.prefab.."_none")
+	end
+
+	if skintype == "ghost_skin" then
+		--DST characters should all be using self.skin_data, ghostbuild is legacy for mod characters
+		base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or self.inst.ghostbuild or default_build or "ghost_" .. self.inst.prefab .. "_build" -- Changed Part
+	else
+		base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or default_build or self.inst.prefab -- Changed Part
+	end
+
+	SetSkinsOnAnim( self.inst.AnimState, self.inst.prefab, base_skin, self.clothing, skintype, default_build )
+
+	self.inst.Network:SetPlayerSkin( self.skin_name or "", self.clothing["body"] or "", self.clothing["hand"] or "", self.clothing["legs"] or "", self.clothing["feet"] or "" )
+end
