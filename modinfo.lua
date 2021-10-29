@@ -1,16 +1,20 @@
-version = "1.52"
+version = "1.52.1"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 【玩家拥有原皮】:衣柜可以套皮.
+- 【玩家拥有原皮】: 套皮形态兼容.
+
+- 【玩家拥有原皮】: 衣柜可以套皮.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
+- "Players OWN Default Skins" Add reskin support for non default skin modes.
+
 - "Players OWN Default Skins" allows players to apply other characters' skin.
 
 ]]
