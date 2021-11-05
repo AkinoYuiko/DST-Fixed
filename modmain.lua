@@ -3,6 +3,7 @@ Assets = {
 	Asset( "ANIM", "anim/ui_showbundle.zip" ),
 	Asset( "ANIM", "anim/ui_showbundle_3x2.zip" ),
 	Asset( "ATLAS", "images/light_builder.xml" ),
+
 }
 
 PrefabFiles = {
@@ -50,7 +51,12 @@ local config_table = {
 	BEEQUEENGIFTWRAP = "giftwrap_blueprint",
 	ATKSPEED = "attack_speed",
 	LUREPLANT = "classic_lureplant",
-	LUNARCROWN = "enhanced_alterguardianhat",
+	LUNARCROWN = {
+		module = "enhanced_alterguardianhat",
+		prefabfiles = {
+			"gestalt_flash"
+		}
+	},
 	CROWNFRAGMENT = "crown_fragment_recipe",
 	BLOCKABLEPOOPING = "blockable_pooping",
 	NOFORESTRESOURCEREGEN = "disable_forestresouce_regen",
