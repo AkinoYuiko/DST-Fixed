@@ -1,11 +1,11 @@
-version = "1.53.5"
+version = "1.53.6"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 【强化启迪之冠】目标为暗影怪物时不消耗碎片.
+- 【强化启迪之冠】目标为暗影怪物也能正常触发攻击特效.
 
 - 修复动画位置问题.
 - 修复一个主客机不同步的问题.
@@ -16,7 +16,7 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Enhanced Enlightened Crown won't consume Moon Glass on shadow creatures.
+- Enhanced Enlightened Crown fx now works on shadow creatures.
 
 - Fix an issue where fx won't show at right position.
 - Fix an issue about syncing between server and client.

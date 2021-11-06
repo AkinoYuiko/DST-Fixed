@@ -52,7 +52,8 @@ local function new_spawngestalt_fn(inst, owner, data)
 			end
 
 			if owner.components.sanity then
-				if has_moonglass and not (target:HasTag("shadowcreature") or target:HasTag("nightmarecreature")) then
+				if has_moonglass then
+				-- if has_moonglass and not (target:HasTag("shadowcreature") or target:HasTag("nightmarecreature")) then
 					if math.random() < 0.25 then
 						inst.components.container:ConsumeByName("moonglass", 1)
 					end
