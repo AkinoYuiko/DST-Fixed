@@ -1,16 +1,20 @@
-version = "1.53"
+version = "1.53.1"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
+- 修复新攻击特效在客户端没有自动移除的问题.
+
 - 【强化启迪之冠】修改攻击特效和消耗率.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
+- Fix an issue where fx won't remove automatically on client-side.
+
 - Rework "Enhanced Enlightened Crown".
 ]]
 

@@ -1,3 +1,5 @@
+require "prefabutil"
+
 local assets = {
     -- Asset("ANIM", "anim/brightmare_gestalt.zip"),
     Asset("ANIM", "anim/gestalt_flash_fx.zip"),
@@ -49,17 +51,12 @@ local function SetTarget(inst, owner, target)
         inst.entity:SetParent(target.entity)
         inst:DoTaskInTime( 6 * FRAMES , doattack, target)
     end
-    -- inst:ListenForEvent("death", function()
-    --     inst:Remove()
-    -- end, target)
 end
 
 local function fn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    -- inst.entity:AddNetwork()
-    inst.entity:AddAnimState()
 
     if not TheWorld.ismastersim then
         return inst
@@ -101,12 +98,13 @@ local function MakeFx(t)
             inst:DoTaskInTime(t.sounddelay or 0, PlaySound, t.sound)
         end
 
-        inst.AnimState:SetBank(t.bank)
-        inst.AnimState:SetBuild(t.build)
-        inst.AnimState:PlayAnimation(FunctionOrValue(t.anim)) -- THIS IS A CLIENT SIDE FUNCTION
-        inst.AnimState:SetMultColour(0.85, 0.85, 0.85, 0.85)
-        inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
-
+        local anim_state = inst.AnimState
+        anim_state:SetBank(t.bank)
+        anim_state:SetBuild(t.build)
+        anim_state:PlayAnimation(FunctionOrValue(t.anim)) -- THIS IS A CLIENT SIDE FUNCTION
+        anim_state:SetMultColour(0.85, 0.85, 0.85, 0.85)
+        anim_state:SetBloomEffectHandle("shaders/anim.ksh")
+        anim_state:SetSortOrder(3)
 
         if t.transform ~= nil then
             inst.AnimState:SetScale(t.transform:Get())
@@ -119,13 +117,14 @@ local function MakeFx(t)
                 t.fn(inst)
             end
         end
+
+        inst:ListenForEvent("animover", inst.Remove)
     end
 
     local function fx_fn()
         local inst = CreateEntity()
 
         inst.entity:AddTransform()
-        inst.entity:AddNetwork()
 
         if not TheNet:IsDedicated() then
             inst:DoTaskInTime(0, startfx, inst)
