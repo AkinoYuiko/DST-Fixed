@@ -57,7 +57,6 @@ local function fn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    inst.entity:AddNetwork()
 
     if not TheWorld.ismastersim then
         return inst
@@ -126,6 +125,7 @@ local function MakeFx(t)
         local inst = CreateEntity()
 
         inst.entity:AddTransform()
+        inst.entity:AddNetwork()
 
         if not TheNet:IsDedicated() then
             inst:DoTaskInTime(0, startfx, inst)

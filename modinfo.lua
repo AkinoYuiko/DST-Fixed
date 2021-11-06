@@ -1,4 +1,4 @@
-version = "1.53.2"
+version = "1.53.3"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
