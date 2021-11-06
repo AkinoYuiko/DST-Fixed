@@ -20,6 +20,7 @@ end
 
 local function onattackother(inst, data)
     local target = data.target
+    local owner = inst.entity:GetParent()
     if target and target:IsValid() and inst:IsValid() then
         if inst.components.electricattacks then
             SpawnPrefab("electrichitsparks"):AlignToTarget(target, inst, true)
@@ -29,7 +30,7 @@ local function onattackother(inst, data)
 
         local x, y, z = target.Transform:GetWorldPosition()
         local radius = target:GetPhysicsRadius(.5)
-        local angle = (inst.Transform:GetRotation() - 90) * DEGREES
+        local angle = ((owner or inst).Transform:GetRotation() - 90) * DEGREES
         atk_fx.Transform:SetPosition(x + math.sin(angle) * radius, 0, z + math.cos(angle) * radius)
 
     end
@@ -48,7 +49,7 @@ local function SetTarget(inst, owner, target)
 
         inst:ListenForEvent("onattackother", onattackother)
 
-        inst.entity:SetParent(target.entity)
+        inst.entity:SetParent(owner.entity)
         inst:DoTaskInTime( 6 * FRAMES , doattack, target)
     end
 end
@@ -64,7 +65,7 @@ local function fn()
     
     inst:AddComponent("combat")
     inst.components.combat:SetDefaultDamage(TUNING.ALTERGUARDIANHAT_GESTALT_DAMAGE)
-    inst.components.combat:SetRange(TUNING.GESTALTGUARD_ATTACK_RANGE)
+    inst.components.combat:SetRange(TUNING.GESTALTGUARD_ATTACK_RANGE * 10)
 
     inst.SetTarget = SetTarget
 
@@ -87,6 +88,8 @@ local function MakeFx(t)
         inst.entity:AddTransform()
         inst.entity:AddAnimState()
 
+        inst:AddTag("FX")
+        
         --[[Non-networked entity]]
         inst.entity:SetCanSleep(false)
         inst.persists = false
