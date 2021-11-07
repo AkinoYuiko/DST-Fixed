@@ -1,12 +1,13 @@
-version = "1.53.6"
+version = "1.53.7"
 
 name = locale == "zh" and "纯净辅助" or "DST Fixed"
 author = locale == "zh" and "丁香女子学校" or "Civi, Tony"
 description = locale == "zh" and "版本: "..version..[[
 
 更新内容:
-- 【强化启迪之冠】目标为暗影怪物也能正常触发攻击特效.
+- 【强化启迪之冠】攻击特效延迟更改为8帧.
 
+- 【强化启迪之冠】目标为暗影怪物也能正常触发攻击特效.
 - 修复动画位置问题.
 - 修复一个主客机不同步的问题.
 - 修复新攻击特效在客户端没有自动移除的问题.
@@ -16,7 +17,7 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Enhanced Enlightened Crown fx now works on shadow creatures.
+- Set Gestalt Flash fx delay to 8 frames.
 
 - Fix an issue where fx won't show at right position.
 - Fix an issue about syncing between server and client.
