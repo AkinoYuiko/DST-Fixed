@@ -3,13 +3,18 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")
 
-local function find_portal()
-    for _, ent in pairs(Ents) do
-        if ent.prefab == "multiplayer_portal_moonrock" then
-            return ent
-        end
+local portal_moonrock
+
+local function on_portal_remove(inst)
+    if portal_moonrock == inst then
+        portal_moonrock = nil
     end
 end
+
+ENV.AddPrefabPostInit("multiplayer_portal_moonrock", function(inst)
+    portal_moonrock = inst
+    inst:ListenForEvent("remove", on_portal_remove)
+end)
 
 local hooked = false
 ENV.AddPrefabPostInit("moondial", function(inst)
@@ -17,7 +22,6 @@ ENV.AddPrefabPostInit("moondial", function(inst)
     local _onalterawake, i, prev = UpvalueHacker.GetUpvalue(inst.OnLoad, "onalterawake")
     if not _onalterawake then return end
     local function onalterawake_fn(inst, awake, ...)
-        local portal_moonrock = find_portal()
         if portal_moonrock and inst.is_glassed and not awake and (POPULATING or not inst.entity:IsAwake()) then
             inst.sg:GoToState("idle")
             local pos = portal_moonrock:GetPosition()
@@ -42,7 +46,6 @@ end)
 ENV.AddStategraphPostInit("moondial", function(self)
     self.states["glassed_pst"].timeline = {
         TimeEvent(10 * FRAMES, function(inst)
-            local portal_moonrock = find_portal()
             inst.components.lootdropper:FlingItem(SpawnPrefab("moonglass"), portal_moonrock and portal_moonrock:GetPosition())
             inst.is_glassed = false
         end),
