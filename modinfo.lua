@@ -10,7 +10,7 @@ author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 重写【月相盘在出生门掉落】.
+- 重写【月相盘在出生门掉落】
 - 模块分类.
 ]]
 or
@@ -46,7 +46,7 @@ local function AddTitle(title)
 end
 
 configuration_options = {
-	AddTitle(zh and "【默认开启】" or "Default On"),
+	AddTitle(zh and "默认开启" or "Default On"),
 	{
 		name = "BUNDLE",
 		label = zh and "显示包裹内容" or "Show Bundle",
@@ -316,7 +316,7 @@ configuration_options = {
 		options = boolean,
 		default = false
 	},
-	AddTitle(zh and "未来可能移除的" or "The Bin"),
+	AddTitle(zh and "未来可能移除的" or "To Be Removed"),
 	{
 		name = "STAFF",
 		label = zh and "星杖/月杖增强" or "Enhanced Star/Monn Caller Staff",
