@@ -4,6 +4,47 @@ GLOBAL.setfenv(1, GLOBAL)
 local UpvalueHacker = require("tools/upvaluehacker")
 
 local portal_moonrock
+local spawn_moonglass_task
+local glassed_moondials = 0
+
+local MOONGLASS_MUSTTAGS = {"moonglass_piece"}
+local function spawn_moonglass(inst)
+    spawn_moonglass_task = nil
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for _, ent in ipairs(TheSim:FindEntities(x, y, z, 4, MOONGLASS_MUSTTAGS)) do
+        if not ent.components.stackable:IsFull() then
+            local stackable = ent.components.stackable
+            local roomleft = stackable:RoomLeft()
+            local after_delta = glassed_moondials - roomleft
+            if after_delta <= 0 then
+                stackable:SetStackSize(stackable:StackSize() + glassed_moondials)
+                glassed_moondials = 0
+                return
+            end
+            stackable:SetStackSize(stackable.maxsize)
+            glassed_moondials = after_delta
+        end
+    end
+    while glassed_moondials > 0 do
+        local moonglass = SpawnPrefab("moonglass")
+        local stackable = moonglass.components.stackable
+        local after_delta = glassed_moondials - stackable.maxsize
+        if after_delta <= 0 then
+            stackable:SetStackSize(stackable:StackSize() + glassed_moondials)
+        else
+            moonglass.components.stackable:SetStackSize(stackable.maxsize)
+        end
+        glassed_moondials = after_delta
+        inst.components.lootdropper:FlingItem(moonglass)
+    end
+    glassed_moondials = 0
+end
+
+local function schedule_spawn_moonglass()
+    if not spawn_moonglass_task then
+        spawn_moonglass_task = portal_moonrock:DoTaskInTime(0, spawn_moonglass)
+    end
+end
 
 local function on_portal_remove(inst)
     if portal_moonrock == inst then
@@ -12,8 +53,12 @@ local function on_portal_remove(inst)
 end
 
 ENV.AddPrefabPostInit("multiplayer_portal_moonrock", function(inst)
+    if not TheWorld.ismastersim then return end
     portal_moonrock = inst
     inst:ListenForEvent("remove", on_portal_remove)
+    if not inst.components.lootdropper then
+        inst:AddComponent("lootdropper")
+    end
 end)
 
 local hooked = false
@@ -24,14 +69,8 @@ ENV.AddPrefabPostInit("moondial", function(inst)
     local function onalterawake_fn(inst, awake, ...)
         if portal_moonrock and inst.is_glassed and not awake and (POPULATING or not inst.entity:IsAwake()) then
             inst.sg:GoToState("idle")
-            local pos = portal_moonrock:GetPosition()
-            local x, y, z = pos:Get()
-            local moonglass = TheSim:FindEntities(x, y, z, 4, {"moonglass_piece"})[1]
-            if moonglass ~= nil and not moonglass.components.stackable:IsFull() then
-                moonglass.components.stackable:SetStackSize(moonglass.components.stackable:StackSize() + 1)
-            else
-                inst.components.lootdropper:FlingItem(SpawnPrefab("moonglass"), pos)
-            end
+            glassed_moondials = glassed_moondials + 1
+            schedule_spawn_moonglass()
             inst.is_glassed = false
         else
             return _onalterawake(inst, awake, ...)
