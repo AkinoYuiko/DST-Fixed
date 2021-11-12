@@ -4,21 +4,19 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.0"
+version = "2.0.1"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 重写【月相盘在出生门掉落】
-- 模块分类.
+- 保留【萤火虫放进蘑菇灯】
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- Rework "Gather Moon Dial's Glass".
-- Module groups.
+- Move "Fireflies into Lamps" to The Builder.
 ]]
 
 api_version = 10
@@ -159,6 +157,13 @@ configuration_options = {
 		name = "BETTERFOSSIL",
 		label = zh and "修骨架必定成功" or "Better Fossil Repairing",
 		hover = "",
+		options = boolean,
+		default = false
+	},
+	{
+		name = "FIREFLIES",
+		label = zh and "萤火虫放进蘑菇灯" or "Fireflies in lamps",
+		hover = zh and "萤火虫可以放进萤菇灯与炽菇灯(永亮)" or "Enable fireflies into lamps",
 		options = boolean,
 		default = false
 	},
@@ -321,13 +326,6 @@ configuration_options = {
 		name = "STAFF",
 		label = zh and "星杖/月杖增强" or "Enhanced Star/Monn Caller Staff",
 		hover = zh and "装备星杖月杖可以右键装备栏原地使用" or "Star/Moon Caller Staff use with right-click on equipped.",
-		options = boolean,
-		default = false
-	},
-	{
-		name = "FIREFLIES",
-		label = zh and "萤火虫放进蘑菇灯" or "Fireflies in lamps",
-		hover = zh and "萤火虫可以放进萤菇灯与炽菇灯(永亮)" or "Enable fireflies into lamps",
 		options = boolean,
 		default = false
 	},
