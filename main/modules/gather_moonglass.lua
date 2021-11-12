@@ -41,6 +41,7 @@ local function spawn_moonglass(inst)
 end
 
 local function schedule_spawn_moonglass()
+    glassed_moondials = glassed_moondials + 1
     if not spawn_moonglass_task then
         spawn_moonglass_task = portal_moonrock:DoTaskInTime(0, spawn_moonglass)
     end
@@ -69,7 +70,6 @@ ENV.AddPrefabPostInit("moondial", function(inst)
     local function onalterawake_fn(inst, awake, ...)
         if portal_moonrock and inst.is_glassed and not awake and (POPULATING or not inst.entity:IsAwake()) then
             inst.sg:GoToState("idle")
-            glassed_moondials = glassed_moondials + 1
             schedule_spawn_moonglass()
             inst.is_glassed = false
         else
@@ -85,7 +85,11 @@ end)
 ENV.AddStategraphPostInit("moondial", function(self)
     self.states["glassed_pst"].timeline = {
         TimeEvent(10 * FRAMES, function(inst)
-            inst.components.lootdropper:FlingItem(SpawnPrefab("moonglass"), portal_moonrock and portal_moonrock:GetPosition())
+            if portal_moonrock then
+                schedule_spawn_moonglass()
+            else
+                inst.components.lootdropper:FlingItem(SpawnPrefab("moonglass"))
+            end
             inst.is_glassed = false
         end),
     }
