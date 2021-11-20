@@ -223,7 +223,7 @@ configuration_options = {
     },
 	{
 		name = "TENTACLE",
-		label = zh and "大触手无掉落物" or "Tentacle pillars no Looting",
+		label = zh and "大触手无掉落物" or "Tentacle Pillars no Looting",
 		hover = zh and "大触手不再掉落任何东西(减少垃圾产生)" or "Removes Tentacle pillar's loottable",
 		options = boolean,
 		default = false
@@ -252,7 +252,7 @@ configuration_options = {
 	},
 	{
 		name = "NOOCEANTREESTRIKEDROP",
-		label = zh and "巨树被劈无掉落" or "No Ocean Tree Stike Drops",
+		label = zh and "巨树被劈无掉落" or "No Ocean Tree Strike Drops",
 		options = boolean,
 		default = false
 	},
@@ -300,27 +300,27 @@ configuration_options = {
 	AddTitle(zh and "配方相关" or "The Recipe"),
 	{
 		name = "RANDOMLIGHTS",
-		label = zh and "随机彩灯合成" or "Craftable Random Winter Lights",
+		label = zh and "随机彩灯合成" or "Random Winter Lights",
 		hover = zh and "新增彩灯配方, 合成时会随机给一种款式的彩灯" or "Enable recipe for RANDOM winter lights",
 		options = boolean,
 		default = false
 	},
 	{
         name = "CROWNFRAGMENT",
-        label = zh and "启迪之冠碎片" or "Craftable Enlightened Crown Shard",
+        label = zh and "启迪之冠碎片" or "Enlightened Crown Shard",
         hover = "",
         options = boolean,
         default = false
     },
 	{
 		name = "TURFARCHIVE",
-		label = zh and "档案馆地皮" or "Craftable Archive Turf",
+		label = zh and "档案馆地皮" or "Archive Turf",
 		options = boolean,
 		default = false
 	},
 	{
 		name = "PROPSIGN",
-		label = zh and "拍人小木牌" or "Craftable Prop Sign",
+		label = zh and "拍人小木牌" or "Prop Sign",
 		hover = "",
 		options = boolean,
 		default = false
