@@ -6,11 +6,7 @@ Assets = {
 
 }
 
-PrefabFiles = {
-	-- "honor_hound",
-	-- "winter_light_builder",
-	-- "townportal_shadow",
-}
+PrefabFiles = {}
 
 local function ImportModuleForConfig(config, module)
 	if GetModConfigData(config) then
