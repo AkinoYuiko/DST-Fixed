@@ -1,3 +1,5 @@
+table.insert(PrefabFiles, "townportal_invisible")
+
 local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -9,7 +11,7 @@ ENHANCEDSANDSTONE.fn = function(act)
     if not act.invobject.AnimState:IsCurrentAnimation("inactive") then return false end
     local doer = act.doer
     if doer.components.inventory then
-        local portal = SpawnPrefab("townportal_shadow")
+        local portal = SpawnPrefab("townportal_invisible")
         portal.entity:SetParent(doer.entity)
         if doer.sg then
             doer.sg:AddStateTag("prechanneling")

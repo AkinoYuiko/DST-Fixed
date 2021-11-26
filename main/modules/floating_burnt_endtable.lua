@@ -1,3 +1,5 @@
+table.insert(Assets, Asset("ANIM", "anim/stagehand_fix.zip"))
+
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 

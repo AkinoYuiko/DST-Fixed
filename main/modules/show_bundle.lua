@@ -1,3 +1,6 @@
+table.insert(Assets, Asset("ANIM", "anim/ui_showbundle.zip"))
+table.insert(Assets, Asset("ANIM", "anim/ui_showbundle_3x2.zip"))
+
 local _G = GLOBAL
 local Vector3 = _G.Vector3
 
