@@ -1,4 +1,8 @@
-local AddAction, AddComponentAction, AddStategraphState, AddStategraphActionHandler, AddPrefabPostInit = AddAction, AddComponentAction, AddStategraphState, AddStategraphActionHandler, AddPrefabPostInit
+local AddAction = AddAction
+local AddComponentAction = AddComponentAction
+local AddPrefabPostInit = AddPrefabPostInit
+local AddStategraphState = AddStategraphState
+local AddStategraphActionHandler = AddStategraphActionHandler
 GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")

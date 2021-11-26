@@ -1,10 +1,11 @@
-local AddAction, AddComponentAction, AddStategraphActionHandler = env.AddAction, env.AddComponentAction, env.AddStategraphActionHandler
+local AddAction = AddAction
+local AddComponentAction = AddComponentAction
+local AddStategraphActionHandler = AddStategraphActionHandler
 GLOBAL.setfenv(1, GLOBAL)
 
 local SEWINGNEW = Action({mount_valid=true})
 SEWINGNEW.id = "SEWINGNEW"
 SEWINGNEW.str = ACTIONS.REPAIR.str
-
 SEWINGNEW.fn = function ( act )
     local sewtool = act.invobject
     local item = act.target
@@ -23,7 +24,6 @@ AddComponentAction("USEITEM", "sewingnew", function( inst, doer, target, actions
         end
     end
 end)
-
-local handler = ActionHandler(SEWINGNEW, "dolongaction")
-AddStategraphActionHandler("wilson", handler)
-AddStategraphActionHandler("wilson_client", handler)
+for _, stage in ipairs({"wilson", "wilson_client"}) do
+    AddStategraphActionHandler("wilson", ActionHandler(SEWINGNEW, "dolongaction"))
+end

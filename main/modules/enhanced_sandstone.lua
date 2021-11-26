@@ -1,6 +1,9 @@
 table.insert(PrefabFiles, "townportal_invisible")
 
-local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit
+local AddAction = AddAction
+local AddComponentAction = AddComponentAction
+local AddPrefabPostInit = AddPrefabPostInit
+local AddStategraphActionHandler = AddStategraphActionHandler
 GLOBAL.setfenv(1, GLOBAL)
 
 local ENHANCEDSANDSTONE = Action()

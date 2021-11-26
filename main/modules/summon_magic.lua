@@ -1,4 +1,6 @@
-local AddShardModRPCHandler, AddComponentAction, AddPrefabPostInit = AddShardModRPCHandler, AddComponentAction, AddPrefabPostInit
+local AddComponentAction = AddComponentAction
+local AddPrefabPostInit = AddPrefabPostInit
+local AddShardModRPCHandler = AddShardModRPCHandler
 GLOBAL.setfenv(1, GLOBAL)
 
 local RPC_NAMESPACE = "summon_magic"

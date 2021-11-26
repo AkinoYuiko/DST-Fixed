@@ -1,4 +1,7 @@
-local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit
+local AddAction = AddAction
+local AddComponentAction = AddComponentAction
+local AddPrefabPostInit = AddPrefabPostInit
+local AddStategraphActionHandler = AddStategraphActionHandler
 GLOBAL.setfenv(1, GLOBAL)
 
 local HANDRESKIN = Action({ mount_valid = true, priority = 5 })
