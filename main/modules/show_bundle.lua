@@ -86,7 +86,7 @@ local function make_itemdata(items)
             end
 
             -- Fix spiced foods
-            if c.edible and c.edible.spice ~= nil and item.nameoverride then
+            if c.edible and c.edible.spice and item.nameoverride then
                 --print(item.nameoverride)
                 data.nameoverride = item.nameoverride
             end
@@ -117,12 +117,12 @@ end
 
 local function make_itemdata_for_unwrappable(unwrappable)
     -- print("make_itemdata_for", unwrappable.inst)
-    if unwrappable and unwrappable.itemdata ~= nil then
+    if unwrappable and unwrappable.itemdata then
         local items = {}
-        local creator = unwrappable.origin ~= nil and _G.TheWorld.meta.session_identifier ~= unwrappable.origin and { sessionid = unwrappable.origin } or nil
+        local creator = unwrappable.origin and _G.TheWorld.meta.session_identifier ~= unwrappable.origin and { sessionid = unwrappable.origin } or nil
         for i, v in ipairs(unwrappable.itemdata) do
             local item = _G.SpawnPrefab(v.prefab, v.skinname, v.skin_id, creator)
-            if item ~= nil and item:IsValid() then
+            if item and item:IsValid() then
                 item:SetPersistData(v.data)
                 table.insert(items, item)
             end
@@ -183,7 +183,7 @@ end
 local function should_show_tip(target)
     local data = target and _G.FunctionOrValue(SB.supported_items[target.prefab], target)
     return data and (not data.is_container
-            or target.replica.container ~= nil and not target.replica.container:IsOpenedBy(_G.ThePlayer))
+            or target.replica.container and not target.replica.container:IsOpenedBy(_G.ThePlayer))
 end
 
 local function send_showbundle_request(target)
@@ -213,7 +213,7 @@ local function show_tip(target)
 end
 
 AddClassPostConstruct("widgets/controls", function(self)
-    if self.owner ~= nil and self.owner == _G.ThePlayer then
+    if self.owner and self.owner == _G.ThePlayer then
         SB.tipbox = Tipbox()
         self.showbundle_tipbox = self:AddChild(SB.tipbox)
     end

@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 AddPrefabPostInit("flower_evil", function(inst)
 	local function on_dug_up(inst)
-	    if inst.components.lootdropper ~= nil then
+	    if inst.components.lootdropper then
 	        inst.components.lootdropper:SpawnLootPrefab("petals_evil")
 	    end
     	inst:Remove()

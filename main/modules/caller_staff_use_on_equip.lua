@@ -16,7 +16,7 @@ local function newcreatelight(staff, target, pos)
     staff.components.finiteuses:Use(1)
 
     local caster = staff.components.inventoryitem.owner
-    if caster ~= nil and caster.components.sanity ~= nil then
+    if caster and caster.components.sanity then
         caster.components.sanity:DoDelta(-TUNING.SANITY_MEDLARGE)
     end
 end

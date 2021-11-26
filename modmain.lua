@@ -89,7 +89,7 @@ end
 -- Wang wang wang!
 local Inventory = require("components/inventory")
 function Inventory:DropActiveItem()
-    if self.activeitem ~= nil then
+    if self.activeitem then
         local active_item = self:DropItem(self.activeitem, true) -- Do whole stack
         self:SetActiveItem(nil)
 		return active_item

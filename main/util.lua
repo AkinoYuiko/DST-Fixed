@@ -13,7 +13,7 @@ function serialize(obj)
             lua = lua .. "[" .. serialize(k) .. "]=" .. serialize(v) .. ",\n"
         end
         local metatable = GLOBAL.getmetatable(obj)
-        if metatable ~= nil and type(metatable.__index) == "table" then
+        if metatable and type(metatable.__index) == "table" then
             for k, v in pairs(metatable.__index) do
                 lua = lua .. "[" .. serialize(k) .. "]=" .. serialize(v) .. ",\n"
             end

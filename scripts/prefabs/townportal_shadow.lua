@@ -52,14 +52,14 @@ local function OnStartChanneling(inst, channeler)
     inst.MiniMapEntity:SetIcon("townportalactive.png")
     inst.MiniMapEntity:SetPriority(20)
 
-    if inst.icon ~= nil then
+    if inst.icon then
         inst.icon.MiniMapEntity:SetIcon("townportalactive.png")
         inst.icon.MiniMapEntity:SetPriority(20)
         inst.icon.MiniMapEntity:SetDrawOverFogOfWar(true)
     end
 
-    inst.channeler = channeler.components.sanity ~= nil and channeler or nil
-    if inst.channeler ~= nil then
+    inst.channeler = channeler.components.sanity and channeler or nil
+    if inst.channeler then
         inst.channeler.components.sanity:DoDelta(-TUNING.SANITY_MED)
         inst.channeler.components.sanity.externalmodifiers:SetModifier(inst, -TUNING.DAPPERNESS_SUPERHUGE)
     end
@@ -71,12 +71,12 @@ local function OnStopChanneling(inst, aborted)
     inst.MiniMapEntity:SetIcon("townportal.png")
     inst.MiniMapEntity:SetPriority(0)
 
-    if inst.icon ~= nil then
+    if inst.icon then
         inst.icon.MiniMapEntity:SetIcon("townportal.png")
         inst.icon.MiniMapEntity:SetPriority(0)
     end
 
-    if inst.channeler ~= nil and inst.channeler:IsValid() and inst.channeler.components.sanity ~= nil then
+    if inst.channeler and inst.channeler:IsValid() and inst.channeler.components.sanity then
         inst.channeler.components.sanity.externalmodifiers:RemoveModifier(inst)
     end
 
@@ -91,7 +91,7 @@ local function OnLinkTownPortals(inst, other)
         inst.components.channelable:SetEnabled(other == nil)
     end
 
-    -- if other ~= nil then
+    -- if other then
         -- inst.AnimState:PlayAnimation("turn_on")
         -- inst.AnimState:PushAnimation("idle_on_loop")
         -- StartSoundLoop(inst)
@@ -104,17 +104,17 @@ end
 
 local function OnStartTeleporting(inst, doer)
     if doer:HasTag("player") then
-        if doer.components.talker ~= nil then
+        if doer.components.talker then
             doer.components.talker:ShutUp()
         end
-        if doer.components.sanity ~= nil then
+        if doer.components.sanity then
             doer.components.sanity:DoDelta(-TUNING.SANITY_HUGE)
         end
     end
 end
 
 local function OnExitingTeleporter(inst, obj)
-    if obj ~= nil and obj:HasTag("player") then
+    if obj and obj:HasTag("player") then
         obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport") -- for wisecracker
     end
 end
@@ -132,7 +132,7 @@ end
 --         inst.components.channelable:StopChanneling(true)
 --         inst.AnimState:PlayAnimation("hit_on")
 --     else
---         if inst.components.teleporter.targetTeleporter ~= nil then
+--         if inst.components.teleporter.targetTeleporter then
 --             TheWorld:PushEvent("townportaldeactivated")
 --             inst.AnimState:PlayAnimation("hit_on")
 --         else
@@ -147,7 +147,7 @@ end
 --     inst.AnimState:PlayAnimation("place")
 --     inst.AnimState:PushAnimation("idle_off")
 
---     if inst.components.teleporter.targetTeleporter ~= nil then
+--     if inst.components.teleporter.targetTeleporter then
 --         inst.AnimState:PushAnimation("turn_on", false)
 --         inst.AnimState:PushAnimation("idle_on_loop")
 --         StartSoundLoop(inst)

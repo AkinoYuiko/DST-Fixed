@@ -20,7 +20,7 @@ local function add_prefab_post_init(colour, colour_light)
 	
 			inst.components.periodicspawner:Start()
 	
-			if owner.components.hunger ~= nil then
+			if owner.components.hunger then
 				owner.components.hunger.burnratemodifiers:SetModifier(inst, TUNING.MUSHROOMHAT_SLOW_HUNGER)
 			end
 	
@@ -35,7 +35,7 @@ local function add_prefab_post_init(colour, colour_light)
 			inst._light.entity:SetParent(owner.entity)
 	
 	
-			if owner.components.bloomer ~= nil then
+			if owner.components.bloomer then
 				owner.components.bloomer:PushBloom(inst, "shaders/anim.ksh", 1)
 			else
 				owner.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
@@ -58,18 +58,18 @@ local function add_prefab_post_init(colour, colour_light)
 	
 			inst.components.periodicspawner:Stop()
 	
-			if owner.components.hunger ~= nil then
+			if owner.components.hunger then
 				owner.components.hunger.burnratemodifiers:RemoveModifier(inst)
 			end
 	
-			if owner.components.bloomer ~= nil then
+			if owner.components.bloomer then
 				owner.components.bloomer:PopBloom(inst)
 			else
 				owner.AnimState:ClearBloomEffectHandle()
 			end
 	
 	
-			if inst._light ~= nil then
+			if inst._light then
 				if inst._light:IsValid() then
 					inst._light:Remove()
 				end

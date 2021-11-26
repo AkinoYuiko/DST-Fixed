@@ -78,7 +78,7 @@ AddPrefabPostInit("telestaff", function(inst)
 
             inst.components.finiteuses:Use(1)
 
-            if caster.components.sanity ~= nil then
+            if caster.components.sanity then
                 caster.components.sanity:SetPercent(0)
             end
 

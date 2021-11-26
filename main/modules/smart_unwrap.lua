@@ -25,13 +25,13 @@ function Unwrappable:Unwrap(doer, ...)
     
     local pos = self.inst:GetPosition()
     pos.y = 0
-    if self.itemdata ~= nil then
-        if doer ~= nil and
-            self.inst.components.inventoryitem ~= nil and
+    if self.itemdata then
+        if doer and
+            self.inst.components.inventoryitem and
             self.inst.components.inventoryitem:GetGrandOwner() == doer then
             local doerpos = doer:GetPosition()
             local offset = FindWalkableOffset(doerpos, doer.Transform:GetRotation() * DEGREES, 1, 8, false, true, NoHoles)
-            if offset ~= nil then
+            if offset then
                 pos.x = doerpos.x + offset.x
                 pos.z = doerpos.z + offset.z
             else
@@ -44,18 +44,18 @@ function Unwrappable:Unwrap(doer, ...)
         removed_from_inv = self.inst.components.inventoryitem:RemoveFromOwner(true) ~= nil
         -- Changed Part
 
-        local creator = self.origin ~= nil and TheWorld.meta.session_identifier ~= self.origin and { sessionid = self.origin } or nil
+        local creator = self.origin and TheWorld.meta.session_identifier ~= self.origin and { sessionid = self.origin } or nil
         for i, v in ipairs(self.itemdata) do
             local item = SpawnPrefab(v.prefab, v.skinname, v.skin_id, creator)
-            if item ~= nil and item:IsValid() then
-                if item.Physics ~= nil then
+            if item and item:IsValid() then
+                if item.Physics then
                     item.Physics:Teleport(pos:Get())
                 else
                     item.Transform:SetPosition(pos:Get())
                 end
                 item:SetPersistData(v.data)
                 -- Changed Part
-                if item.components.inventoryitem ~= nil then
+                if item.components.inventoryitem then
                     if not (grandowner_container and grandowner_container:GiveItem(item, nil, owner_pos)) then
                         doer_container:GiveItem(item, nil, owner_pos)
                     end
@@ -65,7 +65,7 @@ function Unwrappable:Unwrap(doer, ...)
         end
         self.itemdata = nil
     end
-    if self.onunwrappedfn ~= nil then
+    if self.onunwrappedfn then
         self.onunwrappedfn(self.inst, pos, doer, true, grandowner_container) -- Added two new params: should_give, grandowner_container
     end
 
@@ -89,24 +89,24 @@ AddPrefabPostInit("bundle", function(inst)
             local moisture = inst.components.inventoryitem:GetMoisture()
             local iswet = inst.components.inventoryitem:IsWet()
             local item = SpawnPrefab("waxpaper")
-            if item ~= nil then
+            if item then
                 if not (grandowner_container and grandowner_container:GiveItem(item, nil, pos)) then
-                    local doer_container = doer ~= nil and (doer.components.container or doer.components.inventory)
+                    local doer_container = doer and (doer.components.container or doer.components.inventory)
                     if doer_container then
                         doer_container:GiveItem(item, nil, pos)
-                    elseif item.Physics ~= nil then
+                    elseif item.Physics then
                         item.Physics:Teleport(pos:Get())
                     else
                         item.Transform:SetPosition(pos:Get())
                     end
-                    if item.components.inventoryitem ~= nil then
+                    if item.components.inventoryitem then
                         item.components.inventoryitem:InheritMoisture(moisture, iswet)
                     end
                 end
             end
             SpawnPrefab("bundle_unwrap").Transform:SetPosition(pos:Get())
         end
-        if doer ~= nil and doer.SoundEmitter ~= nil then
+        if doer and doer.SoundEmitter then
             doer.SoundEmitter:PlaySound("dontstarve/common/together/packaged")
         end
         inst:Remove()

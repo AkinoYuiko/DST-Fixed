@@ -96,7 +96,7 @@ local function MakeFx(t)
 
         inst.Transform:SetFromProxy(proxy.GUID)
 
-        if t.sound ~= nil then
+        if t.sound then
             inst.entity:AddSoundEmitter()
             inst:DoTaskInTime(t.sounddelay or 0, PlaySound, t.sound)
         end
@@ -109,12 +109,12 @@ local function MakeFx(t)
         anim_state:SetBloomEffectHandle("shaders/anim.ksh")
         anim_state:SetSortOrder(3)
 
-        if t.transform ~= nil then
+        if t.transform then
             inst.AnimState:SetScale(t.transform:Get())
         end
 
-        if t.fn ~= nil then
-            if t.fntime ~= nil then
+        if t.fn then
+            if t.fntime then
                 inst:DoTaskInTime(t.fntime, t.fn)
             else
                 t.fn(inst)

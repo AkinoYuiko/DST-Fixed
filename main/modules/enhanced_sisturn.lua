@@ -19,7 +19,7 @@ AddPrefabPostInit("sisturn", function(inst)
 	local container = inst.components.container
     removesetter(container, "itemtestfn")
     container.itemtestfn = sisturn_test_fn
-	if inst.replica.container ~= nil then inst.replica.container.itemtestfn = sisturn_test_fn end
+	if inst.replica.container then inst.replica.container.itemtestfn = sisturn_test_fn end
 	makereadonly(container, "itemtestfn")
 
 end)

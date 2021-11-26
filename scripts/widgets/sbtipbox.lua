@@ -60,15 +60,15 @@ function Tipbox:WidgetSetup(override_data, force)
 
     local widget = prefab and containers.params[prefab] and containers.params[prefab].widget or self.default_widget_data
 
-    if override_data.animbuild ~= nil then
+    if override_data.animbuild then
         self.bg:GetAnimState():SetBank(override_data.animbank)
-    elseif widget.animbank ~= nil then
+    elseif widget.animbank then
         self.bg:GetAnimState():SetBank(widget.animbank)
     end
 
-    if override_data.animbuild ~= nil then
+    if override_data.animbuild then
         self.bg:GetAnimState():SetBuild(override_data.animbuild)
-    elseif widget.animbuild ~= nil then
+    elseif widget.animbuild then
         self.bg:GetAnimState():SetBuild(widget.animbuild)
     end
     

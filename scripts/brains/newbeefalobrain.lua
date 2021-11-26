@@ -42,10 +42,10 @@ local LOITER_ANCHOR_RESET_DIST = 20
 local LOITER_ANCHOR_HERD_DIST = 40
 
 local function GetFaceTargetFn(inst)
-    if not (inst.components.domesticatable ~= nil and inst.components.domesticatable:IsDomesticated()) and
+    if not (inst.components.domesticatable and inst.components.domesticatable:IsDomesticated()) and
         not BrainCommon.ShouldSeekSalt(inst) then
         local target = FindClosestPlayerToInst(inst, START_FACE_DIST, true)
-        return target ~= nil and not target:HasTag("notarget") and target or nil
+        return target and not target:HasTag("notarget") and target or nil
     end
 end
 
@@ -74,14 +74,14 @@ end
 
 local function GetGreetTargetPosition(inst)
     local greetTarget = GetGreetTarget(inst)
-    return greetTarget ~= nil and greetTarget:GetPosition() or inst:GetPosition()
+    return greetTarget and greetTarget:GetPosition() or inst:GetPosition()
 end
 
 local function GetLoiterAnchor(inst)
     if inst.components.knownlocations:GetLocation("loiteranchor") == nil then
         inst.components.knownlocations:RememberLocation("loiteranchor", inst:GetPosition())
 
-    elseif inst.components.knownlocations:GetLocation("herd") ~= nil and inst:GetDistanceSqToPoint(inst.components.knownlocations:GetLocation("herd")) < LOITER_ANCHOR_HERD_DIST*LOITER_ANCHOR_HERD_DIST then
+    elseif inst.components.knownlocations:GetLocation("herd") and inst:GetDistanceSqToPoint(inst.components.knownlocations:GetLocation("herd")) < LOITER_ANCHOR_HERD_DIST*LOITER_ANCHOR_HERD_DIST then
         inst.components.knownlocations:RememberLocation("loiteranchor", inst.components.knownlocations:GetLocation("herd"))
 
     elseif inst:GetDistanceSqToPoint(inst.components.knownlocations:GetLocation("loiteranchor")) > LOITER_ANCHOR_RESET_DIST*LOITER_ANCHOR_RESET_DIST then
@@ -114,7 +114,7 @@ local function TryBeginGreetingState(inst)
 
     if inst.components.domesticatable ~= nil
         and inst.components.domesticatable:GetDomestication() > 0.0
-        and GetGreetTarget(inst) ~= nil then
+        and GetGreetTarget(inst) then
 
         inst._startgreettime = GetTime()
         return true
@@ -123,7 +123,7 @@ local function TryBeginGreetingState(inst)
 end
 
 local function ShouldWaitForHeavyLifter(inst, target)
-    if target ~= nil and
+    if target and
         target.components.inventory:IsHeavyLifting() and
         inst.components.rideable.canride then
         --Check if target is heavy lifting towards me
@@ -168,15 +168,15 @@ end)
 function NewBeefaloBrain:OnStart()
     local root = PriorityNode(
     {
-        WhileNode(function() return self.inst.components.hauntable ~= nil and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
+        WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
         WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire",
             Panic(self.inst)),
-        IfNode(function() return self.inst.components.combat.target ~= nil end, "hastarget",
+        IfNode(function() return self.inst.components.combat.target end, "hastarget",
             AttackWall(self.inst)),
         ChaseAndAttack(self.inst, MAX_CHASE_TIME),
         Follow(self.inst, function()
-                return (self.inst.components.follower ~= nil and
-                        self.inst.components.follower.leader ~= nil and
+                return (self.inst.components.follower and
+                        self.inst.components.follower.leader and
                         self.inst.components.follower.leader:IsOnValidGround() and
                         self.inst.components.follower.leader)
                         or nil
@@ -197,7 +197,7 @@ function NewBeefaloBrain:OnStart()
 
         -- waiting for feeder
         WhileNode(function() return InState(self.inst, LOITERING) end, "Loitering", PriorityNode{
-            WhileNode(function() return GetLoiterTarget(self.inst) ~= nil end, "Anyone nearby?", PriorityNode{
+            WhileNode(function() return GetLoiterTarget(self.inst) end, "Anyone nearby?", PriorityNode{
                 FailIfSuccessDecorator(ActionNode(function() TryBeginLoiterState(self.inst) end, "Reset Loiter Time")),
                 FaceEntity(self.inst, GetWaitForHeavyLifter, ShouldWaitForHeavyLifter),
                 Follow(self.inst, GetGreetTarget, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, false),

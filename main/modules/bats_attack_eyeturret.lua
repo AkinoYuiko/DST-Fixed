@@ -45,14 +45,14 @@ AddPrefabPostInit("eyeturret",function(inst)
 	    local AllPlayers= AllPlayers
 		for i = 1, #AllPlayers do
 			local v = AllPlayers[i]
-	        if v.components.combat.target ~= nil then
+	        if v.components.combat.target then
 	            playertargets[v.components.combat.target] = true
 	        end
 	    end
 
         return FindEntity(inst, TUNING.EYETURRET_RANGE + 3,
         function(guy)
-            return (playertargets[guy] or (guy.components.combat.target ~= nil and guy.components.combat.target:HasTag("player"))) 
+            return (playertargets[guy] or (guy.components.combat.target and guy.components.combat.target:HasTag("player"))) 
 					and inst.components.combat:CanTarget(guy) or
 	                	guy:HasTag("bat")
         end,
