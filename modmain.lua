@@ -1,92 +1,75 @@
-Assets = {
-	Asset( "ANIM", "anim/stagehand_fix.zip" ),
-	Asset( "ANIM", "anim/ui_showbundle.zip" ),
-	Asset( "ANIM", "anim/ui_showbundle_3x2.zip" ),
-	Asset( "ATLAS", "images/light_builder.xml" ),
-
-}
-
+Assets = {}
 PrefabFiles = {}
 
-local function ImportModuleForConfig(config, module)
-	if GetModConfigData(config) then
-		modimport("main/modules/"..module)
-	end
-end
-
 local config_table = {
+	-- Default On --
 	BUNDLE = "show_bundle",
-	EQUIPMENT = "repairable_equipment",
-	SEED = "disable_seedrots",
-	SISTURN = "enhanced_sisturn",
-	FLOWER = "nopicking_evil_flower",
-	BIRD = "birds_no_sleep",
-	BAT = "bats_attack_eyeturret",
-	STAFF = "caller_staff_use_on_equip",
-	FIREFLIES = "fireflies_into_lamp",
-	RANDOMLIGHTS = {
-		module = "random_winter_lights",
-		prefabfiles = {
-			"winter_light_builder"
-		}
-	},
-	GLOMMER = "repairable_statueglommer",
-	MHATS = "glowing_mushroom_hats",
-	BEEFALO = "beefalo_nogreeting",
-	COOKPOT = "no_dismantle_cookpot",
-	TENTACLE = "tentacle_pillar_noloot",
-	SANDSTONE = {
-		module = "enhanced_sandstone",
-		prefabfiles = {
-			"townportal_shadow"
-		}
-	},
-	CHECKSKINOWNERSHIP = "check_skin_ownership",
-	HALLOWEEN = "disable_halloween_candies",
-	BEEQUEENHAT = "facking_hivehat",
-	BEEQUEENGIFTWRAP = "giftwrap_blueprint",
+	-- The Player --
 	ATKSPEED = "attack_speed",
-	LUREPLANT = "classic_lureplant",
-	LUNARCROWN = {
-		module = "enhanced_alterguardianhat",
-		prefabfiles = {
-			"gestalt_flash"
-		}
-	},
-	CROWNFRAGMENT = "crown_fragment_recipe",
-	BLOCKABLEPOOPING = "blockable_pooping",
-	NOFORESTRESOURCEREGEN = "disable_forestresouce_regen",
-	POCKETRESKIN = "pocket_reskin",
-	NOGHOSTHOUNDED = "no_ghost_hounded",
-	SITEMOTE = "static_sit_emote",
-	NODARTWASTE = "no_lost_blowdart",
-	GATHERMOONGLASS = "gather_moonglass",
-	CUSTOMFAILSTR = "custom_actionfail_strings",
-	ENDTABLE = "floating_burnt_endtable",
-	PROPSIGN = "craftable_prop_sign",
-	SUMMONMAGIC = "summon_magic",
-	BETTERFOSSIL = "easy_fossil_stalker",
 	SMARTUNWRAP = "smart_unwrap",
-	TURFARCHIVE = "turf_archive_recipe",
-	HONORMOUND = "honor_mound",
-	NOOCEANTREESTRIKEDROP = "no_oceantree_strike_drop",
+	CHECKSKINOWNERSHIP = "check_skin_ownership",
+	SITEMOTE = "static_sit_emote",
+	CUSTOMFAILSTR = "custom_actionfail_strings",
+	NOGHOSTHOUNDED = "no_ghost_hounded",
+
+	-- The Equipment --
+	EQUIPMENT = "repairable_equipment",
+	LUNARCROWN = "enhanced_alterguardianhat",
+	SANDSTONE = "enhanced_sandstone",
 	NAMEABLE_WATCHES = "nameable_watches",
+	NODARTWASTE = "no_lost_blowdart",
+	POCKETRESKIN = "pocket_reskin",
+	BEEQUEENHAT = "facking_hivehat",
+	MHATS = "glowing_mushroom_hats",
+
+	-- The Builder --
+	BETTERFOSSIL = "easy_fossil_stalker",
+	FIREFLIES = "fireflies_into_lamp",
+	SISTURN = "enhanced_sisturn",
+	GLOMMER = "repairable_statueglommer",
+	COOKPOT = "no_dismantle_cookpot",
+	LUREPLANT = "classic_lureplant",
+	ENDTABLE = "floating_burnt_endtable",
+
+	-- The Mob --
+	BIRD = "birds_no_sleep",
+	BLOCKABLEPOOPING = "blockable_pooping",
+	TENTACLE = "tentacle_pillar_noloot",
+	BEEQUEENGIFTWRAP = "giftwrap_blueprint",
+
+	-- The World --
+	SEED = "disable_seedrots",
+	FLOWER = "nopicking_evil_flower",
+	NOOCEANTREESTRIKEDROP = "no_oceantree_strike_drop",
+	SUMMONMAGIC = "summon_magic",
+	HONORMOUND = "honor_mound",
+	BAT = "bats_attack_eyeturret",
+	GATHERMOONGLASS = "gather_moonglass",
+	NOFORESTRESOURCEREGEN = "disable_forestresouce_regen",
+	HALLOWEEN = "disable_halloween_candies",
+
+	-- The Recipe --
+	RANDOMLIGHTS = "random_winter_lights",
+	CROWNFRAGMENT = "crown_fragment_recipe",
+	TURFARCHIVE = "turf_archive_recipe",
+	PROPSIGN = "craftable_prop_sign",
+
+	-- Removed --
+	-- STAFF = "caller_staff_use_on_equip",
+	-- BEEFALO = "beefalo_nogreeting",
 }
 
-for k, v in pairs(config_table) do
-	if type(v) == "string" then
-		ImportModuleForConfig(k, v)
-	elseif type(v) == "table" then
-		ImportModuleForConfig(k, v["module"])
-		for _, prefab in ipairs(v["prefabfiles"]) do
-			table.insert(PrefabFiles, prefab)
-		end
+for config, module in pairs(config_table) do
+	if GetModConfigData(config) then
+		modimport("main/modules/" .. module)
 	end
 end
-
 
 -- Some temp fixes, since klei is too down bad
 -- Wang wang wang!
+local AddStategraphPostInit = AddStategraphPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 local Inventory = require("components/inventory")
 function Inventory:DropActiveItem()
     if self.activeitem then
@@ -99,7 +82,7 @@ end
 AddStategraphPostInit("wilson", function(self)
     local onenter = self.states["abandon_ship_pre"].onenter
     self.states["abandon_ship_pre"].onenter = function(inst, ...)
-		if inst.bufferedaction and inst.bufferedaction.action == GLOBAL.ACTIONS.ABANDON_SHIP then
+		if inst.bufferedaction and inst.bufferedaction.action == ACTIONS.ABANDON_SHIP then
 			inst.sg.statemem.action = inst.bufferedaction
 		end
 		if onenter then
