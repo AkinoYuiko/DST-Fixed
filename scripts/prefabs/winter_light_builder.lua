@@ -11,12 +11,10 @@ local prefab = {
 
 -------------------------------
 local function onbuilt(inst, builder)
-	-- if builder and builder.prefab == "dummy" and builder.components.inventory then
-        local num = math.random(1,8)
-		local item = SpawnPrefab("winter_ornament_light"..num)
-		item.Transform:SetPosition(builder.Transform:GetWorldPosition())
-	    builder.components.inventory:GiveItem(item,nil,item:GetPosition())
-	-- end
+    local num = math.random(1,8)
+    local item = SpawnPrefab("winter_ornament_light"..num)
+    item.Transform:SetPosition(builder.Transform:GetWorldPosition())
+    builder.components.inventory:GiveItem(item,nil,item:GetPosition())
   	inst:Remove()
 end
 

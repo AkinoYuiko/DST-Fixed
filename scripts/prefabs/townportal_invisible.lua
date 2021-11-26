@@ -240,4 +240,4 @@ local function fn()
     return inst
 end
 
-return Prefab("townportal_shadow", fn, assets, prefabs)
+return Prefab("townportal_invisible", fn, assets, prefabs)
