@@ -4,13 +4,13 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.0.4"
+version = "2.0.5"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 修复一个崩溃.
+- 修复六个崩溃.
 
 - 调整了几乎所有模块的环境代码格式.
 - 【月相盘在出生门掉落】统一掉落规则.
@@ -20,7 +20,7 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix a crash.
+- Fix 6 crashes.
 
 - Tweak code format for the env of most modules.
 - "Gather Moon Dial's Glass" in one gathering rule.

@@ -30,7 +30,7 @@ local battery_list = {
 	"ghostflower",
 }
 
-for _, v in ipars(battery_list) do
+for _, v in ipairs(battery_list) do
 	AddPrefabPostInit(v, function(inst)
 		inst:AddTag("sisturnbattery")
 	end)

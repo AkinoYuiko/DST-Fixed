@@ -1,5 +1,5 @@
 local AddPrefabPostInit = env.AddPrefabPostInit
-setfenv(1, GLOBAL)
+GLOBAL.setfenv(1, GLOBAL)
 
 local __dummy = function() end
 

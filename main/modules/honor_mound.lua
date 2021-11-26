@@ -1,4 +1,4 @@
-local AddAction, AddComponentAction, ActionHandler, AddStategraphActionHandler, AddPrefabPostInit = env.AddAction, env.AddComponentAction, env.ActionHandler, env.AddStategraphActionHandler, env.AddPrefabPostInit
+local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = env.AddAction, env.AddComponentAction, env.AddStategraphActionHandler, env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local BURRYMOUND = Action()

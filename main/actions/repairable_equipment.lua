@@ -1,6 +1,5 @@
-local ENV = env
+local AddAction, AddComponentAction, AddStategraphActionHandler = env.AddAction, env.AddComponentAction, env.AddStategraphActionHandler
 GLOBAL.setfenv(1, GLOBAL)
-local AddAction, AddComponentAction, AddStategraphActionHandler = ENV.AddAction, ENV.AddComponentAction, ENV.AddStategraphActionHandler
 
 local SEWINGNEW = Action({mount_valid=true})
 SEWINGNEW.id = "SEWINGNEW"
