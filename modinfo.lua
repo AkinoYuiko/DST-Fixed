@@ -4,29 +4,23 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.0.6"
+version = "2.1"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
 - 移除"env.".
-
-- 修复六个崩溃.
-- 调整了几乎所有模块的环境代码格式.
-- 【月相盘在出生门掉落】统一掉落规则.
-- 保留【萤火虫放进蘑菇灯】
+- 移除【驯好的牛不打招呼】.
+- 移除【星杖/月杖增强】.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
 - Remove "env.".
-
-- Fix 6 crashes.
-- Tweak code format for the env of most modules.
-- "Gather Moon Dial's Glass" in one gathering rule.
-- Move "Fireflies into Lamps" to The Builder.
+- Remove "Beefalos No Greeting".
+- Remove "Enhanced Star & Monn Caller Staff".
 ]]
 
 api_version = 10
@@ -331,19 +325,19 @@ configuration_options = {
 		options = boolean,
 		default = false
 	},
-	AddTitle(zh and "未来可能移除的" or "To Be Removed"),
-	{
-		name = "STAFF",
-		label = zh and "星杖/月杖增强" or "Enhanced Star/Monn Caller Staff",
-		hover = zh and "装备星杖月杖可以右键装备栏原地使用" or "Star/Moon Caller Staff use with right-click on equipped.",
-		options = boolean,
-		default = false
-	},
-	{
-		name = "BEEFALO",
-		label = zh and "驯好的牛不打招呼" or "Beefalos No Greeting",
-		hover = zh and "驯好的牛不会跑过来向玩家打招呼" or "Disable beefalos' greeting to players",
-		options = boolean,
-		default = false
-	},
+	-- AddTitle(zh and "未来可能移除的" or "To Be Removed"),
+	-- {
+	-- 	name = "STAFF",
+	-- 	label = zh and "星杖/月杖增强" or "Enhanced Star & Monn Caller Staff",
+	-- 	hover = zh and "装备星杖月杖可以右键装备栏原地使用" or "Star/Moon Caller Staff use with right-click on equipped.",
+	-- 	options = boolean,
+	-- 	default = false
+	-- },
+	-- {
+	-- 	name = "BEEFALO",
+	-- 	label = zh and "驯好的牛不打招呼" or "Beefalos No Greeting",
+	-- 	hover = zh and "驯好的牛不会跑过来向玩家打招呼" or "Disable beefalos' greeting to players",
+	-- 	options = boolean,
+	-- 	default = false
+	-- },
 }
