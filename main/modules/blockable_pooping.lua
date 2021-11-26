@@ -1,3 +1,6 @@
+local AddPrefabPostInit = env.AddPrefabPostInit
+setfenv(1, GLOBAL)
+
 local __dummy = function() end
 
 local function do_block(inst)
@@ -20,7 +23,7 @@ local function do_block(inst)
 end
 
 local function post_init(inst)
-	if not GLOBAL.TheWorld.ismastersim then return end
+	if not TheWorld.ismastersim then return end
 
 	if not inst.components.trader then
 		inst:AddComponent("trader")

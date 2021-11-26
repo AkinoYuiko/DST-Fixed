@@ -1,19 +1,15 @@
-local _G = GLOBAL
-local Action = _G.Action
-local ACTIONS = _G.ACTIONS
-local ActionHandler = _G.ActionHandler
+local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = env.AddAction, env.AddComponentAction, env.AddStategraphActionHandler, env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
 
 local ENHANCEDSANDSTONE = Action()
 
 ENHANCEDSANDSTONE.id = "ENHANCEDSANDSTONE"
-
-ENHANCEDSANDSTONE.str = _G.STRINGS.ACTIONS.USEITEM
-
+ENHANCEDSANDSTONE.str = STRINGS.ACTIONS.USEITEM
 ENHANCEDSANDSTONE.fn = function(act)
     if not act.invobject.AnimState:IsCurrentAnimation("inactive") then return false end
     local doer = act.doer
     if doer.components.inventory then
-        local portal = _G.SpawnPrefab("townportal_shadow")
+        local portal = SpawnPrefab("townportal_shadow")
         portal.entity:SetParent(doer.entity)
         if doer.sg then
             doer.sg:AddStateTag("prechanneling")
@@ -35,11 +31,12 @@ AddComponentAction("INVENTORY", "enhancedsandstone", function(inst, doer, action
     end
 end)
 
-AddStategraphActionHandler("wilson", ActionHandler(ENHANCEDSANDSTONE, "dolongaction"))
-AddStategraphActionHandler("wilson_client", ActionHandler(ENHANCEDSANDSTONE, "dolongaction"))
+local handler = ActionHandler(ENHANCEDSANDSTONE, "dolongaction")
+AddStategraphActionHandler("wilson", handler)
+AddStategraphActionHandler("wilson_client", handler)
 
 AddPrefabPostInit("townportaltalisman",function(inst)
-    if _G.TheWorld.ismastersim then
+    if TheWorld.ismastersim then
         inst:AddComponent("enhancedsandstone")
     end
 end)

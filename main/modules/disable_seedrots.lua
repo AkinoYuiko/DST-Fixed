@@ -1,37 +1,22 @@
-AddPrefabPostInit("seeds",function(inst)
-	if inst.components.perishable then
-	    inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW)
-    	inst.components.perishable:StartPerishing()
-    	-- inst.components.perishable.onperishreplacement = inst.Remove
-    	inst.components.perishable:SetOnPerishFn(function(inst) inst:Remove() end)
-    end
-end)
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
 
-AddPrefabPostInit("lightbulb",function(inst)
-	if inst.components.perishable then
-	    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
-    	inst.components.perishable:StartPerishing()
-    	-- inst.components.perishable.onperishreplacement = inst.Remove
-    	inst.components.perishable:SetOnPerishFn(function(inst) inst:Remove() end)
-    end
-end)
+local remove_table = {
+	seeds = TUNING.PERISH_SUPERSLOW,
+	lightbulb = TUNING.PERISH_FAST,
+	roe = TUNING.PERISH_FAST
+}
 
--- if GLOBAL.Prefabs["roe"] then
--- if GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
-AddPrefabPostInit("roe",function(inst)
-    if inst.components.perishable then
-        inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
-        inst.components.perishable:StartPerishing()
-        -- inst.components.perishable.onperishreplacement = inst.Remove
-        inst.components.perishable:SetOnPerishFn(function(inst) inst:Remove() end)
-    end
-end)
--- end
--- AddPrefabPostInit("crumbs",function(inst)
--- 	if inst.components.perishable then
--- 	    inst.components.perishable:SetPerishTime(TUNING.PERISH_ONE_DAY)
---     	inst.components.perishable:StartPerishing()
---     	-- inst.components.perishable.onperishreplacement = inst.Remove
---     	inst.components.perishable:SetOnPerishFn(function(inst) inst:Remove() end)
---     end
--- end)
+local function add_prefab_post_init(prefab, perish_time)
+	AddPrefabPostInit(prefab, function(inst)
+		if inst.components.perishable then
+			inst.components.perishable:SetPerishTime(perish_time)
+			inst.components.perishable:StartPerishing()
+			inst.components.perishable:SetOnPerishFn(function(inst) inst:Remove() end)
+		end
+	end)
+end
+
+for prefab, time in pairs(remove_table) do
+	add_prefab_post_init(prefab, time)
+end

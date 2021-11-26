@@ -1,7 +1,9 @@
 modimport("main/actions/repairable_equipment.lua")
+local AddPrefabPostInitAny, AddComponentPostInit = env.AddPrefabPostInitAny, env.AddComponentPostInit
+GLOBAL.setfenv(1, GLOBAL)
 
 local function MakeRepairable(inst)
-    if not GLOBAL.TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
     if not inst.components.inventoryitem then return end
     -- if table.contains(block_list,inst.prefab) then return end
 
@@ -14,12 +16,10 @@ local function MakeRepairable(inst)
 end
 
 AddPrefabPostInitAny(MakeRepairable)
-
-
 AddComponentPostInit("playercontroller", function(self)
-  local old_DoActionAutoEquip = self.DoActionAutoEquip
+  local do_action_auto_equip = self.DoActionAutoEquip
   self.DoActionAutoEquip = function(self, buffaction, ...)
-    if buffaction.action == GLOBAL.ACTIONS.SEWINGNEW then return end
-    return old_DoActionAutoEquip(self, buffaction, ...)
+    if buffaction.action == ACTIONS.SEWINGNEW then return end
+    return do_action_auto_equip(self, buffaction, ...)
   end
 end)

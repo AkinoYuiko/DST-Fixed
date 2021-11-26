@@ -1,5 +1,8 @@
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 AddPrefabPostInit("beefalo", function(inst)
-    if GLOBAL.TheWorld.ismastersim then
+    if TheWorld.ismastersim then
         inst:SetBrain(require("brains/newbeefalobrain"))
     end
 end)

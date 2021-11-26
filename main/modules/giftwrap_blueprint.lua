@@ -1,9 +1,11 @@
-local LootTables = GLOBAL.LootTables
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 AddPrefabPostInit("beequeen", function(inst)
-	if not GLOBAL.TheWorld.ismastersim then return end
+	if not TheWorld.ismastersim then return end
 	-- giftwrap_added = true
 	for _,v in pairs(LootTables["beequeen"]) do
-		if table.contains(v,"giftwrap_blueprint") then return end
+		if table.contains(v, "giftwrap_blueprint") then return end
 	end
-	table.insert(LootTables["beequeen"],{"giftwrap_blueprint",1})
+	table.insert(LootTables["beequeen"], {"giftwrap_blueprint",1})
 end)

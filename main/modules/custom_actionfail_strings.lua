@@ -1,9 +1,8 @@
-local _G = GLOBAL
-local STRINGS = _G.STRINGS
+local get_action_fail_string = GLOBAL.GetActionFailString
+GLOBAL.setfenv(1, GLOBAL)
 
-local GetActionFailString = _G.GetActionFailString
-_G.GetActionFailString = function(inst, action, reason, ...)
-    local str = GetActionFailString(inst, action, reason, ...)
+GetActionFailString = function(inst, action, reason, ...)
+    local str = get_action_fail_string(inst, action, reason, ...)
     if str == STRINGS.CHARACTERS.GENERIC.ACTIONFAIL_GENERIC then
         local character = string.upper(type(inst) == "string" and inst or inst.prefab)
         return STRINGS.CHARACTERS[character]

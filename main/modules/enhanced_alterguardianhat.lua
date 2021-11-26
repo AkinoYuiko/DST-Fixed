@@ -1,24 +1,14 @@
-local ENV = env
+local AddPrefabPostInit = env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")
 
--- local function get_attacked(inst, attacker, damage)
--- 	if not inst.components.health:IsDead() and inst.components.combat:CanBeAttacked() then
--- 		inst.components.combat:GetAttacked(attacker, damage)
--- 	end
--- end
-
--- local function on_anim_over(inst)
-	
--- end
-
-local function new_spawngestalt_fn(inst, owner, data)
+local function super_spawngestalt_fn(inst, owner, data)
 	if not inst._is_active then
 		return
 	end
 
-	if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
+	if owner and (owner.components.health == nil or not owner.components.health:IsDead()) then
 		local target = data.target
 		if target and target ~= owner and target:IsValid() and
 			(target.components.health == nil or not target.components.health:IsDead() and
@@ -27,9 +17,9 @@ local function new_spawngestalt_fn(inst, owner, data)
 			then
 
 			-- In combat, this is when we're just launching a projectile, so don't spawn a gestalt yet
-			if data.weapon ~= nil and data.projectile == nil 
-					and (data.weapon.components.projectile ~= nil
-						or data.weapon.components.complexprojectile ~= nil
+			if data.weapon and data.projectile == nil 
+					and (data.weapon.components.projectile
+						or data.weapon.components.complexprojectile
 						or data.weapon.components.weapon:CanRangedAttack()) then
 				return
 			end
@@ -80,7 +70,7 @@ local function new_onequip(inst, owner, ...)
 	local rt = inst.old_equip(inst, owner, ...)
 	inst:RemoveEventCallback("onattackother", inst.alterguardian_spawngestalt_fn, owner)
 
-	inst.new_spawngestalt_fn = function(_owner, _data) new_spawngestalt_fn(inst, _owner, _data) end
+	inst.new_spawngestalt_fn = function(_owner, _data) super_spawngestalt_fn(inst, _owner, _data) end
 	inst:ListenForEvent("onattackother", inst.new_spawngestalt_fn, owner)
 
 	if open_fn and inst.components.container then
@@ -105,7 +95,7 @@ local function OnEntityReplicated(inst)
 	end
 end
 
-ENV.AddPrefabPostInit("alterguardianhat", function(inst)
+AddPrefabPostInit("alterguardianhat", function(inst)
 
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = OnEntityReplicated
@@ -119,7 +109,7 @@ ENV.AddPrefabPostInit("alterguardianhat", function(inst)
 	container.type = "head_inv"
 	inst.components.container.acceptsstacks = true
     container.itemtestfn = alterguardianhat_test_fn
-	if inst.replica.container ~= nil then
+	if inst.replica.container then
 		-- inst.replica.container.type = "head_inv"
 		inst.replica.container.acceptsstacks = true
 		inst.replica.container.itemtestfn = alterguardianhat_test_fn
@@ -135,10 +125,10 @@ ENV.AddPrefabPostInit("alterguardianhat", function(inst)
 		inst.components.equippable:SetOnUnequip(new_onunequip)
 	end
 
-	local _deactivate = UpvalueHacker.GetUpvalue(inst.old_equip, "alterguardian_onsanitydelta", "alterguardian_deactivate")
+	local old_deactivate = UpvalueHacker.GetUpvalue(inst.old_equip, "alterguardian_onsanitydelta", "alterguardian_deactivate")
 	local function new_deactivate_fn(inst)
-		_deactivate(inst)
-		if inst._task ~= nil then
+		old_deactivate(inst)
+		if inst._task then
 			inst._task:Cancel()
 			inst._task = nil
 		end
@@ -146,7 +136,7 @@ ENV.AddPrefabPostInit("alterguardianhat", function(inst)
 	UpvalueHacker.SetUpvalue(inst.old_equip, new_deactivate_fn, "alterguardian_onsanitydelta", "alterguardian_deactivate")
 end)
 
-ENV.AddPrefabPostInit("moonglass", function(inst)
+AddPrefabPostInit("moonglass", function(inst)
 	inst:AddTag("alterguardianhatbattery")
 end)
 

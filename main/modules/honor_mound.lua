@@ -1,11 +1,10 @@
-local ENV = env
+local AddAction, AddComponentAction, ActionHandler, AddStategraphActionHandler, AddPrefabPostInit = env.AddAction, env.AddComponentAction, env.ActionHandler, env.AddStategraphActionHandler, env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local BURRYMOUND = Action()
 
 BURRYMOUND.id = "BURRYMOUND"
 BURRYMOUND.str = "Burry"
-
 BURRYMOUND.fn = function(act)
     if act.target.AnimState:IsCurrentAnimation("dug") then
         if act.invobject.components.stackable then
@@ -19,18 +18,16 @@ BURRYMOUND.fn = function(act)
     end
 end
 
-ENV.AddAction(BURRYMOUND)
-
-ENV.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)
+AddAction(BURRYMOUND)
+AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)
     if inst.prefab == "ghostflower" and target.prefab == "mound" and target.AnimState:IsCurrentAnimation("dug") then
         table.insert(actions, ACTIONS.BURRYMOUND)
     end
 end)
 
 local handler = ActionHandler(ACTIONS.BURRYMOUND, "dolongaction")
-ENV.AddStategraphActionHandler("wilson", handler)
-ENV.AddStategraphActionHandler("wilson_client", handler)
-
+AddStategraphActionHandler("wilson", handler)
+AddStategraphActionHandler("wilson_client", handler)
 
 local function turnoff(inst)
     inst:TurnOff()
@@ -71,7 +68,7 @@ local function StopHonored(inst)
     inst:StopWatchingWorldState("cycles", OnCyclesChanged)
 end
 
-ENV.AddPrefabPostInit("mound", function(inst)
+AddPrefabPostInit("mound", function(inst)
     if not TheWorld.ismastersim then return end
 
     inst.on_workable_finish = inst.components.workable and inst.components.workable.onfinish

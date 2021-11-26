@@ -1,4 +1,7 @@
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 AddPrefabPostInit("oceantree_pillar", function(inst)
-    if not GLOBAL.TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
     inst.components.lightningblocker:SetOnLightningStrike(nil)
 end)

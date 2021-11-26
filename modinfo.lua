@@ -4,22 +4,24 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.0.2"
+version = "2.0.3"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 【月相盘在出生门掉落】统一掉落规则.
+- 调整了几乎所有模块的环境代码格式.
 
+- 【月相盘在出生门掉落】统一掉落规则.
 - 保留【萤火虫放进蘑菇灯】
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- "Gather Moon Dial's Glass" in one gathering rule.
+- Tweak code format for the env of most modules.
 
+- "Gather Moon Dial's Glass" in one gathering rule.
 - Move "Fireflies into Lamps" to The Builder.
 ]]
 

@@ -1,4 +1,4 @@
-local ENV = env
+local AddAction, AddComponentAction, AddStategraphState, AddStategraphActionHandler, AddPrefabPostInit = env.AddAction, env.AddComponentAction, env.AddStategraphState, env.AddStategraphActionHandler, env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")
@@ -74,9 +74,9 @@ RENAME_WATCH.fn = function(act)
     end
 end
 
-ENV.AddAction(RENAME_WATCH)
+AddAction(RENAME_WATCH)
 
-ENV.AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, actions, right)
+AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, actions, right)
     if table.contains(SUPPORTED_WATCHES, target.prefab) and target.watch_record_name then
         table.insert(actions, ACTIONS.RENAME_WATCH)
     end
@@ -204,10 +204,10 @@ local states_client = {
 }
 
 for _, state in pairs(states) do
-    ENV.AddStategraphState("wilson", state)
+    AddStategraphState("wilson", state)
 end
 for _, state in pairs(states_client) do
-    ENV.AddStategraphState("wilson_client", state)
+    AddStategraphState("wilson_client", state)
 end
 
 local actionhandlers = {
@@ -215,8 +215,8 @@ local actionhandlers = {
 }
 
 for _, actionhandler in pairs(actionhandlers) do
-    ENV.AddStategraphActionHandler("wilson", actionhandler)
-    ENV.AddStategraphActionHandler("wilson_client", actionhandler)
+    AddStategraphActionHandler("wilson", actionhandler)
+    AddStategraphActionHandler("wilson_client", actionhandler)
 end
 
 
@@ -291,5 +291,5 @@ local function WatchPostInit(inst)
 end
 
 for _, v in ipairs(SUPPORTED_WATCHES) do
-    ENV.AddPrefabPostInit(v, WatchPostInit)
+    AddPrefabPostInit(v, WatchPostInit)
 end

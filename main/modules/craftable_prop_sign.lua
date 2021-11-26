@@ -1,4 +1,4 @@
-local ENV = env
+local AddRecipe = env.AddRecipe
 GLOBAL.setfenv(1, GLOBAL)
 
 ENV.AddRecipe("propsign", { Ingredient("log", 2) }, RECIPETABS.MAGIC, TECH.MAGIC_THREE)

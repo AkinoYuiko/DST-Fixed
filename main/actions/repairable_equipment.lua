@@ -1,9 +1,6 @@
-local _G = GLOBAL
-local Action = _G.Action
-local ACTIONS = _G.ACTIONS
-local ActionHandler = _G.ActionHandler
-local STRINGS = _G.STRINGS
-local TUNING = _G.TUNING
+local ENV = env
+GLOBAL.setfenv(1, GLOBAL)
+local AddAction, AddComponentAction, AddStategraphActionHandler = ENV.AddAction, ENV.AddComponentAction, ENV.AddStategraphActionHandler
 
 local SEWINGNEW = Action({mount_valid=true})
 SEWINGNEW.id = "SEWINGNEW"
@@ -18,30 +15,16 @@ SEWINGNEW.fn = function ( act )
     return true
 end
 
-
 AddAction(SEWINGNEW)
-
-function SetupActionSewingnew( inst, doer, target, actions, right)
-    -- local sewingnew = inst.components.sewingnew
+AddComponentAction("USEITEM", "sewingnew", function( inst, doer, target, actions, right)
     if not inst:HasTag("sewingnew") then return end
-    -- if not right then return end
     if right then
-        -- for k,v in pairs(sewingnew.repair_maps) do
-            -- if type(v) == "table" then
-            --     if v[1] == target.prefab then
-            --         table.insert(actions, 1,ACTIONS.SEWINGNEW)
-            --     end
-            -- elseif type(v) == "string" then
-            if inst.prefab == target.prefab then
-                table.insert(actions, 1,ACTIONS.SEWINGNEW)
-            end
-            -- end
-        -- end
+        if inst.prefab == target.prefab then
+            table.insert(actions, 1, ACTIONS.SEWINGNEW)
+        end
     end
-end
+end)
 
-
-AddComponentAction("USEITEM", "sewingnew", SetupActionSewingnew)
-
-AddStategraphActionHandler("wilson", ActionHandler(SEWINGNEW, "dolongaction"))
-AddStategraphActionHandler("wilson_client", ActionHandler(SEWINGNEW, "dolongaction"))
+local handler = ActionHandler(SEWINGNEW, "dolongaction")
+AddStategraphActionHandler("wilson", handler)
+AddStategraphActionHandler("wilson_client", handler)

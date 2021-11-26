@@ -1,5 +1,4 @@
-local _G = GLOBAL
-local Vector3 = _G.Vector3
+local Vector3, GetInventoryItemAtlas = GLOBAL.Vector3, GLOBAL.GetInventoryItemAtlas
 local containers = require("containers")
 local params = containers.params
 
@@ -17,7 +16,7 @@ params.showbundle_alterguardianhat =
             Vector3( 75, -36),
         },
         slotbg = {
-            [6] = { image = "alterguardianhat.tex", atlas = _G.GetInventoryItemAtlas("alterguardianhat.tex") }
+            [6] = { image = "alterguardianhat.tex", atlas = GetInventoryItemAtlas("alterguardianhat.tex") }
         },
         animbank = "ui_showbundle_3x2",
         animbuild = "ui_showbundle_3x2",

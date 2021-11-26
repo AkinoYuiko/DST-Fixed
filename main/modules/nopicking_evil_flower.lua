@@ -1,4 +1,5 @@
-local _G = GLOBAL
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
 
 AddPrefabPostInit("flower_evil", function(inst)
 	local function on_dug_up(inst)
@@ -15,7 +16,7 @@ AddPrefabPostInit("flower_evil", function(inst)
 	inst:AddComponent("lootdropper")
 
 	inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(_G.ACTIONS.DIG)
+    inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnFinishCallback(on_dug_up)
     inst.components.workable:SetWorkable(true)

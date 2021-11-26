@@ -1,4 +1,4 @@
-local ENV = env
+local AddPrefabPostInit, AddStategraphPostInit = env.AddPrefabPostInit, env.AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")
@@ -53,7 +53,7 @@ local function on_portal_remove(inst)
     end
 end
 
-ENV.AddPrefabPostInit("multiplayer_portal_moonrock", function(inst)
+AddPrefabPostInit("multiplayer_portal_moonrock", function(inst)
     if not TheWorld.ismastersim then return end
     portal_moonrock = inst
     inst:ListenForEvent("remove", on_portal_remove)
@@ -63,7 +63,7 @@ ENV.AddPrefabPostInit("multiplayer_portal_moonrock", function(inst)
 end)
 
 local hooked = false
-ENV.AddPrefabPostInit("moondial", function(inst)
+AddPrefabPostInit("moondial", function(inst)
     if hooked or not TheWorld.ismastersim then return end
     local _onalterawake, i, prev = UpvalueHacker.GetUpvalue(inst.OnLoad, "onalterawake")
     if not _onalterawake then return end
@@ -82,7 +82,7 @@ ENV.AddPrefabPostInit("moondial", function(inst)
     hooked = true
 end)
 
-ENV.AddStategraphPostInit("moondial", function(self)
+AddStategraphPostInit("moondial", function(self)
     self.states["glassed_pst"].timeline = {
         TimeEvent(10 * FRAMES, function(inst)
             if portal_moonrock then

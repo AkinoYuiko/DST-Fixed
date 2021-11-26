@@ -1,3 +1,6 @@
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 AddPrefabPostInit("tentacle_pillar",function(inst)
-	GLOBAL.SetSharedLootTable("tentacle_pillar",{})
+	SetSharedLootTable("tentacle_pillar",{})
 end)

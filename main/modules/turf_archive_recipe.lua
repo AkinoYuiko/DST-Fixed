@@ -1,7 +1,5 @@
-local ENV = env
+local AddRecipe = env.AddRecipe
 GLOBAL.setfenv(1, GLOBAL)
-local AddRecipe = ENV.AddRecipe
-local AddRecipeTab = ENV.AddRecipeTab
 
 AddRecipe("turf_archive",
 {Ingredient("thulecite", 1), Ingredient("moonrocknugget", 1)},

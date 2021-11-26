@@ -1,7 +1,8 @@
-local _G = GLOBAL
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
 
 AddPrefabPostInit("portablecookpot",function(inst)
-	if not _G.TheWorld.ismastersim then return inst end
+	if not TheWorld.ismastersim then return inst end
 	if inst.components.portablestructure then
 		inst:RemoveComponent("portablestructure")
 	end

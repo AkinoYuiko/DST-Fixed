@@ -1,4 +1,5 @@
-local _G = GLOBAL
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
 
 AddPrefabPostInit("sisturn", function(inst)
 
@@ -6,7 +7,7 @@ AddPrefabPostInit("sisturn", function(inst)
 	    return item:HasTag("sisturnbattery")
 	end
 
-    if not _G.TheWorld.ismastersim then
+    if not TheWorld.ismastersim then
         inst.OnEntityReplicated = function(inst)
             if inst.replica.container then
             	inst.replica.container.itemtestfn=sisturn_test_fn
@@ -16,21 +17,21 @@ AddPrefabPostInit("sisturn", function(inst)
     end
 
 	local container = inst.components.container
-    _G.removesetter(container, "itemtestfn")
+    removesetter(container, "itemtestfn")
     container.itemtestfn = sisturn_test_fn
 	if inst.replica.container ~= nil then inst.replica.container.itemtestfn = sisturn_test_fn end
-	_G.makereadonly(container, "itemtestfn")
+	makereadonly(container, "itemtestfn")
 
 end)
 
-AddPrefabPostInit("petals", function(inst)
-	inst:AddTag("sisturnbattery")
-end)
+local battery_list = {
+	"petals",
+	"boneshard",
+	"ghostflower",
+}
 
-AddPrefabPostInit("boneshard", function(inst)
-	inst:AddTag("sisturnbattery")
-end)
-
-AddPrefabPostInit("ghostflower", function(inst)
-	inst:AddTag("sisturnbattery")
-end)
+for _, v in ipars(battery_list) do
+	AddPrefabPostInit(v, function(inst)
+		inst:AddTag("sisturnbattery")
+	end)
+end

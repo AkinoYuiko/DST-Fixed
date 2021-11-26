@@ -1,12 +1,10 @@
-local ENV = env
+local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = env.AddAction, env.AddComponentAction, env.AddStategraphActionHandler, env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local HANDRESKIN = Action({ mount_valid = true, priority = 5 })
 
 HANDRESKIN.id = "HANDRESKIN"
-
 HANDRESKIN.str = STRINGS.ACTIONS.CASTSPELL.RESKIN
-
 HANDRESKIN.fn = function(act)
     if not act.invobject then return false end
     local staff = act.doer.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -17,19 +15,14 @@ HANDRESKIN.fn = function(act)
     end
 end
 
-ENV.AddAction(HANDRESKIN)
+AddAction(HANDRESKIN)
 local cantprefab = {
     "cane",
     "orangestaff",
     "reskin_tool",
-    -- "lantern",
-    -- "glasscutter",
-    -- "glassiccutter",
-    -- "darklotus",
-    -- "lightlotus",
-    -- "darklotus"
 }
-ENV.AddComponentAction("INVENTORY", "inventoryitem", function(inst, doer, actions)
+
+AddComponentAction("INVENTORY", "inventoryitem", function(inst, doer, actions)
     if table.contains(cantprefab,inst.prefab) or
         (inst.replica.equippable and inst.replica.equippable:IsEquipped()) or
         (not PREFAB_SKINS[inst.prefab])
@@ -40,5 +33,6 @@ ENV.AddComponentAction("INVENTORY", "inventoryitem", function(inst, doer, action
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(HANDRESKIN, "veryquickcastspell"))
-ENV.AddStategraphActionHandler("wilson_client", ActionHandler(HANDRESKIN, "veryquickcastspell"))
+local handler = ActionHandler(HANDRESKIN, "veryquickcastspell")
+AddStategraphActionHandler("wilson", handler)
+AddStategraphActionHandler("wilson_client", handler)

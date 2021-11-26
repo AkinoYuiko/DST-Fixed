@@ -1,8 +1,7 @@
-local ENV = env
+local AddPrefabPostInit = env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 MATERIALS.MARBLE = "marble"
-
 local function OnRepaired(inst)
 	local workleft = inst.components.workable.workleft
     if inst.components.lootdropper.chanceloottable == nil and workleft >= 0 then
@@ -37,7 +36,7 @@ local function MakeRemoveComponentProxy(fn)
     end
 end
 
-ENV.AddPrefabPostInit("statueglommer", function(inst)
+AddPrefabPostInit("statueglommer", function(inst)
     if not TheWorld.ismastersim then return end
 
     if not inst.components.repairable then
@@ -54,7 +53,7 @@ ENV.AddPrefabPostInit("statueglommer", function(inst)
     inst.OnLoad = MakeRemoveComponentProxy(inst.OnLoad)
 end)
 
-ENV.AddPrefabPostInit("marble", function(inst)
+AddPrefabPostInit("marble", function(inst)
 	if not TheWorld.ismastersim then return end
 
     if not inst.components.repairer then

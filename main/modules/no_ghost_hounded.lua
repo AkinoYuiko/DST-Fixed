@@ -1,3 +1,6 @@
+local AddComponentPostInit = env.AddComponentPostInit
+setfenv(1, GLOBAL)
+
 AddComponentPostInit("hounded", function(self, inst)
 
     local result_fns = {}
@@ -11,7 +14,7 @@ AddComponentPostInit("hounded", function(self, inst)
         if listeners then
             for listener, fns in pairs(listeners) do
                 for _, fn in ipairs(fns) do
-                    if string.find(GLOBAL.debug.getinfo(fn, "S").source, "hounded") then
+                    if string.find(debug.getinfo(fn, "S").source, "hounded") then
                         result_fns[name] = fn
                         break
                     end

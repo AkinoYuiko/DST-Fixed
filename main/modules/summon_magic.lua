@@ -1,10 +1,10 @@
-local ENV = env
+local AddShardModRPCHandler, AddComponentAction, AddPrefabPostInit = env.AddShardModRPCHandler, env.AddComponentAction, env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local RPC_NAMESPACE = "summon_magic"
 local CAN_SUMMON_HAND_ITEMS = {"cane", "orangestaff"}
 
-ENV.AddShardModRPCHandler(RPC_NAMESPACE, "Summon", function(shardid, summoner_id, x, z)
+AddShardModRPCHandler(RPC_NAMESPACE, "Summon", function(shardid, summoner_id, x, z)
     for _, player in ipairs(AllPlayers) do
         if player:IsValid() then
             local hand_item = player.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -24,7 +24,7 @@ ENV.AddShardModRPCHandler(RPC_NAMESPACE, "Summon", function(shardid, summoner_id
     SendModRPCToShard(SHARD_MOD_RPC[RPC_NAMESPACE]["Feedback"], shardid, summoner_id, "nope")
 end)
 
-ENV.AddShardModRPCHandler(RPC_NAMESPACE, "Feedback", function(shardid, summoner_id, str)
+AddShardModRPCHandler(RPC_NAMESPACE, "Feedback", function(shardid, summoner_id, str)
     for _, player in ipairs(AllPlayers) do
         if player.userid == summoner_id then
             player.components.talker:Say(str)
@@ -33,7 +33,7 @@ ENV.AddShardModRPCHandler(RPC_NAMESPACE, "Feedback", function(shardid, summoner_
     end
 end)
 
-ENV.AddComponentAction("EQUIPPED", "spellcaster", function(inst, doer, target, actions, right)
+AddComponentAction("EQUIPPED", "spellcaster", function(inst, doer, target, actions, right)
     if right and inst.prefab == "telestaff" and not TheWorld:HasTag("cave") and target:HasTag("telebase") then
         table.insert(actions, ACTIONS.CASTSPELL)
     end
@@ -53,7 +53,7 @@ local function GetFirstShardID()
     end
 end
 
-ENV.AddPrefabPostInit("telestaff", function(inst)
+AddPrefabPostInit("telestaff", function(inst)
     if not TheWorld.ismastersim then return end
 
     local can_cast_fn = inst.components.spellcaster.can_cast_fn

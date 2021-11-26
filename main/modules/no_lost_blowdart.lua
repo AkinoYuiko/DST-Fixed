@@ -1,3 +1,6 @@
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 local allowed_prefabs = {
     "blowdart_sleep",
     "blowdart_fire",
@@ -6,11 +9,11 @@ local allowed_prefabs = {
 }
 
 local function post_init(inst)
-    if not GLOBAL.TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
     local onprehit = inst.components.projectile and inst.components.projectile.onprehit
     inst.components.projectile.onprehit = function(inst, attacker, target, ...)
         if target and target:IsValid() and target.components.health and target.components.health:IsDead() then
-            local new_dart = GLOBAL.SpawnPrefab(inst.prefab)
+            local new_dart = SpawnPrefab(inst.prefab)
             if new_dart then
                 new_dart.Transform:SetPosition(inst.Transform:GetWorldPosition())
             end

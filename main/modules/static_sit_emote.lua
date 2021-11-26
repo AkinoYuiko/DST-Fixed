@@ -1,3 +1,6 @@
+local AddStategraphPostInit = env.AddStategraphPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 local function find_sit_anim(data)
     if data and data.anim and type(data.anim) == "table" then
         for _, v in ipairs(data.anim) do

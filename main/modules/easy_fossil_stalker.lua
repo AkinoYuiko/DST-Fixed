@@ -1,5 +1,8 @@
+local AddPrefabPostInit = env.AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
 AddPrefabPostInit("fossil_stalker", function(inst)
-    if not GLOBAL.TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
 
     local onrepaired = inst.components.repairable.onrepaired
     inst.components.repairable.onrepaired = function(inst, ...)

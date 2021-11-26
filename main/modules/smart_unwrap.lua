@@ -1,4 +1,4 @@
-local ENV = env
+local AddPrefabPostInit = env.AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 -- Well, I really don't like overriding this much,
@@ -74,7 +74,7 @@ function Unwrappable:Unwrap(doer, ...)
     end
 end
 
-ENV.AddPrefabPostInit("bundle", function(inst)
+AddPrefabPostInit("bundle", function(inst)
     if not TheWorld.ismastersim then return end
 
     local onunwrappedfn = inst.components.unwrappable.onunwrappedfn
