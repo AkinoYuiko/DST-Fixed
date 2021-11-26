@@ -1,4 +1,4 @@
-local AddPrefabPostInit = env.AddPrefabPostInit
+local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local function add_prefab_post_init(colour, colour_light)

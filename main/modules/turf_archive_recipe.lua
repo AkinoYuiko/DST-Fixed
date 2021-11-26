@@ -1,4 +1,4 @@
-local AddRecipe = env.AddRecipe
+local AddRecipe = AddRecipe
 GLOBAL.setfenv(1, GLOBAL)
 
 AddRecipe("turf_archive",

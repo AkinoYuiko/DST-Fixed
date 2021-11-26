@@ -1,4 +1,4 @@
-local AddPrefabPostInit, AddStategraphPostInit = env.AddPrefabPostInit, env.AddStategraphPostInit
+local AddPrefabPostInit, AddStategraphPostInit = AddPrefabPostInit, AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")

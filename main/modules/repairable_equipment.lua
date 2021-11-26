@@ -1,5 +1,5 @@
 modimport("main/actions/repairable_equipment.lua")
-local AddPrefabPostInitAny, AddComponentPostInit = env.AddPrefabPostInitAny, env.AddComponentPostInit
+local AddPrefabPostInitAny, AddComponentPostInit = AddPrefabPostInitAny, AddComponentPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local function MakeRepairable(inst)

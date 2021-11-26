@@ -1,4 +1,5 @@
-local Vector3, GetInventoryItemAtlas = GLOBAL.Vector3, GLOBAL.GetInventoryItemAtlas
+local Vector3 = GLOBAL.Vector3
+local GetInventoryItemAtlas = GLOBAL.GetInventoryItemAtlas
 local containers = require("containers")
 local params = containers.params
 

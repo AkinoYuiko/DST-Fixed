@@ -1,4 +1,4 @@
-local AddStategraphPostInit = env.AddStategraphPostInit
+local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local function find_sit_anim(data)

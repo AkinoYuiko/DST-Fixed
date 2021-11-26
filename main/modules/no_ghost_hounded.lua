@@ -1,4 +1,4 @@
-local AddComponentPostInit = env.AddComponentPostInit
+local AddComponentPostInit = AddComponentPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 AddComponentPostInit("hounded", function(self, inst)

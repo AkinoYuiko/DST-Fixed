@@ -1,4 +1,4 @@
-local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = env.AddAction, env.AddComponentAction, env.AddStategraphActionHandler, env.AddPrefabPostInit
+local AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit = AddAction, AddComponentAction, AddStategraphActionHandler, AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local ENHANCEDSANDSTONE = Action()
