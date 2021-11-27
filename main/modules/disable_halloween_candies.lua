@@ -18,6 +18,6 @@ AddPrefabPostInit("pigking", function(inst)
             on_trade_for_gold(inst, item, giver)
             IsSpecialEventActive = is_special_event_active
         end
-        UpvalueHacker.SetUpvalue(inst.components.trader.onaccept, on_accept_fn, "ontradeforgold")
+        UpvalueHacker.SetUpvalue(inst.components.trader.onaccept, "ontradeforgold", on_accept_fn)
     end)
 end)

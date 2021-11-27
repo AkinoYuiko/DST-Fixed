@@ -127,7 +127,8 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 		inst.components.equippable:SetOnUnequip(new_onunequip)
 	end
 
-	local old_deactivate = UpvalueHacker.GetUpvalue(inst.old_equip, "alterguardian_onsanitydelta", "alterguardian_deactivate")
+	local hack_path = "alterguardian_onsanitydelta.alterguardian_deactivate"
+	local old_deactivate = UpvalueHacker.GetUpvalue(inst.old_equip, hack_path)
 	local function new_deactivate_fn(inst)
 		old_deactivate(inst)
 		if inst._task then
@@ -135,7 +136,7 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 			inst._task = nil
 		end
 	end
-	UpvalueHacker.SetUpvalue(inst.old_equip, new_deactivate_fn, "alterguardian_onsanitydelta", "alterguardian_deactivate")
+	UpvalueHacker.SetUpvalue(inst.old_equip, "hack_path", new_deactivate_fn)
 end)
 
 AddPrefabPostInit("moonglass", function(inst)

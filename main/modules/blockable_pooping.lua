@@ -68,7 +68,7 @@ end
 
 local UpvalueHacker = require("tools/upvaluehacker")
 AddPrefabPostInit("beefaloherd", function(inst)
-	UpvalueHacker.SetUpvalue(inst.components.periodicspawner.onspawn, function(inst)
+	UpvalueHacker.SetUpvalue(inst.components.periodicspawner.onspawn, "SpawnableParent", function(inst)
 		for member in pairs(inst.components.herd.members) do
 			if not member.no_periodicspawn then -- Changed Part
 				if member.components.domesticatable == nil
@@ -80,5 +80,5 @@ AddPrefabPostInit("beefaloherd", function(inst)
 			end
 		end
 		return nil
-	end, "SpawnableParent")
+	end)
 end)
