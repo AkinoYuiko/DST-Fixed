@@ -4,14 +4,15 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.1.1"
+version = "2.1.2"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 更新UpvalueHacker，同步Glassic API 的版本.
+- 修复【强化的启迪之冠】低San时不隐藏的问题.
 
+- 更新UpvalueHacker，同步Glassic API 的版本.
 - 移除"env.".
 - 移除【驯好的牛不打招呼】.
 - 移除【星杖/月杖增强】.
@@ -20,8 +21,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Update UpvalueHacker, sync with Glassic API.
+- Fix issue where Enlightened Crown won't be hidden if deactive.
 
+- Update UpvalueHacker, sync with Glassic API.
 - Remove "env.".
 - Remove "Beefalos No Greeting".
 - Remove "Enhanced Star & Monn Caller Staff".
