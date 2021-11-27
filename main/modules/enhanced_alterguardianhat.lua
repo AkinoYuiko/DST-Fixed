@@ -120,15 +120,8 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 	makereadonly(container, "itemtestfn")
 	makereadonly(container, "type")
 
-	if inst.components.equippable then
-		inst.old_equip = inst.components.equippable.onequipfn
-		inst.old_unequip = inst.components.equippable.onunequipfn
-		inst.components.equippable:SetOnEquip(new_onequip)
-		inst.components.equippable:SetOnUnequip(new_onunequip)
-	end
-
-	local hack_path = "alterguardian_onsanitydelta.alterguardian_deactivate"
-	local old_deactivate = UpvalueHacker.GetUpvalue(inst.old_equip, hack_path)
+	local hackpath = "alterguardian_onsanitydelta.alterguardian_deactivate"
+	local old_deactivate = UpvalueHacker.GetUpvalue(inst.components.equippable.onequipfn, hackpath)
 	local function new_deactivate_fn(inst)
 		old_deactivate(inst)
 		if inst._task then
@@ -136,7 +129,14 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 			inst._task = nil
 		end
 	end
-	UpvalueHacker.SetUpvalue(inst.old_equip, "hack_path", new_deactivate_fn)
+	UpvalueHacker.SetUpvalue(inst.components.equippable.onequipfn, hackpath, new_deactivate_fn)
+
+	if inst.components.equippable then
+		inst.old_equip = inst.components.equippable.onequipfn
+		inst.old_unequip = inst.components.equippable.onunequipfn
+		inst.components.equippable:SetOnEquip(new_onequip)
+		inst.components.equippable:SetOnUnequip(new_onunequip)
+	end
 end)
 
 AddPrefabPostInit("moonglass", function(inst)
