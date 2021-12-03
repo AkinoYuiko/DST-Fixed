@@ -20,7 +20,7 @@ local ANGRI_DEATH =
         PEARL = "大螃蟹",
         MAX = "大闸蟹",
     },
-    STALKER_ARTRIUM = {
+    STALKER_ATRIUM = {
         "中庭",
         "钟婷"
     },
