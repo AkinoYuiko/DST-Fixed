@@ -4,12 +4,15 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.2.1"
+version = "2.2.2"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
+- 修复克劳斯死亡信息错误的问题.
+- 补充大小蛤蟆死亡信息.
+
 - 新增【angri_BOT 提示】，当且仅当【Glassic API】模组启用时会调用.
 - 该功能不会对正常游戏产生任何改变或影响.
 ]]
@@ -17,6 +20,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
+- Fix klaus death fn.
+- Add toadstool & toadstoll_dark death fn.
+
 - Add "angri_BOT Boss Tips" when "Glassic API" mod enabled.
 - This won't have side-effect on gameplay.
 ]]
