@@ -65,11 +65,20 @@ for config, module in pairs(config_table) do
 	end
 end
 
+-- angri_BOT boss death tips --
+for _,v in pairs(GLOBAL.ModManager:GetEnabledModNames()) do
+	if table.contains({"Glassic API", "Glassic API - DEV"}, GLOBAL.KnownModIndex:GetModInfo(v).name) then
+		modimport("main/modules/angri_bot_death_tips")
+		break
+	end
+end
+
 -- Some temp fixes, since klei is too down bad
 -- Wang wang wang!
 local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
+-- Fix active_item's stack-lost when swimming
 local Inventory = require("components/inventory")
 function Inventory:DropActiveItem()
     if self.activeitem then
@@ -79,6 +88,7 @@ function Inventory:DropActiveItem()
     end
 end
 
+-- Fix abandon ship board invalid
 AddStategraphPostInit("wilson", function(self)
     local onenter = self.states["abandon_ship_pre"].onenter
     self.states["abandon_ship_pre"].onenter = function(inst, ...)
