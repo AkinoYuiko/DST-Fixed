@@ -50,9 +50,9 @@ local function death_fn(msg, delay)
 
     local day = (TheWorld.state.cycles + 1) % 1000
     local seg = TheWorld.state.time * 16 + 0.5
-    local delay_segs = ( delay or 0 ) * 16
+    local delay_segs = ( type(delay) == "number" and delay or 0 ) * 16
     seg = math.floor(seg + delay_segs)
-    while seg > 16 do
+    while seg >= 16 do
         day = day + 1
         seg = seg - 16
     end
