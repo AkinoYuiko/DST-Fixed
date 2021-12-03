@@ -26,22 +26,21 @@ local ANGRI_DEATH =
     },
     DEERCLOPS = "巨鹿",
     KLAUS = "克劳斯",
+    TOADSTOOL = "小蛤蟆",
+    TOADSTOOL_DARK = "大蛤蟆",
 
 }
--- local test_fn = function()
---     c_spawn"dragonfly" c_findnext"dragonfly":PushEvent("death")
--- end
 
 local function add_zero(day)
-    local day_rec = day % 1000
-    if day_rec == 0 then
+    local day_str = day % 1000
+    if day_str == 0 then
         return day % 10000
-    elseif math.floor(day_rec / 10) == 0 then
-        return "00" .. day_rec
-    elseif math.floor(day_rec / 100) == 0 then
-        return "0" .. day_rec
+    elseif math.floor(day_str / 10) == 0 then
+        return "00" .. day_str
+    elseif math.floor(day_str / 100) == 0 then
+        return "0" .. day_str
     else
-        return day_rec
+        return day_str
     end
 end
 
@@ -57,10 +56,9 @@ local function death_fn(msg, delay)
         seg = seg - 16
     end
     day = add_zero(day)
-    local time = seg == 0 and day or (day .. "(" .. seg .. ")")
     local prefab = type(msg) == "table" and msg[math.random(1, #msg)] or msg
 
-    print("angri_BOT", time, prefab)
+    print("angri_BOT", day .. "(" .. seg .. ")", prefab)
 end
 
 local function common_death_fn(delay_days)
@@ -71,7 +69,13 @@ local epics =
 {
     stalker_atrium = common_death_fn(0.5),
     dragonfly = common_death_fn(),
-    klaus = common_death_fn(),
+    toadstool = common_death_fn(),
+    toadstool_dark = common_death_fn(),
+    klaus = function(inst)
+        if not TheWorld.ismastersim then return end
+
+        if inst:IsUnchained() then death_fn(ANGRI_DEATH.KLAUS) end
+    end,
     crabking = function(inst)
         if not TheWorld.ismastersim then return end
 
