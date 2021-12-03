@@ -50,7 +50,8 @@ local function death_fn(msg, delay)
 
     local day = (TheWorld.state.cycles + 1) % 1000
     local seg = TheWorld.state.time * 16 + 0.5
-    seg = delay and math.floor(seg + delay * 16) or math.floor(seg)
+    local delay_segs = ( delay or 0 ) * 16
+    seg = math.floor(seg + delay_segs)
     while seg > 16 do
         day = day + 1
         seg = seg - 16
@@ -62,15 +63,15 @@ local function death_fn(msg, delay)
     print("angri_BOT", time, prefab)
 end
 
-local function common_death_fn(delay)
-    return function(inst) death_fn(ANGRI_DEATH[string.upper(inst.prefab)], delay) end
+local function common_death_fn(delay_days)
+    return function(inst) death_fn(ANGRI_DEATH[string.upper(inst.prefab)], delay_days) end
 end
 
 local epics = 
 {
     stalker_atrium = common_death_fn(0.5),
-    dragonfly = common_death_fn(0),
-    klaus = common_death_fn(0),
+    dragonfly = common_death_fn(),
+    klaus = common_death_fn(),
     crabking = function(inst)
         if not TheWorld.ismastersim then return end
 
