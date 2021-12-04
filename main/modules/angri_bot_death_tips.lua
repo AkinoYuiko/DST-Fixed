@@ -44,7 +44,19 @@ local function add_zero(day)
     end
 end
 
-local function death_fn(msg, delay)
+local function get_nearby_players(inst)
+    local players = {}
+    for _, v in ipairs(AllPlayers) do
+        if inst:GetDistanceSqToInst(v) < 60 then
+            table.insert(players, UserToName(v.userid))
+            table.insert(players, ", ")
+        end
+    end
+    if #players >= 2 then table.remove(players) end
+    return table.concat(players)
+end
+
+local function death_fn(inst, msg, delay)
     if not TheWorld.ismastersim then return end
 
     local day = (TheWorld.state.cycles + 1) % 1000
@@ -57,12 +69,14 @@ local function death_fn(msg, delay)
     end
     day = add_zero(day)
     local prefab = type(msg) == "table" and msg[math.random(1, #msg)] or msg
+    
+    local players = get_nearby_players(inst)
 
-    print("angri_BOT", day .. "(" .. seg .. ")", prefab)
+    print("angri_BOT", prefab, day .. "(" .. seg .. ")", players)
 end
 
 local function common_death_fn(delay_days)
-    return function(inst) death_fn(ANGRI_DEATH[string.upper(inst.prefab)], delay_days) end
+    return function(inst) death_fn(inst, ANGRI_DEATH[string.upper(inst.prefab)], delay_days) end
 end
 
 local epics = 
@@ -74,7 +88,7 @@ local epics =
     klaus = function(inst)
         if not TheWorld.ismastersim then return end
 
-        if inst:IsUnchained() then death_fn(ANGRI_DEATH.KLAUS) end
+        if inst:IsUnchained() then death_fn(inst, ANGRI_DEATH.KLAUS) end
     end,
     crabking = function(inst)
         if not TheWorld.ismastersim then return end
@@ -83,14 +97,17 @@ local epics =
         local type = num == 9 and "MAX" or
                     (num > 0 and "PEARL") or
                     "GENERAL"
-        death_fn(ANGRI_DEATH.CRABKING[type])
+        death_fn(inst, ANGRI_DEATH.CRABKING[type])
     end,
     deerclops = function(inst)
         if not TheWorld.ismastersim then return end
 
         local season = ZH_SEASON[TheWorld.state.season]
         local day = TheWorld.state.elapseddaysinseason + 1
-        print("angri_BOT", season .. day, ANGRI_DEATH[string.upper(inst.prefab)])
+
+        local players = get_nearby_players(inst)
+
+        print("angri_BOT", ANGRI_DEATH[string.upper(inst.prefab)], season .. day, players)
     end,
 }
 
