@@ -55,7 +55,7 @@ local function get_nearby_players(inst)
     local players = {}
     for _, v in ipairs(AllPlayers) do
         if inst:GetDistanceSqToInst(v) < 3600 then
-            table.insert(players, UserToName(v.userid))
+            table.insert(players, UserToName(v.userid) .. "(" .. STRINGS.NAMES[string.upper(v.prefab)] .. ")")
             table.insert(players, ", ")
         end
     end
@@ -63,10 +63,10 @@ local function get_nearby_players(inst)
     return table.concat(players)
 end
 
-local function death_fn(inst, msg, delay)
+local function get_cycles_seg(delay)
     if not TheWorld.ismastersim then return end
 
-    local day = (TheWorld.state.cycles + 1) % 1000
+    local cycles = TheWorld.state.cycles + 1
     local seg = TheWorld.state.time * 16 + 0.5
     local delay_segs = ( type(delay) == "number" and delay or 0 ) * 16
     seg = math.floor(seg + delay_segs)
@@ -74,10 +74,21 @@ local function death_fn(inst, msg, delay)
         day = day + 1
         seg = seg - 16
     end
-    day = add_zero(day)
-    local prefab = type(msg) == "table" and msg[math.random(1, #msg)] or msg
+    return cycles, seg
+end
 
-    print("angri_BOT", "EPIC", prefab, day .. "(" .. seg .. ")", get_nearby_players(inst))
+local function get_date(delay)
+    if not TheWorld.ismastersim then return end
+    
+    local cycles, seg = get_cycles_seg(delay)
+    return add_zero(cycles) .. "(" .. seg .. ")"
+end
+
+local function death_fn(inst, msg, delay)
+    if not TheWorld.ismastersim then return end
+    local prefab = type(msg) == "table" and msg[math.random(1, #msg)] or msg
+    local date = get_date(delay)
+    print("angri_BOT", "EPIC", prefab, date, get_nearby_players(inst))
 end
 
 local function common_death_fn(delay_days)
@@ -110,10 +121,11 @@ local epics =
     deerclops = function(inst)
         if not TheWorld.ismastersim then return end
 
+        local date = get_date()
         local season = ZH_SEASON[TheWorld.state.season]
         local day = TheWorld.state.elapseddaysinseason + 1
 
-        print("angri_BOT", "EPIC", ANGRI_DEATH[string.upper(inst.prefab)], season .. day, get_nearby_players(inst))
+        print("angri_BOT", "EPIC", ANGRI_DEATH[string.upper(inst.prefab)], date , season .. day, get_nearby_players(inst))
     end,
 }
 
@@ -152,7 +164,7 @@ end)
 AddSimPostInit(function()
     if not TheWorld.ismastersim then return end
     TheWorld:ListenForEvent("cycleschanged", function(inst, data)
-        local cycles = TheWorld.state.cycles + 1
+        local cycles = get_cycles_seg()
         local season = ZH_SEASON[TheWorld.state.season]
         local day = TheWorld.state.elapseddaysinseason + 1
         if not TheWorld:HasTag("cave") then

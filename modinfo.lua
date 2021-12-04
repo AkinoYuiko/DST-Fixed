@@ -4,14 +4,16 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.2.6"
+version = "2.2.7"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- angri_BOT 统计新增魔眼和蚁狮.
+- angri_BOT 统计玩家时会记录玩家使用的角色.
+- angri_BOT 统计巨鹿数据时会同步统计天数格.
 
+- angri_BOT 统计新增魔眼和蚁狮.
 - angri_BOT 统计新增邪天翁.
 - angri_BOT 现在会统计boss死亡时附近的玩家.
 - 修复 STALKER_ATRIUM 拼写错误.
@@ -24,8 +26,10 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- angri_BOT will now record terrarium and antlion.
+- angri_BOT will now record player's character.
+- angri_BOT will now also record cycles-seg for deerclops.
 
+- angri_BOT will now record terrarium and antlion.
 - angri_BOT will now record malbatross.
 - angri_BOT will now print nearby players on boss death.
 - Fix STALKER_ATRIUM spell.
