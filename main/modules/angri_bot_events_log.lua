@@ -39,6 +39,7 @@ local ANGRI_DEATH =
 }
 
 local function add_zero(day)
+    if not type(day) == "number" then return end
     local day_str = day % 1000
     if day_str == 0 then
         return day % 10000
@@ -64,7 +65,7 @@ local function get_nearby_players(inst)
 end
 
 local function get_cycles_seg(delay)
-    if not TheWorld.ismastersim then return end
+    if not TheWorld then return end
 
     local cycles = TheWorld.state.cycles + 1
     local seg = TheWorld.state.time * 16 + 0.5
@@ -78,14 +79,11 @@ local function get_cycles_seg(delay)
 end
 
 local function get_date(delay)
-    if not TheWorld.ismastersim then return end
-    
     local cycles, seg = get_cycles_seg(delay)
     return add_zero(cycles) .. "(" .. seg .. ")"
 end
 
 local function death_fn(inst, msg, delay)
-    if not TheWorld.ismastersim then return end
     local prefab = type(msg) == "table" and msg[math.random(1, #msg)] or msg
     local date = get_date(delay)
     print("angri_BOT", "EPIC", prefab, date, get_nearby_players(inst))
