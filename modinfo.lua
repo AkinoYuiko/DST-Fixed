@@ -24,8 +24,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- angri_BOT will now record malbatross.
+- angri_BOT will now record terrarium and antlion.
 
+- angri_BOT will now record malbatross.
 - angri_BOT will now print nearby players on boss death.
 - Fix STALKER_ATRIUM spell.
 - Fix klaus death fn.

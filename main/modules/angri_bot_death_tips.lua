@@ -1,6 +1,5 @@
 local AddPrefabPostInit = AddPrefabPostInit
 local AddSimPostInit = AddSimPostInit
-local UpvalueHacker = require"tools/upvaluehacker"
 GLOBAL.setfenv(1, GLOBAL)
 
 local ZH_SEASON =
