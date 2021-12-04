@@ -4,14 +4,15 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.2.5"
+version = "2.2.6"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- angri_BOT 统计新增邪天翁.
+- angri_BOT 统计新增魔眼和蚁狮.
 
+- angri_BOT 统计新增邪天翁.
 - angri_BOT 现在会统计boss死亡时附近的玩家.
 - 修复 STALKER_ATRIUM 拼写错误.
 - 修复克劳斯死亡信息错误的问题.
