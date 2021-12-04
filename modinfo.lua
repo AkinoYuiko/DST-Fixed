@@ -4,14 +4,15 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.2.4"
+version = "2.2.5"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- angri_BOT 现在会统计boss死亡时附近的玩家.
+- angri_BOT 统计新增邪天翁.
 
+- angri_BOT 现在会统计boss死亡时附近的玩家.
 - 修复 STALKER_ATRIUM 拼写错误.
 - 修复克劳斯死亡信息错误的问题.
 - 补充大小蛤蟆死亡信息.
@@ -22,8 +23,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- angri_BOT will now print nearby players on boss death.
+- angri_BOT will now record malbatross.
 
+- angri_BOT will now print nearby players on boss death.
 - Fix STALKER_ATRIUM spell.
 - Fix klaus death fn.
 - Add toadstool & toadstoll_dark death fn.

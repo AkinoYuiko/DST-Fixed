@@ -22,7 +22,11 @@ local ANGRI_DEATH =
     },
     STALKER_ATRIUM = {
         "中庭",
-        "钟婷"
+        "钟婷",
+    },
+    MALBATROSS = {
+        "邪天翁",
+        "屑天翁",
     },
     DEERCLOPS = "巨鹿",
     KLAUS = "克劳斯",
@@ -69,10 +73,8 @@ local function death_fn(inst, msg, delay)
     end
     day = add_zero(day)
     local prefab = type(msg) == "table" and msg[math.random(1, #msg)] or msg
-    
-    local players = get_nearby_players(inst)
 
-    print("angri_BOT", prefab, day .. "(" .. seg .. ")", players)
+    print("angri_BOT", prefab, day .. "(" .. seg .. ")", get_nearby_players(inst))
 end
 
 local function common_death_fn(delay_days)
@@ -85,6 +87,7 @@ local epics =
     dragonfly = common_death_fn(),
     toadstool = common_death_fn(),
     toadstool_dark = common_death_fn(),
+    malbatross = common_death_fn(),
     klaus = function(inst)
         if not TheWorld.ismastersim then return end
 
@@ -105,9 +108,7 @@ local epics =
         local season = ZH_SEASON[TheWorld.state.season]
         local day = TheWorld.state.elapseddaysinseason + 1
 
-        local players = get_nearby_players(inst)
-
-        print("angri_BOT", ANGRI_DEATH[string.upper(inst.prefab)], season .. day, players)
+        print("angri_BOT", ANGRI_DEATH[string.upper(inst.prefab)], season .. day, get_nearby_players(inst))
     end,
 }
 
