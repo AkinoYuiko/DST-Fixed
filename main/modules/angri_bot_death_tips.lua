@@ -55,7 +55,7 @@ end
 local function get_nearby_players(inst)
     local players = {}
     for _, v in ipairs(AllPlayers) do
-        if inst:GetDistanceSqToInst(v) < 60 then
+        if inst:GetDistanceSqToInst(v) < 3600 then
             table.insert(players, UserToName(v.userid))
             table.insert(players, ", ")
         end
