@@ -1,4 +1,6 @@
 local AddPrefabPostInit = AddPrefabPostInit
+local AddSimPostInit = AddSimPostInit
+local UpvalueHacker = require"tools/upvaluehacker"
 GLOBAL.setfenv(1, GLOBAL)
 
 local ZH_SEASON =
@@ -32,7 +34,9 @@ local ANGRI_DEATH =
     KLAUS = "克劳斯",
     TOADSTOOL = "小蛤蟆",
     TOADSTOOL_DARK = "大蛤蟆",
-
+    ANTLION = "蚁狮",
+    EYEOFTERROR = "小眼",
+    TWINMANAGER = "双眼",
 }
 
 local function add_zero(day)
@@ -74,7 +78,7 @@ local function death_fn(inst, msg, delay)
     day = add_zero(day)
     local prefab = type(msg) == "table" and msg[math.random(1, #msg)] or msg
 
-    print("angri_BOT", prefab, day .. "(" .. seg .. ")", get_nearby_players(inst))
+    print("angri_BOT", "EPIC", prefab, day .. "(" .. seg .. ")", get_nearby_players(inst))
 end
 
 local function common_death_fn(delay_days)
@@ -88,6 +92,8 @@ local epics =
     toadstool = common_death_fn(),
     toadstool_dark = common_death_fn(),
     malbatross = common_death_fn(),
+    antlion = common_death_fn(),
+    eyeofterror = common_death_fn(),
     klaus = function(inst)
         if not TheWorld.ismastersim then return end
 
@@ -108,7 +114,7 @@ local epics =
         local season = ZH_SEASON[TheWorld.state.season]
         local day = TheWorld.state.elapseddaysinseason + 1
 
-        print("angri_BOT", ANGRI_DEATH[string.upper(inst.prefab)], season .. day, get_nearby_players(inst))
+        print("angri_BOT", "EPIC", ANGRI_DEATH[string.upper(inst.prefab)], season .. day, get_nearby_players(inst))
     end,
 }
 
@@ -118,3 +124,40 @@ for prefab, fn in pairs(epics) do
         inst:ListenForEvent("death", fn)
     end)
 end
+
+-- Twin of Terror --
+AddPrefabPostInit("twinmanager", function(inst)
+    if not TheWorld.ismastersim then return end
+
+    local function check_end_fight()
+        local et = inst.components.entitytracker
+        local t1 = et:GetEntity("twin1")
+        local t2 = et:GetEntity("twin2")
+        if (t1 == nil or t1.components.health:IsDead()) and (t2 == nil or t2.components.health:IsDead()) then
+            death_fn(inst, ANGRI_DEATH.TWINMANAGER, -1/32)
+        end
+    end
+
+    inst:ListenForEvent("arrive", function(inst)
+        inst:DoTaskInTime(0, function(inst)
+            local et = inst.components.entitytracker
+            local t1 = et:GetEntity("twin1")
+            local t2 = et:GetEntity("twin2")
+
+            inst:ListenForEvent("death", check_end_fight, t1)
+            inst:ListenForEvent("death", check_end_fight, t2)
+        end)
+    end)
+end)
+
+AddSimPostInit(function()
+    if not TheWorld.ismastersim then return end
+    TheWorld:ListenForEvent("cycleschanged", function(inst, data)
+        local cycles = TheWorld.state.cycles + 1
+        local season = ZH_SEASON[TheWorld.state.season]
+        local day = TheWorld.state.elapseddaysinseason + 1
+        if not TheWorld:HasTag("cave") then
+            print("angri_BOT", "CYCLES", cycles, season .. day)
+        end
+    end)
+end)
