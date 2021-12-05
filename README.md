@@ -2,12 +2,12 @@
 Mods in DSTogayther Server. Each can be enabled or disabled.
 
 
-- \- Default On -
+- Default On
 
 Show Bundle
 
 
-- \- The Player -
+- The Player
 
 Enable Quick Attack
 
@@ -22,7 +22,7 @@ Custom Action Fail String
 Disable Ghost Hounded
 
 
-- \- The Equipment -
+- The Equipment
 
 Combinable Equipment
 
@@ -41,7 +41,7 @@ No bowing for Bee Queen Crown
 Glowing Mushroom Hats
 
 
-- \- The Builder -
+- The Builder
 
 Better Fossil Repairing
 
@@ -58,7 +58,7 @@ Classic Lure Plants
 Floating burnt End Table
 
 
-- \- The Mob -
+- The Mob
 
 Birds no sleeping
 
@@ -70,7 +70,7 @@ Bee Queen Extra Drops
 
 
 
-- \- The World -
+- The World
 
 Seeds Disappear on Perished
 
@@ -91,7 +91,7 @@ Disable Forest Resouces Regen
 No Halloween Candies
 
 
-- \- The Recipe -
+- The Recipe
 
 Random Winter Lights
 
