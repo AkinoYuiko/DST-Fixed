@@ -45,6 +45,7 @@ local config_table = {
 	HONORMOUND = "honor_mound",
 	BAT = "bats_attack_eyeturret",
 	GATHERMOONGLASS = "gather_moonglass",
+	PIGKINGMOONGLASS = "pigking_reward_moonglass",
 	NOFORESTRESOURCEREGEN = "disable_forestresouce_regen",
 	HALLOWEEN = "disable_halloween_candies",
 
