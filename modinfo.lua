@@ -4,18 +4,22 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.3"
+version = "2.3.1"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
+- 修复一个崩溃.
+
 - 新模块【世界相关 - 猪王给月亮碎片】.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
+- Fix crash.
+
 - New Module (The World): Pig King reward Moon Glass during Moonstorm.
 ]]
 
