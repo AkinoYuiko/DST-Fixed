@@ -66,14 +66,6 @@ for config, module in pairs(config_table) do
 	end
 end
 
--- angri_BOT boss death tips --
-for _,v in pairs(GLOBAL.ModManager:GetEnabledModNames()) do
-	if table.contains({"Glassic API", "Glassic API - DEV"}, GLOBAL.KnownModIndex:GetModInfo(v).name) then
-		modimport("main/modules/angri_bot_events_log")
-		break
-	end
-end
-
 -- Some temp fixes, since klei is too down bad
 -- Wang wang wang!
 local AddStategraphPostInit = AddStategraphPostInit
