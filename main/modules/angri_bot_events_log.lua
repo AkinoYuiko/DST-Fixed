@@ -72,7 +72,7 @@ local function get_cycles_seg(delay)
     local delay_segs = ( type(delay) == "number" and delay or 0 ) * 16
     seg = math.floor(seg + delay_segs)
     while seg >= 16 do
-        day = day + 1
+        cycles = cycles + 1
         seg = seg - 16
     end
     return cycles, seg
