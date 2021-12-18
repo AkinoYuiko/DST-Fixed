@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local function ontradeforglass(inst, item, giver, ...)
     if (giver and giver.prefab == "miotan") or not TheWorld.state.isalterawake then
-        return inst.last_ontradeforgold_fns["dst-fixed"](inst, item, giver, ...)
+        return inst.ontradeforgold_prefns["dst-fixed"](inst, item, giver, ...)
     end
     local launchitem = inst.launchitem_fn or function() end
 
@@ -65,9 +65,9 @@ end
 
 AddPrefabPostInit("pigking", function(inst)
     if not TheWorld.ismastersim then return end
-    inst.last_ontradeforgold_fns = inst.last_ontradeforgold_fns or {}
+    inst.ontradeforgold_prefns = inst.ontradeforgold_prefns or {}
     inst.launchitem_fn = inst.launchitem_fn or UpvalueHacker.GetUpvalue(inst.components.trader.onaccept, "ontradeforgold.launchitem")
     -- inst.launchitem_fn = UpvalueHacker.GetUpvalue(inst.components.trader.onaccept, "ontradeforgold.launchitem")
-    inst.last_ontradeforgold_fns["dst-fixed"] = UpvalueHacker.GetUpvalue(inst.components.trader.onaccept, "ontradeforgold")
+    inst.ontradeforgold_prefns["dst-fixed"] = UpvalueHacker.GetUpvalue(inst.components.trader.onaccept, "ontradeforgold")
     UpvalueHacker.SetUpvalue(inst.components.trader.onaccept, "ontradeforgold", ontradeforglass)
 end)
