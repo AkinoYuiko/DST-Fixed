@@ -77,45 +77,30 @@ local function new_onequip(inst, owner, ...)
 		inst.components.container.Open = function() --[[ Disabled ]] end
 	end
 
-	local rt = inst.onequip_prefns["dst-fixed"](inst, owner, ...)
+	inst.onequip_prefns["dst-fixed"](inst, owner, ...)
+
 	inst:RemoveEventCallback("onattackother", inst.alterguardian_spawngestalt_fn, owner)
 
 	inst.new_spawngestalt_fn = function(_owner, _data) super_spawngestalt_fn(inst, _owner, _data) end
 	inst:ListenForEvent("onattackother", inst.new_spawngestalt_fn, owner)
 
-	inst._hide_on_deactive = function() hide_on_deactive(inst, owner) end
-	inst:ListenForEvent("sanitydelta", inst._hide_on_deactive, owner)
-	if inst._hide_on_deactive then
-		inst:DoTaskInTime(0, function(inst, owner)
-			inst._hide_on_deactive(inst, owner)
-		end)
-	end
-	-- hide_on_deactive(inst, owner)
+	-- if owner.prefab == "dummy" then
+		-- inst:ListenForEvent("healthdelta", inst._onsanitydelta, owner)
+	-- end
 
 	if open_fn and inst.components.container then
 		inst.components.container.Open = open_fn
 	end
 
 	if owner then owner.AnimState:ClearOverrideSymbol("swap_hat") end
-
-	-- local hackpath = "alterguardian_onsanitydelta.alterguardian_deactivate"
-	-- local alterguardian_deactivate = UpvalueHacker.GetUpvalue(inst._onsanitydelta, hackpath)
-	-- local function deactivate_fn(inst)
-	-- 	alterguardian_deactivate(inst)
-	-- 	if inst._task then
-	-- 		inst._task:Cancel()
-	-- 		inst._task = nil
-	-- 	end
-	-- end
-	-- UpvalueHacker.SetUpvalue(inst.components.equippable.onequipfn, hackpath, deactivate_fn)
-
-	return rt
 end
 
 local function new_onunequip(inst, owner, ...)
 	inst.onunequip_prefns["dst-fixed"](inst, owner, ...)
 	inst:RemoveEventCallback("onattackother", inst.new_spawngestalt_fn, owner)
-	inst:RemoveEventCallback("sanitydelta", inst._hide_on_deactive, owner)
+	-- if owner.prefab == "dummy" then
+	-- 	inst:RemoveEventCallback("healthdelta", inst._onsanitydeltas, owner)
+	-- end
 end
 
 local function OnEntityReplicated(inst)
@@ -148,6 +133,18 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 	makereadonly(container, "acceptsstacks")
 	makereadonly(container, "itemtestfn")
 	makereadonly(container, "type")
+
+	local hackpath = "alterguardian_onsanitydelta.alterguardian_deactivate"
+	local alterguardian_deactivate = UpvalueHacker.GetUpvalue(inst.components.equippable.onequipfn, hackpath)
+	local function deactivate_fn(inst)
+		alterguardian_deactivate(inst)
+		if inst._task then
+			inst._task:Cancel()
+			inst._task = nil
+		end
+	end
+	UpvalueHacker.SetUpvalue(inst.components.equippable.onequipfn, hackpath, deactivate_fn)
+
 
 	inst.onequip_prefns = inst.onequip_prefns or {}
 	inst.onunequip_prefns = inst.onunequip_prefns or {}
