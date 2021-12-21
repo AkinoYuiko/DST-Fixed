@@ -4,7 +4,8 @@ local boolean = {
 	{description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.3.5"
+version = "2.3.6"
+version_compatible = "2.3.5"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
@@ -285,13 +286,13 @@ configuration_options = {
 	{
 		name = "GATHERMOONGLASS",
 		label = zh and "月相盘在出生门掉落" or "Gather Moon Dial's Glass",
-        hover = "Moon Glass dropped from Moon Dials will be teleported to Celestial Portal.",
+        hover = zh and "风暴事件结束时月相盘在出生门处掉落玻璃碎片." or "Moon Glass dropped from Moon Dials will be teleported to Celestial Portal.",
         options = boolean,
         default = false
 	},
 	{
 		name = "PIGKINGMOONGLASS",
-		lable = zh and "猪王给月亮碎片（新）" or "Pig King Reward Moonglass (NEW)",
+		label = zh and "猪王给月亮碎片（新）" or "Pig King Reward Moonglass (NEW)",
 		hover = zh and "月亮风暴期间猪王给月亮碎片." or "Pig King reward Moon Glass during Moonstorm.",
 		options = boolean,
 		default = false
