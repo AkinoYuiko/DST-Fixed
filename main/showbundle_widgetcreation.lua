@@ -3,7 +3,7 @@ local GetInventoryItemAtlas = GLOBAL.GetInventoryItemAtlas
 local containers = require("containers")
 local params = containers.params
 
-params.showbundle_alterguardianhat = 
+params.showbundle_alterguardianhat =
 {
     widget =
     {

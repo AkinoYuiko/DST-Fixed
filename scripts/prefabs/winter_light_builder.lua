@@ -6,7 +6,7 @@ local prefab = {
     "winter_ornament_light5",
     "winter_ornament_light6",
     "winter_ornament_light7",
-	"winter_ornament_light8",
+    "winter_ornament_light8",
 }
 
 -------------------------------
@@ -15,11 +15,11 @@ local function onbuilt(inst, builder)
     local item = SpawnPrefab("winter_ornament_light"..num)
     item.Transform:SetPosition(builder.Transform:GetWorldPosition())
     builder.components.inventory:GiveItem(item,nil,item:GetPosition())
-  	inst:Remove()
+      inst:Remove()
 end
 
 local function MakeBuilder(prefab)
-	-- body
+    -- body
     local function fn()
         local inst = CreateEntity()
 

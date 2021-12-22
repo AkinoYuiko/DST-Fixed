@@ -49,7 +49,7 @@ local function OnCyclesChanged(inst)
         end
 
         inst.AnimState:PlayAnimation("gravedirt")
-        
+
         inst._light = SpawnPrefab("chesterlight")
         inst._light.Transform:SetPosition(inst.Transform:GetWorldPosition())
         inst._light:TurnOn()
@@ -75,7 +75,7 @@ AddPrefabPostInit("mound", function(inst)
     if not TheWorld.ismastersim then return end
 
     inst.on_workable_finish = inst.components.workable and inst.components.workable.onfinish
-    
+
     inst.StartHonored = StartHonored
     inst.StopHonored = StopHonored
 

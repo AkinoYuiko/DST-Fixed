@@ -45,7 +45,7 @@ local RecallMark = require("components/recallmark")
 
 local Copy = RecallMark.Copy
 function RecallMark:Copy(rhs, ...)
-	if rhs
+    if rhs
         and table.contains(SUPPORTED_WATCHES, self.inst.prefab)
         and table.contains(SUPPORTED_WATCHES, rhs.prefab)
         and self.inst.watch_record_name

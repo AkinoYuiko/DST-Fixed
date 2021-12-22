@@ -11,7 +11,7 @@ HANDRESKIN.str = STRINGS.ACTIONS.CASTSPELL.RESKIN
 HANDRESKIN.fn = function(act)
     if not act.invobject then return false end
     local staff = act.doer.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-	local act_pos = act:GetActionPoint()
+    local act_pos = act:GetActionPoint()
     if staff and staff.components.spellcaster then
         staff.components.spellcaster:CastSpell(act.invobject, act_pos)
         return true

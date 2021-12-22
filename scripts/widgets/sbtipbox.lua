@@ -11,7 +11,7 @@ local Tipbox = Class(Widget, function(self, data, widget_override)
 
     self:Hide()
 
-	self:SetScaleMode(SCALEMODE_PROPORTIONAL)
+    self:SetScaleMode(SCALEMODE_PROPORTIONAL)
 
     self.scale = TheFrontEnd:GetHUDScale()
     self.root_scale = 0.95
@@ -71,7 +71,7 @@ function Tipbox:WidgetSetup(override_data, force)
     elseif widget.animbuild then
         self.bg:GetAnimState():SetBuild(widget.animbuild)
     end
-    
+
     local widget_data_map = {
         pos        = { map = "offset",      default = Vector3(0, 95) },
         scale      = { map = "root_scale",  default = 0.52           },

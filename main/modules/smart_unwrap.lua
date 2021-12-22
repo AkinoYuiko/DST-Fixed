@@ -22,7 +22,7 @@ function Unwrappable:Unwrap(doer, ...)
     local owner_container = self.inst.components.inventoryitem:GetContainer()
     local grandowner_container = owner.components.container or owner.components.inventory
     local removed_from_inv = false
-    
+
     local pos = self.inst:GetPosition()
     pos.y = 0
     if self.itemdata then

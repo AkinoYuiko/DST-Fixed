@@ -29,7 +29,7 @@ local SBItemTile = Class(Widget, function(self, itemt)
     self.imagebg:Hide()
 
     self.image = self:AddChild(Image())
-	self.image:Hide()
+    self.image:Hide()
 
     self.rechargeframe = self:AddChild(UIAnim())
     self.rechargeframe:GetAnimState():SetBank("recharge_meter")
@@ -81,10 +81,10 @@ function SBItemTile:SetItemData(data)
     else
         self.imagebg:Hide()
     end
-    
+
     self.image:SetTexture(self.data.atlas or GetInventoryItemAtlas(self.data.image), self.data.image)
     self.image:Show()
-    
+
     if self.data.recharge then
         self:SetChargePercent(self.data.recharge)
         self.rechargeframe:Show()

@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 MATERIALS.MARBLE = "marble"
 local function OnRepaired(inst)
-	local workleft = inst.components.workable.workleft
+    local workleft = inst.components.workable.workleft
     if inst.components.lootdropper.chanceloottable == nil and workleft >= 0 then
         inst.components.lootdropper:SetChanceLootTable("statueglommer")
     end
@@ -54,7 +54,7 @@ AddPrefabPostInit("statueglommer", function(inst)
 end)
 
 AddPrefabPostInit("marble", function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
 
     if not inst.components.repairer then
         inst:AddComponent("repairer")
