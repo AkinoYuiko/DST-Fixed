@@ -1,4 +1,5 @@
 local AddPlayerPostInit = AddPlayerPostInit
+local modimport = modimport
 GLOBAL.setfenv(1, GLOBAL)
 
 local DELIM = "＋"
@@ -275,4 +276,5 @@ AddPlayerPostInit(function(inst)
     end
 end)
 
-modimport("main/asscleaner/descriptionfns")
+-- fix strings code for specified prefabs
+modimport("main/asscleaner/special_description_code")
