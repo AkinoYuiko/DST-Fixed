@@ -1,6 +1,7 @@
-local DELIM = "＋"
 local AddPlayerPostInit = AddPlayerPostInit
 GLOBAL.setfenv(1, GLOBAL)
+
+local DELIM = "＋"
 
 local function getmodifiedstring(base_str, topic_tab, modifier)
     if type(modifier) == "table" then
@@ -34,18 +35,15 @@ local function getmodifiedstring(base_str, topic_tab, modifier)
 end
 
 local function getcharacterstring(base_str, tab, item, modifier)
-    if tab == nil then
-        return
+    if tab then
+        local topic_tab = tab[item]
+        if type(topic_tab) == "string" then
+            return base_str .. "." .. item
+        elseif type(topic_tab) == "table" then
+            base_str = base_str .. "." .. item
+            return getmodifiedstring(base_str, topic_tab, modifier)
+        end
     end
-
-    local topic_tab = tab[item]
-    if type(topic_tab) == "string" then
-        return base_str .. "." .. topic_tab
-    elseif type(topic_tab) ~= "table" then
-        return
-    end
-
-    return getmodifiedstring(base_str, topic_tab, modifier)
 end
 
 function GetStringCode(inst, stringtype, modifier)
@@ -87,8 +85,6 @@ function GetStringCode(inst, stringtype, modifier)
 end
 
 function GetDescriptionCode(inst, item, modifier)
-
-
     local character =
         type(inst) == "string"
         and inst
@@ -120,7 +116,7 @@ function GetDescriptionCode(inst, item, modifier)
     local ret
 
     if character ~= nil and STRINGS.CHARACTERS[character] ~= nil then
-        ret = getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character].DESCRIBE, itemname, modifier)
+        ret = getcharacterstring("CHARACTERS."..character..".DESCRIBE", STRINGS.CHARACTERS[character].DESCRIBE, itemname, modifier)
         if ret ~= nil then
             if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
                 return ret .. DELIM .. (getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], "ANNOUNCE_CANFIX", modifier) or "")
@@ -129,7 +125,7 @@ function GetDescriptionCode(inst, item, modifier)
         end
     end
 
-    ret = getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC.DESCRIBE, itemname, modifier)
+    ret = getcharacterstring("CHARACTERS.GENERIC.DESCRIBE", STRINGS.CHARACTERS.GENERIC.DESCRIBE, itemname, modifier)
 
     if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
         if ret ~= nil then
@@ -152,6 +148,11 @@ function Inspectable:GetDescriptionCode(viewer)
         return GetStringCode(viewer, "DESCRIBE_TOODARK")
     end
 
+    -- Manually written description fns
+    if self.special_description_code then
+        return self.special_description_code(self.inst, viewer)
+    end
+
     local desc
     if self.getspecialdescription ~= nil then
         -- for cases where we need to do additional processing before calling GetDescriptionCode (i.e. player skeleton)
@@ -162,7 +163,7 @@ function Inspectable:GetDescriptionCode(viewer)
         desc = self.description
     end
 
-    if desc == nil or viewer:HasTag("playerghost") or viewer:HasTag("mime") then
+    if desc == nil then
         -- force the call for ghost/mime
         return GetDescriptionCode(viewer, self.inst, self:GetStatus(viewer))
     end
@@ -194,9 +195,9 @@ local Talker = require("components/talker")
 
 local function ResolveChatterString(str)
     local ret = ""
-    for _, v in ipairs(str:gmatch("[^" .. DELIM .. "]+")) do
+    for sub_str in str:gmatch("[^" .. DELIM .. "]+") do
         local val = STRINGS
-        for _, v in ipairs(str:gmatch("[^%.]+")) do
+        for v in sub_str:gmatch("[^%.]+") do
             val = val[v]
             if val == nil then
                 return
@@ -204,15 +205,17 @@ local function ResolveChatterString(str)
         end
         ret = ret .. val
     end
-    return ret
+    -- print("ResolveChatterString", ret)
+    return ret ~= "" and ret or nil
 end
 
 local function OnSpeakerDirty(inst)
     local self = inst.components.talker
 
-    if #self.str_code_speaker.strcode:value() > 0 then
-
-        local str = ResolveChatterString(self.str_code_speaker.strcode)
+    local strcode = self.str_code_speaker.strcode:value()
+    -- print("OnSpeakerDirty", strcode)
+    if #strcode > 0 then
+        local str = ResolveChatterString(strcode)
 
         if str ~= nil then
             local time = self.str_code_speaker.strtime:value()
@@ -227,7 +230,6 @@ end
 
 function Talker:MakeStringCodeSpeaker()
     if self.str_code_speaker == nil then
-        --for npc
         self.str_code_speaker =
         {
             strcode = net_string(self.inst.GUID, "talker.str_code_speaker.strcode", "speakerdirty"),
@@ -272,3 +274,5 @@ AddPlayerPostInit(function(inst)
         talker:MakeStringCodeSpeaker()
     end
 end)
+
+modimport("main/asscleaner/descriptionfns")

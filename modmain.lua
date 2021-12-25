@@ -11,7 +11,7 @@ local config_table = {
     SITEMOTE = "static_sit_emote",
     CUSTOMFAILSTR = "custom_actionfail_strings",
     NOGHOSTHOUNDED = "no_ghost_hounded",
-    LOCALIZEDESC = "localize_desciption",
+    LOCALIZEDESC = "localize_description",
 
     -- The Equipment --
     EQUIPMENT = "repairable_equipment",
@@ -68,41 +68,11 @@ for config, module in pairs(config_table) do
 end
 
 -- Some temp fixes, since klei is too down bad
--- Wang wang wang!
-local AddStategraphPostInit = AddStategraphPostInit
-GLOBAL.setfenv(1, GLOBAL)
+local asscleaner = {
+    "abandon_ship_board",
+    "active_item_stack",
+}
 
--- Fix active_item's stack-lost when swimming
-local Inventory = require("components/inventory")
-function Inventory:DropActiveItem()
-    if self.activeitem then
-        local active_item = self:DropItem(self.activeitem, true) -- Do whole stack
-        self:SetActiveItem(nil)
-        return active_item
-    end
+for _, v in ipairs(asscleaner) do
+    modimport("main/asscleaner/" .. v)
 end
-
--- Fix abandon ship board invalid
-AddStategraphPostInit("wilson", function(self)
-    local onenter = self.states["abandon_ship_pre"].onenter
-    self.states["abandon_ship_pre"].onenter = function(inst, ...)
-        if inst.bufferedaction and inst.bufferedaction.action == ACTIONS.ABANDON_SHIP then
-            inst.sg.statemem.action = inst.bufferedaction
-        end
-        if onenter then
-            return onenter(inst, ...)
-        end
-    end
-
-    local onexit = self.states["abandon_ship_pre"].onexit
-    self.states["abandon_ship_pre"].onexit = function(inst, ...)
-        local bufferedaction = inst.sg.statemem.action
-        if bufferedaction and bufferedaction:IsValid() then
-            bufferedaction:Do()
-        end
-        if onexit then
-            return onexit(inst, ...)
-        end
-    end
-end)
-
