@@ -11,6 +11,7 @@ local config_table = {
     SITEMOTE = "static_sit_emote",
     CUSTOMFAILSTR = "custom_actionfail_strings",
     NOGHOSTHOUNDED = "no_ghost_hounded",
+    LOCALIZEDESC = "localize_desciption",
 
     -- The Equipment --
     EQUIPMENT = "repairable_equipment",
@@ -104,3 +105,4 @@ AddStategraphPostInit("wilson", function(self)
         end
     end
 end)
+

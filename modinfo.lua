@@ -4,28 +4,20 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.3.6"
+version = "2.4"
 version_compatible = "2.3.5"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 提高兼容性.
-
-- 修复一个崩溃.
-- 新模块【世界相关 - 猪王给月亮碎片】.
+- 新模块【玩家相关 - 检查文本跟随客户端语言】.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- Improve compatibility with Night Stories.
-
-- Remove angri_BOT event logs.
-- angri_BOT no longer record charname.
-- Fix crash.
-- New Module (The World): Pig King reward Moon Glass during Moonstorm.
+- New Module (The Player): Description Follows Client Language.
 ]]
 
 api_version = 10
@@ -100,6 +92,13 @@ configuration_options = {
     {
         name = "NOGHOSTHOUNDED",
         label = zh and "禁用灵魂来狗" or "Disable Ghost Hounded",
+        hover = "",
+        options = boolean,
+        default = false
+    },
+    {
+        name = "LOCALIZEDESC",
+        label = zh and "检查文本跟随客户端语言（新）" or "desc follows client lang (NEW)",
         hover = "",
         options = boolean,
         default = false
@@ -290,7 +289,7 @@ configuration_options = {
     },
     {
         name = "PIGKINGMOONGLASS",
-        label = zh and "猪王给月亮碎片（新）" or "Pig King Reward Moonglass (NEW)",
+        label = zh and "猪王给月亮碎片" or "Pig King Reward Moonglass",
         hover = zh and "月亮风暴期间猪王给月亮碎片." or "Pig King reward Moon Glass during Moonstorm.",
         options = boolean,
         default = false
