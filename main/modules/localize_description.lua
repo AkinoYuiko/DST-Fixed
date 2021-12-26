@@ -39,10 +39,10 @@ local function getcharacterstring(base_str, tab, item, modifier)
     if tab then
         local topic_tab = tab[item]
         if type(topic_tab) == "string" then
-            return base_str .. "." .. item
+            return DELIM .. base_str .. "." .. item
         elseif type(topic_tab) == "table" then
             base_str = base_str .. "." .. item
-            return getmodifiedstring(base_str, topic_tab, modifier)
+            return DELIM .. getmodifiedstring(base_str, topic_tab, modifier)
         end
     end
 end
@@ -84,6 +84,9 @@ function GetStringCode(inst, stringtype, modifier)
     return getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], stringtype, modifier)
         or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, stringtype, modifier)
 end
+function GetString(inst, item, modifier)
+    return GetStringCode(inst, item, modifier)
+end
 
 function GetDescriptionCode(inst, item, modifier)
     local character =
@@ -120,7 +123,7 @@ function GetDescriptionCode(inst, item, modifier)
         ret = getcharacterstring("CHARACTERS."..character..".DESCRIBE", STRINGS.CHARACTERS[character].DESCRIBE, itemname, modifier)
         if ret ~= nil then
             if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
-                return ret .. DELIM .. (getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], "ANNOUNCE_CANFIX", modifier) or "")
+                return ret .. (getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], "ANNOUNCE_CANFIX", modifier) or "")
             end
             return ret
         end
@@ -130,7 +133,7 @@ function GetDescriptionCode(inst, item, modifier)
 
     if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
         if ret ~= nil then
-            return ret .. DELIM .. (getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier) or "")
+            return ret .. (getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier) or "")
         end
         ret = getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier)
         if ret ~= nil then
@@ -138,10 +141,14 @@ function GetDescriptionCode(inst, item, modifier)
         end
     end
 
-    return ret or "CHARACTERS.GENERIC.DESCRIBE_GENERIC"
+    return ret or (DELIM .. "CHARACTERS.GENERIC.DESCRIBE_GENERIC")
+end
+function GetDescription(inst, item, modifier)
+    return GetDescriptionCode(inst, item, modifier)
 end
 
 local Inspectable = require("components/inspectable")
+-- function Inspectable:GetDescription(viewer)
 function Inspectable:GetDescriptionCode(viewer)
     if self.inst == viewer then
         return
@@ -169,30 +176,45 @@ function Inspectable:GetDescriptionCode(viewer)
         return GetDescriptionCode(viewer, self.inst, self:GetStatus(viewer))
     end
 end
-
-local lookat_fn = ACTIONS.LOOKAT.fn
-ACTIONS.LOOKAT.fn = function(act, ...)
-    local target = act.target or act.invobject
-
-    if target ~= nil and target.components.inspectable ~= nil then
-        -- Change GetDescription to GetDescriptionCode
-        local code = target.components.inspectable:GetDescriptionCode(act.doer)
-        if code ~= nil then
-            if act.doer.components.playercontroller == nil or
-                not act.doer.components.playercontroller.directwalking then
-                act.doer.components.locomotor:Stop()
-            end
-            if act.doer.components.talker ~= nil then
-                -- Change Say to SpeakStrCode
-                act.doer.components.talker:SpeakStrCode(code, nil, target.components.inspectable.noanim)
-            end
-            return true
-        end
-    end
-    return lookat_fn(act, ...)
+function Inspectable:GetDescription(viewer)
+    local inspectable = self.inst.components.inspectable
+    return inspectable:GetDescriptionCode(viewer)
 end
 
+
+-- local lookat_fn = ACTIONS.LOOKAT.fn
+-- ACTIONS.LOOKAT.fn = function(act, ...)
+--     local target = act.target or act.invobject
+
+--     if target ~= nil and target.components.inspectable ~= nil then
+--         -- Change GetDescription to GetDescriptionCode
+--         local code = target.components.inspectable:GetDescriptionCode(act.doer)
+--         if code ~= nil then
+--             if act.doer.components.playercontroller == nil or
+--                 not act.doer.components.playercontroller.directwalking then
+--                 act.doer.components.locomotor:Stop()
+--             end
+--             if act.doer.components.talker ~= nil then
+--                 -- Change Say to SpeakStrCode
+--                 -- act.doer.components.talker:SpeakStrCode(code, nil, target.components.inspectable.noanim)
+--                 act.doer.components.talker:Say(code, nil, target.components.inspectable.noanim)
+--             end
+--             return true
+--         end
+--     end
+--     return lookat_fn(act, ...)
+-- end
+
 local Talker = require("components/talker")
+local TalkerSay = Talker.Say
+function Talker:Say(script, time, noanim, ...)
+    local talker = self.inst.components.talker
+    if talker and script:find("^"..DELIM) then
+        talker:SpeakStrCode(script, time, noanim)
+    else
+        TalkerSay(self, script, time, noanim, ...)
+    end
+end
 
 local function ResolveChatterString(str)
     local ret = ""
@@ -221,7 +243,7 @@ local function OnSpeakerDirty(inst)
         if str ~= nil then
             local time = self.str_code_speaker.strtime:value()
             local forcetext = self.str_code_speaker.forcetext:value()
-            self:Say(str, time > 0 and time or nil, forcetext, forcetext, true)
+            TalkerSay(self, str, time > 0 and time or nil, forcetext, forcetext, true)
             return
         end
     end
