@@ -4,15 +4,16 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.5"
+version = "2.4.6"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
+- 修复一个导致崩溃的问题.
+
 - 恢复 GetSpecialCharacterString.
 - 移除 GetDescriptionCode.
-
 - 新增 GetActionFailStringCode 用于角色动作失败的自定义文本.
 - 修复了一个崩溃.
 - 尝试修改 Talker.Say
@@ -22,9 +23,10 @@ or
 "[Version: "..version..[[]
 
 Changelog:
+- Fix a crash
+
 - Restore GetSpecialCharacterString.
 - Remove GetDescriptionCode.
-
 - Add GetActionFailStringCode for custom actionfail strings.
 - Fix crash on talking nil.
 - Try modifying Talker.Say
