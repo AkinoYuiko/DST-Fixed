@@ -112,7 +112,7 @@ configuration_options = {
     },
     {
         name = "LOCALIZEDESC",
-        label = zh and "检查文本跟随客户端语言（新）" or "desc follows client lang (NEW)",
+        label = zh and "检查文本跟随客户端语言（新）" or "Descriptions Follow Client Lang (NEW)",
         hover = zh and "大部分检查文本将跟随客户端语言\n测试性功能，谨慎使用" or "Make most descriptions follow client language.\n Testing func. Use at your own risk.",
         options = boolean,
         default = false

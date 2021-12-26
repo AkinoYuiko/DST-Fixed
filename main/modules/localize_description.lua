@@ -1,8 +1,19 @@
+local CUSTOMFAILSTR = GetModConfigData("CUSTOMFAILSTR")
+
 local AddPlayerPostInit = AddPlayerPostInit
 local modimport = modimport
 GLOBAL.setfenv(1, GLOBAL)
 
-local DELIM = "＋"
+STRCODE_HEADER = "/strcode "
+-- local DELIM = "＋"
+
+local function is_strcode(value)
+    return type(value) == "string" and value:find("^"..STRCODE_HEADER)
+end
+
+local function sub_strcode(str)
+    return str:sub(#STRCODE_HEADER + 1, -1)
+end
 
 local function getmodifiedstring(base_str, topic_tab, modifier)
     if type(modifier) == "table" then
@@ -39,17 +50,15 @@ local function getcharacterstring(base_str, tab, item, modifier)
     if tab then
         local topic_tab = tab[item]
         if type(topic_tab) == "string" then
-            local ret = base_str .. "." .. item
-            return ret and DELIM .. ret
+            return base_str .. "." .. item
         elseif type(topic_tab) == "table" then
             base_str = base_str .. "." .. item
-            local ret = getmodifiedstring(base_str, topic_tab, modifier)
-            return ret and DELIM .. ret
+            return getmodifiedstring(base_str, topic_tab, modifier)
         end
     end
 end
 
-function GetStringCode(inst, stringtype, modifier)
+function GetStringCode(inst, item, modifier, strtype, params)
     local character =
         type(inst) == "string"
         and inst
@@ -63,13 +72,12 @@ function GetStringCode(inst, stringtype, modifier)
             (inst:HasTag("playerghost") and "ghost"))
         or character
 
-    local ret = GetSpecialCharacterString(specialcharacter)
-    if ret ~= nil then
-        return ret
+    if GetSpecialCharacterString(specialcharacter) then
+        return
     end
 
-    if stringtype then
-        stringtype = string.upper(stringtype)
+    if item then
+        item = string.upper(item)
     end
     if modifier then
         if type(modifier) == "table" then
@@ -81,18 +89,25 @@ function GetStringCode(inst, stringtype, modifier)
         end
     end
 
-    if not character then
-        return getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, stringtype, modifier)
+    local str = character
+        and getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], item, modifier)
+        or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, item, modifier)
+    if str then
+        local ret = {
+            strtype = strtype,
+            content = str,
+            params = params
+        }
+        return STRCODE_HEADER .. json.encode(ret)
     end
-
-    return getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], stringtype, modifier)
-        or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, stringtype, modifier)
 end
-function GetString(inst, item, modifier)
+local get_string = GetString
+function GetString(inst, item, modifier, ...)
     return GetStringCode(inst, item, modifier)
+        or get_string(inst, item, modifier, ...)
 end
 
-function GetDescriptionCode(inst, item, modifier)
+function GetDescriptionCode(inst, item, modifier, strtype, params)
     local character =
         type(inst) == "string"
         and inst
@@ -117,40 +132,62 @@ function GetDescriptionCode(inst, item, modifier)
             (inst:HasTag("playerghost") and "ghost"))
         or character
 
-    local ret = GetSpecialCharacterString(specialcharacter)
-    if ret ~= nil then
-        return ret
+    if GetSpecialCharacterString(specialcharacter) then
+        return
     end
 
-    if character ~= nil and STRINGS.CHARACTERS[character] ~= nil then
-        ret = getcharacterstring("CHARACTERS."..character..".DESCRIBE", STRINGS.CHARACTERS[character].DESCRIBE, itemname, modifier)
-        if ret ~= nil then
-            if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
-                return ret .. (getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], "ANNOUNCE_CANFIX", modifier) or "")
-            end
-            return ret
+    local ret = {
+        strtype = strtype,
+        content = {},
+        params = params
+    }
+
+    local character_speech = character and STRINGS.CHARACTERS[character]
+    local str = character_speech
+        and getcharacterstring("CHARACTERS."..character..".DESCRIBE", character_speech.DESCRIBE, itemname, modifier)
+        or getcharacterstring("CHARACTERS.GENERIC.DESCRIBE", STRINGS.CHARACTERS.GENERIC.DESCRIBE, itemname, modifier)
+
+    if str then
+        table.insert(ret.content, str)
+    end
+    if item and item.components.repairable and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
+        str = character
+            and getcharacterstring("CHARACTERS."..character, character_speech, "ANNOUNCE_CANFIX", modifier)
+            or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier)
+        if str then
+            table.insert(ret.content, str)
         end
     end
+    -- if character ~= nil and STRINGS.CHARACTERS[character] ~= nil then
+    --     local str = getcharacterstring("CHARACTERS."..character..".DESCRIBE", STRINGS.CHARACTERS[character].DESCRIBE, itemname, modifier)
+    --     if str then
+    --         table.insert(ret.content, str)
+    --     end
+    --     if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
+    --         str = getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], "ANNOUNCE_CANFIX", modifier)
+    --         if str then
+    --             table.insert(ret.content, str)
+    --         end
+    --     end
+    -- else
+    --     str1 = getcharacterstring("CHARACTERS.GENERIC.DESCRIBE", STRINGS.CHARACTERS.GENERIC.DESCRIBE, itemname, modifier)
 
-    ret = getcharacterstring("CHARACTERS.GENERIC.DESCRIBE", STRINGS.CHARACTERS.GENERIC.DESCRIBE, itemname, modifier)
+    --     if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
+    --         str2 = getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier)
+    --     end
+    --     if str1 then table.insert(ret.content, str1) end
+    --     if str2 then table.insert(ret.content, str2) end
+    -- end
 
-    if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
-        if ret ~= nil then
-            return ret .. (getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier) or "")
-        end
-        ret = getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier)
-        if ret ~= nil then
-            return ret
-        end
-    end
-
-    return ret or (DELIM .. "CHARACTERS.GENERIC.DESCRIBE_GENERIC")
+    PrintTable(ret)
+    return #ret.content > 0 and STRCODE_HEADER .. json.encode(ret) or nil
 end
-function GetDescription(inst, item, modifier)
-    return GetDescriptionCode(inst, item, modifier)
+local get_description = GetDescription
+function GetDescription(inst, item, modifier, ...)
+    return GetDescriptionCode(inst, item, modifier) or get_description(inst, item, modifier, ...)
 end
 
-function GetActionFailStringCode(inst, action, reason)
+function GetActionFailStringCode(inst, action, reason, strtype, params)
     local character =
         type(inst) == "string"
         and inst
@@ -164,9 +201,8 @@ function GetActionFailStringCode(inst, action, reason)
             (inst:HasTag("playerghost") and "ghost"))
         or character
 
-    local ret = GetSpecialCharacterString(specialcharacter)
-    if ret ~= nil then
-        return ret
+    if GetSpecialCharacterString(specialcharacter) then
+        return
     end
 
     if action then
@@ -181,18 +217,27 @@ function GetActionFailStringCode(inst, action, reason)
             reason = string.upper(reason)
         end
     end
-
-    if not character then
-        return getcharacterstring("CHARACTERS.GENERIC.ACTIONFAIL", STRINGS.CHARACTERS.GENERIC.ACTIONFAIL, action, reason)
-            or (DELIM .. "CHARACTERS.GENERIC.ACTIONFAIL_GENERIC")
-    end
-
-    return getcharacterstring("CHARACTERS."..character..".ACTIONFAIL", STRINGS.CHARACTERS[character].ACTIONFAIL, action, reason)
+    local character_speech = character and STRINGS.CHARACTERS[character]
+    local str = character_speech
+        and getcharacterstring("CHARACTERS."..character..".ACTIONFAIL", character_speech.ACTIONFAIL, action, reason)
         or getcharacterstring("CHARACTERS.GENERIC.ACTIONFAIL", STRINGS.CHARACTERS.GENERIC.ACTIONFAIL, action, reason)
-        or (DELIM .. "CHARACTERS."..character..".ACTIONFAIL_GENERIC")
+        or (
+            CUSTOMFAILSTR and character_speech
+            and "CHARACTERS."..character..".ACTIONFAIL_GENERIC"
+            or "CHARACTERS.GENERIC.ACTIONFAIL_GENERIC"
+        )
+
+    local ret = {
+        strtype = strtype,
+        content = str,
+        params = params
+    }
+    return STRCODE_HEADER .. json.encode(ret)
+
 end
+local get_action_fail_string = GetActionFailString
 GetActionFailString = function(inst, action, reason, ...)
-    return GetActionFailStringCode(inst, action, reason)
+    return GetActionFailStringCode(inst, action, reason) or get_action_fail_string(inst, action, reason, ...)
 end
 
 -- Components Inspectable --
@@ -233,28 +278,79 @@ end
 local Talker = require("components/talker")
 local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
-    local talker = self.inst.components.talker
-    if talker and type(script) == "string" and script:find("^"..DELIM) then
-        talker:SpeakStrCode(script, time, noanim)
+    if is_strcode(script) then
+        self:SpeakStrCode(sub_strcode(script), time, noanim)
     else
-        TalkerSay(self, script, time, noanim, ...)
+        return TalkerSay(self, script, time, noanim, ...)
     end
 end
 
-local function ResolveChatterString(str)
-    local ret = ""
-    for sub_str in str:gmatch("[^" .. DELIM .. "]+") do
-        local val = STRINGS
-        for v in sub_str:gmatch("[^%.]+") do
-            local modifier = tonumber(v) or v
-            val = val[modifier]
-            if val == nil then
-                return
+-- local function ResolveChatterString(str)
+    -- local ret = ""
+    -- for sub_str in str:gmatch("[^" .. DELIM .. "]+") do
+    --     local val = STRINGS
+    --     for v in sub_str:gmatch("[^%.]+") do
+    --         local modifier = tonumber(v) or v
+    --         val = val[modifier]
+    --         if val == nil then
+    --             return
+    --         end
+    --     end
+    --     ret = ret .. val
+    -- end
+    -- return ret ~= "" and ret
+
+local function get_string_from_field(str)
+    local val = STRINGS
+    for v in str:gmatch("[^%.]+") do
+        local modifier = tonumber(v) or v
+        val = val[modifier]
+        if val == nil then
+            return
+        end
+    end
+    return val
+end
+
+local function ResolveChatterString(message)
+    if type(message) ~= "string" then
+        return
+    end
+    local data = json.decode(message)
+    if not data then
+        return
+    end
+
+    local res = ""
+    if type(data.content) == "table" then
+        for _, str in ipairs(data.content) do
+            local val = get_string_from_field(str)
+            if val then
+                res = res .. val
             end
         end
-        ret = ret .. val
+    else
+        res = get_string_from_field(data.content)
     end
-    return ret ~= "" and ret or nil
+    -- local format_fn = data.strtype == "format" and string.format
+    --                 or data.strtype == "subfmt" and subfmt
+    if data.params then
+        for k, v in pairs(data.params) do
+            if is_strcode(v) then
+                data.params[k] = get_string_from_field(sub_strcode(v))
+            end
+        end
+    else
+        data.params = {}
+    end
+
+    if data.strtype == "format" then
+        res = string.format(res, unpack(data.params))
+    elseif data.strtype == "subfmt" then
+        res = subfmt(res, data.params)
+    end
+    return res
+
 end
 
 local function OnSpeakerDirty(inst)
@@ -325,12 +421,10 @@ end)
 
 local ChatHistoryOnSay = ChatHistory.OnSay
 function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
-    if type(message) == "string" and message:find("^"..DELIM) then
-        message = ResolveChatterString(message)
+    if is_strcode(message) then
+        message = ResolveChatterString(sub_strcode(message))
     end
     return ChatHistoryOnSay(self, guid, userid, netid, name, prefab, message, ...)
 end
 -- fix strings code for specified prefabs
--- modimport("main/asscleaner/special_description_code")
-
--- ＋CHARACTERS.WANDA.ACTIONFAIL_GENERIC＋CHARACTERS.WANDA.ACTIONFAIL_GENERIC
+modimport("main/asscleaner/special_description_code")
