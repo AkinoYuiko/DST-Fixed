@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.8"
+version = "2.4.9"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 修复 ResolveChatterString 解析数字字段的问题.
+- 大幅度优化【检查文本跟随客户端语言】的代码逻辑.
 
+- 修复 ResolveChatterString 解析数字字段的问题.
 - 恢复 GetSpecialCharacterString.
 - 移除 GetDescriptionCode.
 - 新增 GetActionFailStringCode 用于角色动作失败的自定义文本.
@@ -23,8 +24,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix ResolveChatterString with numbers.
+- Greatly tweak code logic for "Descriptions Follow Client Lang".
 
+- Fix ResolveChatterString with numbers.
 - Fix a crash.
 - Restore GetSpecialCharacterString.
 - Remove GetDescriptionCode.
