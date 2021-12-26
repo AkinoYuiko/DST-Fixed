@@ -251,7 +251,7 @@ local function ResolveChatterString(str)
                 return
             end
         end
-        ret = ret .. val
+        ret = ret .. (type(val) ~= "string" and "VAL is not STRING" or val)
     end
     return ret ~= "" and ret or nil
 end

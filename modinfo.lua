@@ -4,7 +4,7 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.6"
+version = "2.4.7"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
@@ -23,7 +23,7 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix a crash
+- Fix a crash.
 
 - Restore GetSpecialCharacterString.
 - Remove GetDescriptionCode.
