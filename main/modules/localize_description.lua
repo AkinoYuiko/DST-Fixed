@@ -147,8 +147,51 @@ function GetDescription(inst, item, modifier)
     return GetDescriptionCode(inst, item, modifier)
 end
 
+function GetActionFailStringCode(inst, action, reason)
+    local character =
+        type(inst) == "string"
+        and inst
+        or (inst ~= nil and inst.prefab or nil)
+
+    character = character ~= nil and string.upper(character) or nil
+
+    if GetSpecialCharacterString(
+        type(inst) == "table"
+        and ((inst:HasTag("mime") and "mime") or
+            (inst:HasTag("playerghost") and "ghost"))
+        or character
+    ) then
+        return
+    end
+
+    if action then
+        action = string.upper(action)
+    end
+    if reason then
+        if type(reason) == "table" then
+            for i, v in ipairs(reason) do
+                reason[i] = string.upper(v)
+            end
+        else
+            reason = string.upper(reason)
+        end
+    end
+
+    if not character then
+        return getcharacterstring("CHARACTERS.GENERIC.ACTIONFAIL", STRINGS.CHARACTERS.GENERIC.ACTIONFAIL, action, reason)
+            or (DELIM .. "CHARACTERS.GENERIC.ACTIONFAIL_GENERIC")
+    end
+
+    return getcharacterstring("CHARACTERS."..character..".ACTIONFAIL", STRINGS.CHARACTERS[character].ACTIONFAIL, action, reason)
+        or getcharacterstring("CHARACTERS.GENERIC.ACTIONFAIL", STRINGS.CHARACTERS.GENERIC.ACTIONFAIL, action, reason)
+        or (DELIM .. "CHARACTERS."..character..".ACTIONFAIL_GENERIC")
+end
+GetActionFailString = function(inst, action, reason, ...)
+    return GetActionFailStringCode(inst, action, reason)
+end
+
+-- Components Inspectable --
 local Inspectable = require("components/inspectable")
--- function Inspectable:GetDescription(viewer)
 function Inspectable:GetDescriptionCode(viewer)
     if self.inst == viewer then
         return
@@ -181,30 +224,7 @@ function Inspectable:GetDescription(viewer)
     return inspectable:GetDescriptionCode(viewer)
 end
 
-
--- local lookat_fn = ACTIONS.LOOKAT.fn
--- ACTIONS.LOOKAT.fn = function(act, ...)
---     local target = act.target or act.invobject
-
---     if target ~= nil and target.components.inspectable ~= nil then
---         -- Change GetDescription to GetDescriptionCode
---         local code = target.components.inspectable:GetDescriptionCode(act.doer)
---         if code ~= nil then
---             if act.doer.components.playercontroller == nil or
---                 not act.doer.components.playercontroller.directwalking then
---                 act.doer.components.locomotor:Stop()
---             end
---             if act.doer.components.talker ~= nil then
---                 -- Change Say to SpeakStrCode
---                 -- act.doer.components.talker:SpeakStrCode(code, nil, target.components.inspectable.noanim)
---                 act.doer.components.talker:Say(code, nil, target.components.inspectable.noanim)
---             end
---             return true
---         end
---     end
---     return lookat_fn(act, ...)
--- end
-
+-- Components Talker --
 local Talker = require("components/talker")
 local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
@@ -228,7 +248,6 @@ local function ResolveChatterString(str)
         end
         ret = ret .. val
     end
-    -- print("ResolveChatterString", ret)
     return ret ~= "" and ret or nil
 end
 
@@ -236,7 +255,6 @@ local function OnSpeakerDirty(inst)
     local self = inst.components.talker
 
     local strcode = self.str_code_speaker.strcode:value()
-    -- print("OnSpeakerDirty", strcode)
     if #strcode > 0 then
         local str = ResolveChatterString(strcode)
 
