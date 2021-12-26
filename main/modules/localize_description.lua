@@ -209,7 +209,7 @@ local Talker = require("components/talker")
 local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
     local talker = self.inst.components.talker
-    if talker and script:find("^"..DELIM) then
+    if talker and type(script) == "string" and script:find("^"..DELIM) then
         talker:SpeakStrCode(script, time, noanim)
     else
         TalkerSay(self, script, time, noanim, ...)
