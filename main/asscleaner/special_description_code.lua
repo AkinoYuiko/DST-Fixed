@@ -1,3 +1,4 @@
+local AddPlayerPostInit = AddPlayerPostInit
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -32,4 +33,39 @@ end)
 --     if not TheWorld.ismastersim then return end
 
 --     inst.components.inspectable.special_description_code = singingshell_special_description_code
+-- end)
+
+------------------------------------
+----------  PLAYER COMMON ----------
+------------------------------------
+local function TryDescribe(descstrings, modifier)
+    return descstrings ~= nil and (
+            type(descstrings) == "string" and
+            descstrings or
+            descstrings[modifier] or
+            descstrings.GENERIC
+        ) or nil
+end
+
+local function TryCharStrings(inst, charstrings, modifier)
+    return charstrings ~= nil and (
+            TryDescribe(charstrings.DESCRIBE[string.upper(inst.prefab)], modifier) or
+            TryDescribe(charstrings.DESCRIBE.PLAYER, modifier)
+        ) or nil
+end
+
+local function GetDescription(inst, viewer)
+    local modifier = inst.components.inspectable:GetStatus(viewer) or "GENERIC"
+    return string.format(
+            TryCharStrings(inst, STRINGS.CHARACTERS[string.upper(viewer.prefab)], modifier) or
+            TryCharStrings(inst, STRINGS.CHARACTERS.GENERIC, modifier),
+            inst:GetDisplayName()
+        )
+end
+
+-- AddPlayerPostInit(function(inst)
+--     if not TheWorld.ismastersim then return end
+--     if inst.components.inspectable then
+--         inst.components.inspectable.getspecialdescription = GetDescription
+--     end
 -- end)
