@@ -246,12 +246,13 @@ local function ResolveChatterString(str)
     for sub_str in str:gmatch("[^" .. DELIM .. "]+") do
         local val = STRINGS
         for v in sub_str:gmatch("[^%.]+") do
-            val = val[v]
+            local modifier = tonumber(v) or v
+            val = val[modifier]
             if val == nil then
                 return
             end
         end
-        ret = ret .. (type(val) ~= "string" and "VAL is not STRING" or val)
+        ret = ret .. val
     end
     return ret ~= "" and ret or nil
 end
@@ -296,6 +297,7 @@ end
 -- TODO: Make a net event for repeat speech
 --NOTE: forcetext translates to noanim + force say
 function Talker:SpeakStrCode(strcode, time, forcetext)
+    print("SpeakStrCode", strcode)
     if self.str_code_speaker ~= nil and TheWorld.ismastersim then
         self.str_code_speaker.strcode:set(strcode)
         self.str_code_speaker.strtime:set(time or 0)
