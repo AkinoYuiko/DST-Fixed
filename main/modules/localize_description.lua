@@ -319,5 +319,15 @@ AddPlayerPostInit(function(inst)
     end
 end)
 
+-- local ChatHistory = require("chathistory")
+local ChatHistoryOnSay = ChatHistory.OnSay
+function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
+    if type(message) == "string" and message:find("^"..DELIM) then
+        message = ResolveChatterString(message)
+    end
+    return ChatHistoryOnSay(self, guid, userid, netid, name, prefab, message, ...)
+end
 -- fix strings code for specified prefabs
-modimport("main/asscleaner/special_description_code")
+-- modimport("main/asscleaner/special_description_code")
+
+-- ＋CHARACTERS.WANDA.ACTIONFAIL_GENERIC＋CHARACTERS.WANDA.ACTIONFAIL_GENERIC
