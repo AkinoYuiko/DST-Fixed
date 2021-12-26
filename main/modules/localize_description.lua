@@ -7,12 +7,16 @@ GLOBAL.setfenv(1, GLOBAL)
 STRCODE_HEADER = "/strcode "
 -- local DELIM = "＋"
 
-local function is_strcode(value)
+function IsStrCode(value)
     return type(value) == "string" and value:find("^"..STRCODE_HEADER)
 end
 
-local function sub_strcode(str)
+function SubStrCode(str)
     return str:sub(#STRCODE_HEADER + 1, -1)
+end
+
+function EncodeStrCode(tbl)
+    return STRCODE_HEADER .. json.encode(tbl)
 end
 
 local function getmodifiedstring(base_str, topic_tab, modifier)
@@ -98,7 +102,7 @@ function GetStringCode(inst, item, modifier, strtype, params)
             content = str,
             params = params
         }
-        return STRCODE_HEADER .. json.encode(ret)
+        return EncodeStrCode(ret)
     end
 end
 local get_string = GetString
@@ -158,33 +162,13 @@ function GetDescriptionCode(inst, item, modifier, strtype, params)
             table.insert(ret.content, str)
         end
     end
-    -- if character ~= nil and STRINGS.CHARACTERS[character] ~= nil then
-    --     local str = getcharacterstring("CHARACTERS."..character..".DESCRIBE", STRINGS.CHARACTERS[character].DESCRIBE, itemname, modifier)
-    --     if str then
-    --         table.insert(ret.content, str)
-    --     end
-    --     if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
-    --         str = getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], "ANNOUNCE_CANFIX", modifier)
-    --         if str then
-    --             table.insert(ret.content, str)
-    --         end
-    --     end
-    -- else
-    --     str1 = getcharacterstring("CHARACTERS.GENERIC.DESCRIBE", STRINGS.CHARACTERS.GENERIC.DESCRIBE, itemname, modifier)
 
-    --     if item ~= nil and item.components.repairable ~= nil and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
-    --         str2 = getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier)
-    --     end
-    --     if str1 then table.insert(ret.content, str1) end
-    --     if str2 then table.insert(ret.content, str2) end
-    -- end
-
-    PrintTable(ret)
-    return #ret.content > 0 and STRCODE_HEADER .. json.encode(ret) or nil
+    return #ret.content > 0 and EncodeStrCode(ret) or nil
 end
 local get_description = GetDescription
 function GetDescription(inst, item, modifier, ...)
-    return GetDescriptionCode(inst, item, modifier) or get_description(inst, item, modifier, ...)
+    return GetDescriptionCode(inst, item, modifier)
+        or get_description(inst, item, modifier, ...)
 end
 
 function GetActionFailStringCode(inst, action, reason, strtype, params)
@@ -232,12 +216,13 @@ function GetActionFailStringCode(inst, action, reason, strtype, params)
         content = str,
         params = params
     }
-    return STRCODE_HEADER .. json.encode(ret)
+    return EncodeStrCode(ret)
 
 end
 local get_action_fail_string = GetActionFailString
 GetActionFailString = function(inst, action, reason, ...)
-    return GetActionFailStringCode(inst, action, reason) or get_action_fail_string(inst, action, reason, ...)
+    return GetActionFailStringCode(inst, action, reason)
+        or get_action_fail_string(inst, action, reason, ...)
 end
 
 -- Components Inspectable --
@@ -278,27 +263,12 @@ end
 local Talker = require("components/talker")
 local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
-    if is_strcode(script) then
-        self:SpeakStrCode(sub_strcode(script), time, noanim)
+    if IsStrCode(script) then
+        self:SpeakStrCode(SubStrCode(script), time, noanim)
     else
         return TalkerSay(self, script, time, noanim, ...)
     end
 end
-
--- local function ResolveChatterString(str)
-    -- local ret = ""
-    -- for sub_str in str:gmatch("[^" .. DELIM .. "]+") do
-    --     local val = STRINGS
-    --     for v in sub_str:gmatch("[^%.]+") do
-    --         local modifier = tonumber(v) or v
-    --         val = val[modifier]
-    --         if val == nil then
-    --             return
-    --         end
-    --     end
-    --     ret = ret .. val
-    -- end
-    -- return ret ~= "" and ret
 
 local function get_string_from_field(str)
     local val = STRINGS
@@ -312,7 +282,7 @@ local function get_string_from_field(str)
     return val
 end
 
-local function ResolveChatterString(message)
+function ResolveStrCode(message)
     if type(message) ~= "string" then
         return
     end
@@ -324,20 +294,23 @@ local function ResolveChatterString(message)
     local res = ""
     if type(data.content) == "table" then
         for _, str in ipairs(data.content) do
-            local val = get_string_from_field(str)
-            if val then
-                res = res .. val
+            if str:find("^%$") then
+                res = res .. str:sub(2, -1)
+            else
+                local val = get_string_from_field(str)
+                if val then
+                    res = res .. val
+                end
             end
         end
     else
         res = get_string_from_field(data.content)
     end
-    -- local format_fn = data.strtype == "format" and string.format
-    --                 or data.strtype == "subfmt" and subfmt
+
     if data.params then
         for k, v in pairs(data.params) do
-            if is_strcode(v) then
-                data.params[k] = get_string_from_field(sub_strcode(v))
+            if IsStrCode(v) then
+                data.params[k] = get_string_from_field(SubStrCode(v))
             end
         end
     else
@@ -358,12 +331,12 @@ local function OnSpeakerDirty(inst)
 
     local strcode = self.str_code_speaker.strcode:value()
     if #strcode > 0 then
-        local str = ResolveChatterString(strcode)
+        local str = ResolveStrCode(strcode)
 
         if str ~= nil then
             local time = self.str_code_speaker.strtime:value()
             local forcetext = self.str_code_speaker.forcetext:value()
-            TalkerSay(self, str, time > 0 and time or nil, forcetext, forcetext, true)
+            self:Say(str, time > 0 and time or nil, forcetext, forcetext, true)
             return
         end
     end
@@ -393,7 +366,7 @@ end
 -- TODO: Make a net event for repeat speech
 --NOTE: forcetext translates to noanim + force say
 function Talker:SpeakStrCode(strcode, time, forcetext)
-    print("SpeakStrCode", strcode)
+    -- print("SpeakStrCode", strcode)
     if self.str_code_speaker ~= nil and TheWorld.ismastersim then
         self.str_code_speaker.strcode:set(strcode)
         self.str_code_speaker.strtime:set(time or 0)
@@ -421,8 +394,8 @@ end)
 
 local ChatHistoryOnSay = ChatHistory.OnSay
 function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
-    if is_strcode(message) then
-        message = ResolveChatterString(sub_strcode(message))
+    if IsStrCode(message) then
+        message = ResolveStrCode(SubStrCode(message))
     end
     return ChatHistoryOnSay(self, guid, userid, netid, name, prefab, message, ...)
 end
