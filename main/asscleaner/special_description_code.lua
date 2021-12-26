@@ -265,7 +265,6 @@ end
 
 local death_announcement = Networking_DeathAnnouncement
 function Networking_DeathAnnouncement(message, ...)
-    print("Networking_DeathAnnouncement", message)
     if IsStrCode(message) then
         message = ResolveStrCode(SubStrCode(message))
     end

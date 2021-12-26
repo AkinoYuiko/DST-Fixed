@@ -4,13 +4,14 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.10"
+version = "2.4.11"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
 - 尝试修复死亡信息未跟随客户端的问题.
+- 修复独立服务器【检查文本跟随客户端语言】死亡和复活部分不生效的问题
 
 - 大幅度优化【检查文本跟随客户端语言】的代码逻辑.
 - 修复 ResolveChatterString 解析数字字段的问题.
@@ -26,6 +27,7 @@ or
 
 Changelog:
 - Attempt to fix death message not translated.
+- Fix "Descriptions Follow Client Lang" not working on dedicted server for death & rez announcements
 
 - Greatly tweak code logic for "Descriptions Follow Client Lang".
 - Fix ResolveChatterString with numbers.
