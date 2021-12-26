@@ -262,13 +262,13 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
     return EncodeStrCode(msg_tab)
 end
 
-local death_announcement = Networking_DeathAnnouncement
-function Networking_DeathAnnouncement(message, ...)
-    if IsStrCode(message) then
-        message = ResolveStrCode(SubStrCode(message))
-    end
-    return death_announcement(message, ...)
-end
+-- local death_announcement = Networking_DeathAnnouncement
+-- function Networking_DeathAnnouncement(message, ...)
+--     if IsStrCode(message) then
+--         message = ResolveStrCode(SubStrCode(message))
+--     end
+--     return death_announcement(message, ...)
+-- end
 
 function GetNewRezAnnouncementString(theRezzed, source)
     if not theRezzed or not source then return "" end
@@ -289,10 +289,10 @@ function GetNewRezAnnouncementString(theRezzed, source)
     return EncodeStrCode(msg_tab)
 end
 
-local resurrect_announcement = Networking_ResurrectAnnouncement
-function Networking_ResurrectAnnouncement(message, ...)
-    if IsStrCode(message) then
-        message = ResolveStrCode(SubStrCode(message))
-    end
-    return resurrect_announcement(message, ...)
-end
+-- local resurrect_announcement = Networking_ResurrectAnnouncement
+-- function Networking_ResurrectAnnouncement(message, ...)
+--     if IsStrCode(message) then
+--         message = ResolveStrCode(SubStrCode(message))
+--     end
+--     return resurrect_announcement(message, ...)
+-- end

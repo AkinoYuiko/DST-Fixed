@@ -399,5 +399,13 @@ function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
     end
     return ChatHistoryOnSay(self, guid, userid, netid, name, prefab, message, ...)
 end
+
+local ChatHistoryOnAnnouncement = ChatHistory.OnAnnouncement
+function ChatHistory:OnAnnouncement(message, ...)
+    if IsStrCode(message) then
+        message = ResolveStrCode(SubStrCode(message))
+    end
+    return ChatHistoryOnAnnouncement(self, message, ...)
+end
 -- fix strings code for specified prefabs
 modimport("main/asscleaner/special_description_code")
