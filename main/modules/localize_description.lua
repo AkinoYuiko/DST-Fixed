@@ -39,10 +39,12 @@ local function getcharacterstring(base_str, tab, item, modifier)
     if tab then
         local topic_tab = tab[item]
         if type(topic_tab) == "string" then
-            return DELIM .. base_str .. "." .. item
+            local ret = base_str .. "." .. item
+            return ret and DELIM .. ret
         elseif type(topic_tab) == "table" then
             base_str = base_str .. "." .. item
-            return DELIM .. getmodifiedstring(base_str, topic_tab, modifier)
+            local ret = getmodifiedstring(base_str, topic_tab, modifier)
+            return ret and DELIM .. ret
         end
     end
 end
@@ -319,7 +321,6 @@ AddPlayerPostInit(function(inst)
     end
 end)
 
--- local ChatHistory = require("chathistory")
 local ChatHistoryOnSay = ChatHistory.OnSay
 function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
     if type(message) == "string" and message:find("^"..DELIM) then
