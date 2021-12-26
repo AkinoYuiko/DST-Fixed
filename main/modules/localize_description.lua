@@ -55,13 +55,15 @@ function GetStringCode(inst, stringtype, modifier)
 
     character = character ~= nil and string.upper(character) or nil
 
-    if GetSpecialCharacterString(
+    local specialcharacter =
         type(inst) == "table"
         and ((inst:HasTag("mime") and "mime") or
             (inst:HasTag("playerghost") and "ghost"))
         or character
-    ) then
-        return
+
+    local ret = GetSpecialCharacterString(specialcharacter)
+    if ret ~= nil then
+        return ret
     end
 
     if stringtype then
@@ -113,11 +115,10 @@ function GetDescriptionCode(inst, item, modifier)
             (inst:HasTag("playerghost") and "ghost"))
         or character
 
-    if GetSpecialCharacterString(specialcharacter) then
-        return
+    local ret = GetSpecialCharacterString(specialcharacter)
+    if ret ~= nil then
+        return ret
     end
-
-    local ret
 
     if character ~= nil and STRINGS.CHARACTERS[character] ~= nil then
         ret = getcharacterstring("CHARACTERS."..character..".DESCRIBE", STRINGS.CHARACTERS[character].DESCRIBE, itemname, modifier)
@@ -155,13 +156,15 @@ function GetActionFailStringCode(inst, action, reason)
 
     character = character ~= nil and string.upper(character) or nil
 
-    if GetSpecialCharacterString(
+    local specialcharacter =
         type(inst) == "table"
         and ((inst:HasTag("mime") and "mime") or
             (inst:HasTag("playerghost") and "ghost"))
         or character
-    ) then
-        return
+
+    local ret = GetSpecialCharacterString(specialcharacter)
+    if ret ~= nil then
+        return ret
     end
 
     if action then
@@ -191,38 +194,38 @@ GetActionFailString = function(inst, action, reason, ...)
 end
 
 -- Components Inspectable --
-local Inspectable = require("components/inspectable")
-function Inspectable:GetDescriptionCode(viewer)
-    if self.inst == viewer then
-        return
-    elseif not CanEntitySeeTarget(viewer, self.inst) then
-        return GetStringCode(viewer, "DESCRIBE_TOODARK")
-    end
+-- local Inspectable = require("components/inspectable")
+-- function Inspectable:GetDescriptionCode(viewer)
+--     if self.inst == viewer then
+--         return
+--     elseif not CanEntitySeeTarget(viewer, self.inst) then
+--         return GetStringCode(viewer, "DESCRIBE_TOODARK")
+--     end
 
-    -- Manually written description fns
-    if self.special_description_code then
-        return self.special_description_code(self.inst, viewer)
-    end
+--     -- Manually written description fns
+--     if self.special_description_code then
+--         return self.special_description_code(self.inst, viewer)
+--     end
 
-    local desc
-    if self.getspecialdescription ~= nil then
-        -- for cases where we need to do additional processing before calling GetDescriptionCode (i.e. player skeleton)
-        desc = self.getspecialdescription(self.inst, viewer)
-    elseif self.descriptionfn ~= nil then
-        desc = self.descriptionfn(self.inst, viewer)
-    else
-        desc = self.description
-    end
+--     local desc
+--     if self.getspecialdescription ~= nil then
+--         -- for cases where we need to do additional processing before calling GetDescriptionCode (i.e. player skeleton)
+--         desc = self.getspecialdescription(self.inst, viewer)
+--     elseif self.descriptionfn ~= nil then
+--         desc = self.descriptionfn(self.inst, viewer)
+--     else
+--         desc = self.description
+--     end
 
-    if desc == nil then
-        -- force the call for ghost/mime
-        return GetDescriptionCode(viewer, self.inst, self:GetStatus(viewer))
-    end
-end
-function Inspectable:GetDescription(viewer)
-    local inspectable = self.inst.components.inspectable
-    return inspectable:GetDescriptionCode(viewer)
-end
+--     if desc == nil then
+--         -- force the call for ghost/mime
+--         return GetDescriptionCode(viewer, self.inst, self:GetStatus(viewer))
+--     end
+-- end
+-- function Inspectable:GetDescription(viewer)
+--     local inspectable = self.inst.components.inspectable
+--     return inspectable:GetDescriptionCode(viewer)
+-- end
 
 -- Components Talker --
 local Talker = require("components/talker")
