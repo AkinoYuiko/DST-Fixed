@@ -263,8 +263,23 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
     return EncodeStrCode(msg_tab)
 end
 
+
+local STRCODE_REVIERS = {}
+STRCODE_REVIERS[STRINGS.NAMES.POCKETWATCH_REVIVE] = "NAMES.POCKETWATCH_REVIVE"
+STRCODE_REVIERS[STRINGS.NAMES.POCKETWATCH_REVIVE_REVIVER] = "NAMES.POCKETWATCH_REVIVE_REVIVER"
+STRCODE_REVIERS[STRINGS.NAMES.AMULET] = "NAMES.AMULET"
+STRCODE_REVIERS[STRINGS.NAMES.RESURRECTIONSTONE] = "NAMES.RESURRECTIONSTONE"
+STRCODE_REVIERS[STRINGS.NAMES.RESURRECTIONSTATUE] = "NAMES.RESURRECTIONSTATUE"
+STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL] = "NAMES.MULTIPLAYER_PORTAL"
+STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK] = "NAMES.MULTIPLAYER_PORTAL_MOONROCK"
+STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS] = "NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS"
+
 function GetNewRezAnnouncementString(theRezzed, source)
     if not theRezzed or not source then return "" end
+    local strcode_source = source == STRINGS.NAMES.SHENANIGANS and STRCODE_HEADER .. "NAMES.SHENANIGANS"
+            or STRCODE_REVIERS[source] and STRCODE_HEADER .. STRCODE_REVIERS[source]
+            or source
+    print("GetNewRezAnnouncementString", strcode_source)
     -- local message = theRezzed:GetDisplayName().." "..STRINGS.UI.HUD.REZ_ANNOUNCEMENT.." "..source.."."
     local msg_tab = {
         strtype = "format",
@@ -275,7 +290,7 @@ function GetNewRezAnnouncementString(theRezzed, source)
         },
         params = {
             theRezzed:GetDisplayName(),
-            source
+            strcode_source
         }
     }
     -- return message

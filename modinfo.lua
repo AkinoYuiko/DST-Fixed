@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.17"
+version = "2.4.18"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 更新了Talker.Say的逻辑.
+- 复活提示现在可以翻译部分来源.
 
+- 更新了Talker.Say的逻辑.
 - 修复风暴时间老头被󰂻的问题.
 - 【玩家相关 - 检查文本跟随客户端语言】兼容风暴事件老头的语言.
 - <折叠了多个修复>
@@ -21,8 +22,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Update code logic for Talker.Say.
+- RezAnnouncementString now translates most sources.
 
+- Update code logic for Talker.Say.
 - Fix wagstaff_npc 󰂻.
 - Make wagstaff_npc's speech follow client language.
 - < include multi fixes >
