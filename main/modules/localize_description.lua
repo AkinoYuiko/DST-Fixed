@@ -301,16 +301,20 @@ end
 
 -- Components Talker --
 local Talker = require("components/talker")
+
+local enable_say_parse = true
 local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
-    if IsStrCode(script) then
-        self:SpeakStrCode(SubStrCode(script), time, noanim)
-        return
-    elseif TheWorld.ismastersim then
-        local strcode = STRCODE_TALKER[script]
-        if strcode then
-            self:SpeakStrCode(json.encode({content = strcode}), time, noanim)
+    if enable_say_parse then
+        if IsStrCode(script) then
+            self:SpeakStrCode(SubStrCode(script), time, noanim)
             return
+        elseif TheWorld.ismastersim then
+            local strcode = STRCODE_TALKER[script]
+            if strcode then
+                self:SpeakStrCode(json.encode({content = strcode}), time, noanim)
+                return
+            end
         end
     end
     return TalkerSay(self, script, time, noanim, ...)
@@ -326,7 +330,9 @@ local function OnSpeakerDirty(inst)
         if str ~= nil then
             local time = self.str_code_speaker.strtime:value()
             local forcetext = self.str_code_speaker.forcetext:value()
-            TalkerSay(self, str, time > 0 and time or nil, forcetext, forcetext, true)
+            enable_say_parse = false
+            self:Say(str, time > 0 and time or nil, forcetext, forcetext, true)
+            enable_say_parse = true
             return
         end
     end
