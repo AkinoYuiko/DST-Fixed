@@ -227,8 +227,8 @@ GetActionFailString = function(inst, action, reason, ...)
 end
 
 local function vanilla_subfmt(s, tab)
-    ​return​ (s:​gsub​(​'​(%b{})​'​, ​function​(​w​) ​return​ tab[w:​sub​(​2​, ​-​2​)] ​or​ w ​end​)) 
-end
+    return (s:gsub('(%b{})', function(w) return tab[w:sub(2, -2)] or w end))
+  end
 
 local function get_string_from_field(str)
     local val = STRINGS
@@ -386,6 +386,7 @@ end
 
 local ChatHistoryOnAnnouncement = ChatHistory.OnAnnouncement
 function ChatHistory:OnAnnouncement(message, ...)
+
     if IsStrCode(message) then
         message = ResolveStrCode(SubStrCode(message))
     end
@@ -393,11 +394,10 @@ function ChatHistory:OnAnnouncement(message, ...)
 end
 
 local vanilla_networking_announcement = Networking_Announcement
-​function​ ​Networking_Announcement​(​message​, ​...​)
+function Networking_Announcement(message,...)
     for _, str in ipairs(STRCODE_ANNOUNCE) do
         if message == get_string_from_field(str) then
-            local ret = { content = str }
-            return EncodeStrCode(ret)
+            return vanilla_networking_announcement(EncodeStrCode({ content = str }), ...)
         end
     end
     return vanilla_networking_announcement(message, ...)

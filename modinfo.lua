@@ -4,39 +4,28 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.11"
+version = "2.4.14"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 尝试修复死亡信息未跟随客户端的问题.
-- 修复独立服务器【检查文本跟随客户端语言】死亡和复活部分不生效的问题
+- 修复 Networking Announcement 未正常跟随客户端语言的问题.
 
-- 大幅度优化【检查文本跟随客户端语言】的代码逻辑.
-- 修复 ResolveChatterString 解析数字字段的问题.
-- 恢复 GetSpecialCharacterString.
-- 移除 GetDescriptionCode.
-- 新增 GetActionFailStringCode 用于角色动作失败的自定义文本.
-- 修复了一个崩溃.
-- 尝试修改 Talker.Say
+- 修复死亡信息未跟随客户端语言的问题.
+- 文本跟随客户端语言新增盒中泰拉.
+- <折叠了多个修复>
 - 新模块【玩家相关 - 检查文本跟随客户端语言】.
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- Attempt to fix death message not translated.
-- Fix "Descriptions Follow Client Lang" not working on dedicted server for death & rez announcements
+- Fix networking announcement not hacked.
 
-- Greatly tweak code logic for "Descriptions Follow Client Lang".
-- Fix ResolveChatterString with numbers.
-- Fix a crash.
-- Restore GetSpecialCharacterString.
-- Remove GetDescriptionCode.
-- Add GetActionFailStringCode for custom actionfail strings.
-- Fix crash on talking nil.
-- Try modifying Talker.Say
+- Fix death message not translated.
+- Add strcode for terrarium.
+- < include multi fixes >
 - New Module (The Player): Description Follows Client Language.
 ]]
 
