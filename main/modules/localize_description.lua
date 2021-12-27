@@ -229,18 +229,6 @@ end
 
 local function vanilla_subfmt(s, tab)
     return (s:gsub('(%b{})', function(w) return tab[w:sub(2, -2)] or w end))
-  end
-
-local function get_string_from_field(str)
-    local val = STRINGS
-    for v in str:gmatch("[^%.]+") do
-        local modifier = tonumber(v) or v
-        val = val[modifier]
-        if val == nil then
-            return
-        end
-    end
-    return val
 end
 
 function subfmt(s, tab)
@@ -254,6 +242,18 @@ function subfmt(s, tab)
         return EncodeStrCode(ret)
     end
     return vanilla_subfmt(s, tab)
+end
+
+local function get_string_from_field(str)
+    local val = STRINGS
+    for v in str:gmatch("[^%.]+") do
+        local modifier = tonumber(v) or v
+        val = val[modifier]
+        if val == nil then
+            return
+        end
+    end
+    return val
 end
 
 function ResolveStrCode(message)
@@ -305,14 +305,14 @@ local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
     if IsStrCode(script) then
         self:SpeakStrCode(SubStrCode(script), time, noanim)
-    else
+    elseif TheWorld.ismastersim then
         local strcode = STRCODE_TALKER[script]
         if strcode then
             self:SpeakStrCode(json.encode({content = strcode}), time, noanim)
-        else
-            return TalkerSay(self, script, time, noanim, ...)
+            return
         end
     end
+    return TalkerSay(self, script, time, noanim, ...)
 end
 
 local function OnSpeakerDirty(inst)
@@ -389,14 +389,21 @@ function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
     return ChatHistoryOnSay(self, guid, userid, netid, name, prefab, message, ...)
 end
 
-local vanilla_networking_announcement = Networking_Announcement
-function Networking_Announcement(message,...)
-    local str = STRCODE_ANNOUNCE[message]
-    if str then
-        return vanilla_networking_announcement(EncodeStrCode({ content = str }), ...)
-    else
-        return vanilla_networking_announcement(message, ...)
+local announce = NetworkProxy.Announce
+function NetworkProxy:Announce(message, ...)
+    local strcode = STRCODE_ANNOUNCE[message]
+    if strcode then
+        message = EncodeStrCode(strcode)
     end
+    return announce(self, message, ...)
+end
+
+local networking_announcement = Networking_Announcement
+function Networking_Announcement(message, ...)
+    if IsStrCode(message) then
+        message = ResolveStrCode(SubStrCode(message))
+    end
+    return networking_announcement(message, ...)
 end
 
 -- fix strings code for specified prefabs
