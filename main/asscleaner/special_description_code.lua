@@ -297,3 +297,13 @@ function Networking_ResurrectAnnouncement(message, ...)
     end
     return resurrect_announcement(message, ...)
 end
+
+--------------------------------------------------------
+----------------------- TERRARIUM ----------------------
+--------------------------------------------------------
+table.insert(STRCODE_ANNOUNCE, "EYEOFTERROR_CANCEL")
+table.insert(STRCODE_ANNOUNCE, "EYEOFTERROR_COMING")
+table.insert(STRCODE_ANNOUNCE, "TWINS_COMING")
+
+table.insert(STRCODE_SUBFMT, "EYEOFTERROR_TARGET")
+table.insert(STRCODE_SUBFMT, "TWINS_TARGET")

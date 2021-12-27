@@ -6,6 +6,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 STRCODE_HEADER = "/strcode "
 STRCODE_SUBFMT = {}
+STRCODE_ANNOUNCE = {}
 
 function IsStrCode(value)
     return type(value) == "string" and value:find("^"..STRCODE_HEADER)
@@ -225,33 +226,8 @@ GetActionFailString = function(inst, action, reason, ...)
         or get_action_fail_string(inst, action, reason, ...)
 end
 
- 
-local function​ ​vanilla_subfmt​(​s​, ​tab​) 
+local function vanilla_subfmt(s, tab)
     ​return​ (s:​gsub​(​'​(%b{})​'​, ​function​(​w​) ​return​ tab[w:​sub​(​2​, ​-​2​)] ​or​ w ​end​)) 
-end
-
-function subfmt(s, tab)
-    if STRCODE_SUBFMT[s] then
-        local ret = {
-            strtype = "subfmt",
-            content = STRCODE_SUBFMT[s],
-            params = tab
-        }
-        return EncodeStrCode(ret)
-    else
-        return vanilla_subfmt(s, tab)
-    end
-end
-
--- Components Talker --
-local Talker = require("components/talker")
-local TalkerSay = Talker.Say
-function Talker:Say(script, time, noanim, ...)
-    if IsStrCode(script) then
-        self:SpeakStrCode(SubStrCode(script), time, noanim)
-    else
-        return TalkerSay(self, script, time, noanim, ...)
-    end
 end
 
 local function get_string_from_field(str)
@@ -264,6 +240,20 @@ local function get_string_from_field(str)
         end
     end
     return val
+end
+
+function subfmt(s, tab)
+    for _, str in ipairs(STRCODE_SUBFMT) do
+        if s == get_string_from_field(str) then
+            local ret = {
+                strtype = "subfmt",
+                content = str,
+                params = tab
+            }
+            return EncodeStrCode(ret)
+        end
+    end
+    return vanilla_subfmt(s, tab)
 end
 
 function ResolveStrCode(message)
@@ -307,6 +297,17 @@ function ResolveStrCode(message)
         res = vanilla_subfmt(res, data.params)
     end
     return res
+end
+
+-- Components Talker --
+local Talker = require("components/talker")
+local TalkerSay = Talker.Say
+function Talker:Say(script, time, noanim, ...)
+    if IsStrCode(script) then
+        self:SpeakStrCode(SubStrCode(script), time, noanim)
+    else
+        return TalkerSay(self, script, time, noanim, ...)
+    end
 end
 
 local function OnSpeakerDirty(inst)
@@ -390,5 +391,17 @@ function ChatHistory:OnAnnouncement(message, ...)
     end
     return ChatHistoryOnAnnouncement(self, message, ...)
 end
+
+local vanilla_networking_announcement = Networking_Announcement
+​function​ ​Networking_Announcement​(​message​, ​...​)
+    for _, str in ipairs(STRCODE_ANNOUNCE) do
+        if message == get_string_from_field(str) then
+            local ret = { content = str }
+            return EncodeStrCode(ret)
+        end
+    end
+    return vanilla_networking_announcement(message, ...)
+end
+
 -- fix strings code for specified prefabs
 modimport("main/asscleaner/special_description_code")
