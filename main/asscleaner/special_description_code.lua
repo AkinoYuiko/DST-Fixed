@@ -2,9 +2,9 @@ local AddPlayerPostInit = AddPlayerPostInit
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
---------------------------------------------------------
---------------------  PLAYER COMMON --------------------
---------------------------------------------------------
+--------------------------------------------------------------------------------
+-------------------------------- PLAYER COMMON ---------------------------------
+--------------------------------------------------------------------------------
 
 local function TryDescribe(base_str, descstrings, modifier)
     return descstrings and (
@@ -44,9 +44,9 @@ AddPlayerPostInit(function(inst)
     end
 end)
 
---------------------------------------------------------
-----------------------  SKELETONS ----------------------
---------------------------------------------------------
+--------------------------------------------------------------------------------
+---------------------------------- SKELETONS -----------------------------------
+--------------------------------------------------------------------------------
 
 local function getdesc(inst, viewer)
     if inst.char and not viewer:HasTag("playerghost") then
@@ -100,9 +100,9 @@ AddPrefabPostInit("skeleton_player", function(inst)
     end
 end)
 
---------------------------------------------------------
---------------------  SINGING SHELL --------------------
---------------------------------------------------------
+--------------------------------------------------------------------------------
+-------------------------------- SINGING SHELL ---------------------------------
+--------------------------------------------------------------------------------
 
 local NOTES =
 {
@@ -140,9 +140,9 @@ for _, prefab in ipairs(shells) do
     AddPrefabPostInit(prefab, shell_postinit)
 end
 
---------------------------------------------------------
----------------------  DEATH EVENT ---------------------
---------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------- DEATH EVENT ----------------------------------
+--------------------------------------------------------------------------------
 
 -- local EventAnnouncer = require("widgets/eventannouncer")
 require("widgets/eventannouncer")
@@ -298,12 +298,70 @@ function Networking_ResurrectAnnouncement(message, ...)
     return resurrect_announcement(message, ...)
 end
 
---------------------------------------------------------
------------------------ TERRARIUM ----------------------
---------------------------------------------------------
-table.insert(STRCODE_ANNOUNCE, "EYEOFTERROR_CANCEL")
-table.insert(STRCODE_ANNOUNCE, "EYEOFTERROR_COMING")
-table.insert(STRCODE_ANNOUNCE, "TWINS_COMING")
+--------------------------------------------------------------------------------
+---------------------------------- TERRARIUM -----------------------------------
+--------------------------------------------------------------------------------
+STRCODE_ANNOUNCE[STRINGS.EYEOFTERROR_CANCEL] = "EYEOFTERROR_CANCEL"
+STRCODE_ANNOUNCE[STRINGS.EYEOFTERROR_COMING] = "EYEOFTERROR_COMING"
+STRCODE_ANNOUNCE[STRINGS.TWINS_COMING] = "TWINS_COMING"
 
-table.insert(STRCODE_SUBFMT, "EYEOFTERROR_TARGET")
-table.insert(STRCODE_SUBFMT, "TWINS_TARGET")
+STRCODE_SUBFMT[STRINGS.EYEOFTERROR_TARGET] = "EYEOFTERROR_TARGET"
+STRCODE_SUBFMT[STRINGS.TWINS_TARGET] = "TWINS_TARGET"
+
+--------------------------------------------------------------------------------
+--------------------------------- WAGSTAFF_NPC ---------------------------------
+--------------------------------------------------------------------------------
+
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_START[1]] = "WAGSTAFF_NPC_START.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_START[2]] = "WAGSTAFF_NPC_START.2"
+
+-- table.insert(STRCODE_TALKER, "WAGSTAFF_NPC_MUMBLE_1.1")
+-- table.insert(STRCODE_TALKER, "WAGSTAFF_NPC_MUMBLE_1.2")
+-- table.insert(STRCODE_TALKER, "WAGSTAFF_NPC_MUMBLE_1.3")
+-- table.insert(STRCODE_TALKER, "WAGSTAFF_NPC_MUMBLE_1.4")
+
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_THIS_WAY[1]] = "WAGSTAFF_NPC_THIS_WAY.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_THIS_WAY[2]] = "WAGSTAFF_NPC_THIS_WAY.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_THIS_WAY[3]] = "WAGSTAFF_NPC_THIS_WAY.3"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_NO_WAY1[1]] = "WAGSTAFF_NPC_NO_WAY1.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_NO_WAY2[1]] = "WAGSTAFF_NPC_NO_WAY2.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_NO_WAY3[1]] = "WAGSTAFF_NPC_NO_WAY3.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_NOT_THIS_TOOL[1]] = "WAGSTAFF_NPC_NOT_THIS_TOOL.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_NOT_THIS_TOOL[2]] = "WAGSTAFF_NPC_NOT_THIS_TOOL.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_YES_THIS_TOOL[1]] = "WAGSTAFF_NPC_YES_THIS_TOOL.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_YES_THIS_TOOL[2]] = "WAGSTAFF_NPC_YES_THIS_TOOL.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_TOO_BUSY[1]] = "WAGSTAFF_NPC_TOO_BUSY.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_TOO_BUSY[2]] = "WAGSTAFF_NPC_TOO_BUSY.2"
+
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_EXPERIMENT_DONE_1] = "WAGSTAFF_NPC_EXPERIMENT_DONE_1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_EXPERIMENT_DONE_2] = "WAGSTAFF_NPC_EXPERIMENT_DONE_2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_EXPERIMENT_FAIL_1] = "WAGSTAFF_NPC_EXPERIMENT_FAIL_1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_EXPERIMENT_FAIL_2] = "WAGSTAFF_NPC_EXPERIMENT_FAIL_2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_STORMPASS] = "WAGSTAFF_NPC_STORMPASS"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MEETING] = "WAGSTAFF_NPC_MEETING"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MEETING_2] = "WAGSTAFF_NPC_MEETING_2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MEETING_3] = "WAGSTAFF_NPC_MEETING_3"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MEETING_4] = "WAGSTAFF_NPC_MEETING_4"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MEETING_5] = "WAGSTAFF_NPC_MEETING_5"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_WANT_TOOL_1] = "WAGSTAFF_NPC_WANT_TOOL_1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_WANT_TOOL_2] = "WAGSTAFF_NPC_WANT_TOOL_2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_WANT_TOOL_3] = "WAGSTAFF_NPC_WANT_TOOL_3"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_WANT_TOOL_4] = "WAGSTAFF_NPC_WANT_TOOL_4"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_WANT_TOOL_5] = "WAGSTAFF_NPC_WANT_TOOL_5"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_CAPTURESTART] = "WAGSTAFF_NPC_CAPTURESTART"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_CAPTURESTOP] = "WAGSTAFF_NPC_CAPTURESTOP"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_CAPTURESTOP2] = "WAGSTAFF_NPC_CAPTURESTOP2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTAGO1] = "WAGSTAFF_GOTTAGO1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTAGO2] = "WAGSTAFF_GOTTAGO2"
+
+local function wagstaff_npc_postinit(inst)
+    if not TheWorld.ismastersim then return end
+    local talker = inst.components.talker
+    if talker then
+        talker:MakeStringCodeSpeaker()
+    end
+end
+
+for _, prefab in ipairs({"wagstaff_npc", "wagstaff_npc_pstboss", "alterguardian_contained"}) do
+    AddPrefabPostInit(prefab, wagstaff_npc_postinit)
+end

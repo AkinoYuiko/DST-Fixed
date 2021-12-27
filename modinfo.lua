@@ -4,13 +4,13 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.14"
+version = "2.4.15"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 更新内容:
-- 修复 Networking Announcement 未正常跟随客户端语言的问题.
+- 【玩家相关 - 检查文本跟随客户端语言】兼容风暴事件老头的语言.
 
 - 修复死亡信息未跟随客户端语言的问题.
 - 文本跟随客户端语言新增盒中泰拉.
@@ -21,8 +21,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix networking announcement not hacked.
+- Make wagstaff_npc's speech follow client language.
 
+- Fix networking announcement not hacked.
 - Fix death message not translated.
 - Add strcode for terrarium.
 - < include multi fixes >

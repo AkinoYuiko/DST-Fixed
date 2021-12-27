@@ -7,6 +7,7 @@ GLOBAL.setfenv(1, GLOBAL)
 STRCODE_HEADER = "/strcode "
 STRCODE_SUBFMT = {}
 STRCODE_ANNOUNCE = {}
+STRCODE_TALKER = {}
 
 function IsStrCode(value)
     return type(value) == "string" and value:find("^"..STRCODE_HEADER)
@@ -243,15 +244,14 @@ local function get_string_from_field(str)
 end
 
 function subfmt(s, tab)
-    for _, str in ipairs(STRCODE_SUBFMT) do
-        if s == get_string_from_field(str) then
-            local ret = {
-                strtype = "subfmt",
-                content = str,
-                params = tab
-            }
-            return EncodeStrCode(ret)
-        end
+    local str = STRCODE_SUBFMT[s]
+    if str then
+        local ret = {
+            strtype = "subfmt",
+            content = str,
+            params = tab
+        }
+        return EncodeStrCode(ret)
     end
     return vanilla_subfmt(s, tab)
 end
@@ -306,7 +306,12 @@ function Talker:Say(script, time, noanim, ...)
     if IsStrCode(script) then
         self:SpeakStrCode(SubStrCode(script), time, noanim)
     else
-        return TalkerSay(self, script, time, noanim, ...)
+        local strcode = STRCODE_TALKER[script]
+        if strcode then
+            self:SpeakStrCode(json.encode({content = strcode}), time, noanim)
+        else
+            return TalkerSay(self, script, time, noanim, ...)
+        end
     end
 end
 
@@ -320,7 +325,7 @@ local function OnSpeakerDirty(inst)
         if str ~= nil then
             local time = self.str_code_speaker.strtime:value()
             local forcetext = self.str_code_speaker.forcetext:value()
-            self:Say(str, time > 0 and time or nil, forcetext, forcetext, true)
+            TalkerSay(self, str, time > 0 and time or nil, forcetext, forcetext, true)
             return
         end
     end
@@ -384,23 +389,14 @@ function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
     return ChatHistoryOnSay(self, guid, userid, netid, name, prefab, message, ...)
 end
 
-local ChatHistoryOnAnnouncement = ChatHistory.OnAnnouncement
-function ChatHistory:OnAnnouncement(message, ...)
-
-    if IsStrCode(message) then
-        message = ResolveStrCode(SubStrCode(message))
-    end
-    return ChatHistoryOnAnnouncement(self, message, ...)
-end
-
 local vanilla_networking_announcement = Networking_Announcement
 function Networking_Announcement(message,...)
-    for _, str in ipairs(STRCODE_ANNOUNCE) do
-        if message == get_string_from_field(str) then
-            return vanilla_networking_announcement(EncodeStrCode({ content = str }), ...)
-        end
+    local str = STRCODE_ANNOUNCE[message]
+    if str then
+        return vanilla_networking_announcement(EncodeStrCode({ content = str }), ...)
+    else
+        return vanilla_networking_announcement(message, ...)
     end
-    return vanilla_networking_announcement(message, ...)
 end
 
 -- fix strings code for specified prefabs
