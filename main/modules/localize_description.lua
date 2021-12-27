@@ -5,7 +5,7 @@ local modimport = modimport
 GLOBAL.setfenv(1, GLOBAL)
 
 STRCODE_HEADER = "/strcode "
--- local DELIM = "＋"
+STRCODE_SUBFMT = {}
 
 function IsStrCode(value)
     return type(value) == "string" and value:find("^"..STRCODE_HEADER)
@@ -225,39 +225,23 @@ GetActionFailString = function(inst, action, reason, ...)
         or get_action_fail_string(inst, action, reason, ...)
 end
 
--- Components Inspectable --
--- local Inspectable = require("components/inspectable")
--- function Inspectable:GetDescriptionCode(viewer)
---     if self.inst == viewer then
---         return
---     elseif not CanEntitySeeTarget(viewer, self.inst) then
---         return GetStringCode(viewer, "DESCRIBE_TOODARK")
---     end
+ 
+local function​ ​vanilla_subfmt​(​s​, ​tab​) 
+    ​return​ (s:​gsub​(​'​(%b{})​'​, ​function​(​w​) ​return​ tab[w:​sub​(​2​, ​-​2​)] ​or​ w ​end​)) 
+end
 
---     -- Manually written description fns
---     if self.special_description_code then
---         return self.special_description_code(self.inst, viewer)
---     end
-
---     local desc
---     if self.getspecialdescription ~= nil then
---         -- for cases where we need to do additional processing before calling GetDescriptionCode (i.e. player skeleton)
---         desc = self.getspecialdescription(self.inst, viewer)
---     elseif self.descriptionfn ~= nil then
---         desc = self.descriptionfn(self.inst, viewer)
---     else
---         desc = self.description
---     end
-
---     if desc == nil then
---         -- force the call for ghost/mime
---         return GetDescriptionCode(viewer, self.inst, self:GetStatus(viewer))
---     end
--- end
--- function Inspectable:GetDescription(viewer)
---     local inspectable = self.inst.components.inspectable
---     return inspectable:GetDescriptionCode(viewer)
--- end
+function subfmt(s, tab)
+    if STRCODE_SUBFMT[s] then
+        local ret = {
+            strtype = "subfmt",
+            content = STRCODE_SUBFMT[s],
+            params = tab
+        }
+        return EncodeStrCode(ret)
+    else
+        return vanilla_subfmt(s, tab)
+    end
+end
 
 -- Components Talker --
 local Talker = require("components/talker")
@@ -320,10 +304,9 @@ function ResolveStrCode(message)
     if data.strtype == "format" then
         res = string.format(res, unpack(data.params))
     elseif data.strtype == "subfmt" then
-        res = subfmt(res, data.params)
+        res = vanilla_subfmt(res, data.params)
     end
     return res
-
 end
 
 local function OnSpeakerDirty(inst)
