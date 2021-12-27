@@ -339,7 +339,6 @@ STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTAGO1] = "WAGSTAFF_GOTTAGO1"
 STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTAGO2] = "WAGSTAFF_GOTTAGO2"
 
 local function wagstaff_npc_postinit(inst)
-    if not TheWorld.ismastersim then return end
     local talker = inst.components.talker
     if talker then
         talker:MakeStringCodeSpeaker()

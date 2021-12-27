@@ -305,6 +305,7 @@ local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
     if IsStrCode(script) then
         self:SpeakStrCode(SubStrCode(script), time, noanim)
+        return
     elseif TheWorld.ismastersim then
         local strcode = STRCODE_TALKER[script]
         if strcode then
@@ -389,21 +390,21 @@ function ChatHistory:OnSay(guid, userid, netid, name, prefab, message, ...)
     return ChatHistoryOnSay(self, guid, userid, netid, name, prefab, message, ...)
 end
 
-local announce = NetworkProxy.Announce
-function NetworkProxy:Announce(message, ...)
-    local strcode = STRCODE_ANNOUNCE[message]
-    if strcode then
-        message = EncodeStrCode(strcode)
-    end
-    return announce(self, message, ...)
-end
-
 local networking_announcement = Networking_Announcement
 function Networking_Announcement(message, ...)
     if IsStrCode(message) then
         message = ResolveStrCode(SubStrCode(message))
     end
     return networking_announcement(message, ...)
+end
+
+local announce = NetworkProxy.Announce
+function NetworkProxy:Announce(message, ...)
+    local strcode = STRCODE_ANNOUNCE[message]
+    if strcode then
+        message = EncodeStrCode({content = strcode})
+    end
+    return announce(self, message, ...)
 end
 
 -- fix strings code for specified prefabs
