@@ -4,7 +4,7 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.19"
+version = "2.4.20"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
