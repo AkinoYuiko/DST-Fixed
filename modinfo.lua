@@ -4,15 +4,16 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.20"
+version = "2.4.21"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
 
 更新内容:
-- 新模块支持寄居蟹奶奶和称重.
+- 修复多处崩溃.
 
+- 新模块支持寄居蟹奶奶和称重.
 - 复活提示现在可以翻译部分来源.
 - 更新了Talker.Say的逻辑.
 - 修复风暴时间老头被󰂻的问题.
@@ -24,8 +25,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Update STRCODE_TALKER for hermit_crab.
+- Fix multi crashes.
 
+- Update STRCODE_TALKER for hermit_crab.
 - RezAnnouncementString now translates most sources.
 - Update code logic for Talker.Say.
 - Fix wagstaff_npc 󰂻.
