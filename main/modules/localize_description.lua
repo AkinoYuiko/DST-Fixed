@@ -64,7 +64,7 @@ local function getcharacterstring(base_str, tab, item, modifier)
     end
 end
 
-function GetStringCode(inst, item, modifier, strtype, params)
+function GetStringCode(inst, stringtype, modifier, stringformat, params)
     local character =
         type(inst) == "string"
         and inst
@@ -82,8 +82,8 @@ function GetStringCode(inst, item, modifier, strtype, params)
         return
     end
 
-    if item then
-        item = string.upper(item)
+    if stringtype then
+        stringtype = string.upper(stringtype)
     end
     if modifier then
         if type(modifier) == "table" then
@@ -96,11 +96,11 @@ function GetStringCode(inst, item, modifier, strtype, params)
     end
 
     local str = character
-        and getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], item, modifier)
-        or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, item, modifier)
+        and getcharacterstring("CHARACTERS."..character, STRINGS.CHARACTERS[character], stringtype, modifier)
+        or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, stringtype, modifier)
     if str then
         local ret = {
-            strtype = strtype,
+            strtype = stringformat,
             content = str,
             params = params
         }
@@ -108,9 +108,9 @@ function GetStringCode(inst, item, modifier, strtype, params)
     end
 end
 local get_string = GetString
-function GetString(inst, item, modifier, ...)
-    return GetStringCode(inst, item, modifier)
-        or get_string(inst, item, modifier, ...)
+function GetString(inst, stringtype, modifier, ...)
+    return GetStringCode(inst, stringtype, modifier)
+        or get_string(inst, stringtype, modifier, ...)
 end
 
 function GetDescriptionCode(inst, item, modifier, strtype, params)

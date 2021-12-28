@@ -99,7 +99,7 @@ local function new_onunequip(inst, owner, ...)
     inst.onunequip_prefns["dst-fixed"](inst, owner, ...)
     inst:RemoveEventCallback("onattackother", inst.new_spawngestalt_fn, owner)
     -- if owner.prefab == "dummy" then
-    -- 	inst:RemoveEventCallback("healthdelta", inst._onsanitydeltas, owner)
+    --     inst:RemoveEventCallback("healthdelta", inst._onsanitydeltas, owner)
     -- end
 end
 

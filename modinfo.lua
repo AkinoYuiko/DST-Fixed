@@ -4,14 +4,16 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.18"
+version = "2.4.19"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "版本: "..version..[[
 
-更新内容:
-- 复活提示现在可以翻译部分来源.
 
+更新内容:
+- 新模块支持寄居蟹奶奶和称重.
+
+- 复活提示现在可以翻译部分来源.
 - 更新了Talker.Say的逻辑.
 - 修复风暴时间老头被󰂻的问题.
 - 【玩家相关 - 检查文本跟随客户端语言】兼容风暴事件老头的语言.
@@ -22,8 +24,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- RezAnnouncementString now translates most sources.
+- Update STRCODE_TALKER for hermit_crab.
 
+- RezAnnouncementString now translates most sources.
 - Update code logic for Talker.Say.
 - Fix wagstaff_npc 󰂻.
 - Make wagstaff_npc's speech follow client language.
@@ -347,19 +350,4 @@ configuration_options = {
         options = boolean,
         default = false
     },
-    -- AddTitle(zh and "未来可能移除的" or "To Be Removed"),
-    -- {
-    -- 	name = "STAFF",
-    -- 	label = zh and "星杖/月杖增强" or "Enhanced Star & Monn Caller Staff",
-    -- 	hover = zh and "装备星杖月杖可以右键装备栏原地使用" or "Star/Moon Caller Staff use with right-click on equipped.",
-    -- 	options = boolean,
-    -- 	default = false
-    -- },
-    -- {
-    -- 	name = "BEEFALO",
-    -- 	label = zh and "驯好的牛不打招呼" or "Beefalos No Greeting",
-    -- 	hover = zh and "驯好的牛不会跑过来向玩家打招呼" or "Disable beefalos' greeting to players",
-    -- 	options = boolean,
-    -- 	default = false
-    -- },
 }
