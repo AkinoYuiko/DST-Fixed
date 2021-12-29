@@ -1,6 +1,9 @@
 local CUSTOMFAILSTR = GetModConfigData("CUSTOMFAILSTR")
 
 local AddPlayerPostInit = AddPlayerPostInit
+local AddPrefabPostInit = AddPrefabPostInit
+-- local AddPrefabPostInitAny = AddPrefabPostInitAny
+local AddClassPostConstruct = AddClassPostConstruct
 local modimport = modimport
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -411,6 +414,28 @@ function NetworkProxy:Announce(message, ...)
         message = EncodeStrCode({content = strcode})
     end
     return announce(self, message, ...)
+end
+
+AddClassPostConstruct("components/named_replica", function(self, inst)
+    local function OnNameDirty(inst)
+        local name = inst.replica.named._name:value()
+        inst.name = name ~= ""
+            and IsStrCode(name) and ResolveStrCode(SubStrCode(name))
+            or STRINGS.NAMES[string.upper(inst.prefab)]
+    end
+
+    if not TheWorld.ismastersim then
+        inst:ListenForEvent("namedirty", OnNameDirty)
+    end
+end)
+
+local Named = require("components/named")
+local named_set_name = Named.SetName
+function Named:SetName(name, ...)
+    named_set_name(self, name, ...)
+    if IsStrCode(name) then
+        self.inst.name = ResolveStrCode(SubStrCode(name))
+    end
 end
 
 -- fix strings code for specified prefabs

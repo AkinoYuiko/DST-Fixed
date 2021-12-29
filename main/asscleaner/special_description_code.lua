@@ -814,3 +814,85 @@ AddStategraphPostInit("wilson", function(self)
         end)
 
 end)
+
+--------------------------------------------------------------------------------
+---------------------------------- BLUEPRINT -----------------------------------
+--------------------------------------------------------------------------------
+
+local function get_blueprint_string_ret(inst)
+    local ret = inst.is_rare
+        and {
+            strtype = "subfmt",
+            content = "NAMES.BLUEPRINT_RARE",
+            params = { item = STRINGS.NAMES[string.upper(inst.recipetouse)] and STRCODE_HEADER .. "NAMES." .. string.upper(inst.recipetouse) or STRCODE_HEADER .. "NAMES.UNKNOWN" }
+        }
+
+        or {
+            content = {
+                -- "$angri ", -- Test String
+                STRINGS.NAMES[string.upper(inst.recipetouse)] and "NAMES." .. string.upper(inst.recipetouse) or "NAMES.UNKNOWN",
+                "$ ",
+                "NAMES.BLUEPRINT"
+            }
+        }
+
+    return STRCODE_HEADER .. json.encode(ret)
+end
+
+local function blueprint_postinit(inst)
+    if not TheWorld.ismastersim then return end
+
+    inst.components.named:SetName(get_blueprint_string_ret(inst))
+
+    local onload = inst.OnLoad
+    inst.OnLoad = function(inst, data)
+        onload(inst, data)
+        inst.components.named:SetName(get_blueprint_string_ret(inst))
+        inst.drawnameoverride = get_blueprint_string_ret(inst)
+    end
+
+    local onhaunt = inst.components.hauntable.onhaunt
+    inst.components.hauntable:SetOnHauntFn(function(self, ...)
+        onhaunt(self, ...)
+        inst.components.named:SetName(get_blueprint_string_ret(inst))
+        inst.drawnameoverride = get_blueprint_string_ret(inst)
+    end)
+
+    inst.drawnameoverride = get_blueprint_string_ret(inst)
+end
+
+AddPrefabPostInit("blueprint", blueprint_postinit)
+
+--------------------------------------------------------------------------------
+----------------------------------- MINISIGN -----------------------------------
+--------------------------------------------------------------------------------
+
+local function minisign_displaynamefn(inst)
+    return #inst._imagename:value() > 0
+        and subfmt(STRINGS.NAMES.MINISIGN_DRAWN, { item = IsStrCode(inst._imagename:value()) and ResolveStrCode(SubStrCode(inst._imagename:value())) or inst._imagename:value() })
+        or STRINGS.NAMES.MINISIGN
+end
+
+local function minisign_postinit(inst)
+    inst.displaynamefn = minisign_displaynamefn
+end
+
+local minisigns = {
+    "minisign",
+    "minisign_drawn",
+}
+
+for _, sign in ipairs(minisigns) do
+    AddPrefabPostInit(sign, minisign_postinit)
+end
+
+ACTIONS.DRAW.stroverridefn = function(act)
+    local item = FindEntityToDraw(act.target, act.invobject)
+    local drawnameoverride = item.drawnameoverride
+    return item ~= nil
+        and subfmt(STRINGS.ACTIONS.DRAWITEM,
+                { item = drawnameoverride
+                    and (IsStrCode(drawnameoverride) and ResolveStrCode(SubStrCode(drawnameoverride)) or drawnameoverride)
+                    or item:GetBasicDisplayName() })
+        or nil
+end
