@@ -420,7 +420,7 @@ AddClassPostConstruct("components/named_replica", function(self, inst)
     local function OnNameDirty(inst)
         local name = inst.replica.named._name:value()
         inst.name = name ~= ""
-            and IsStrCode(name) and ResolveStrCode(SubStrCode(name))
+            and (IsStrCode(name) and ResolveStrCode(SubStrCode(name)) or name)
             or STRINGS.NAMES[string.upper(inst.prefab)]
     end
 

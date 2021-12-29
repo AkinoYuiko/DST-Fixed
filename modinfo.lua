@@ -4,15 +4,16 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.23"
+version = "2.4.24"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
+- 检查文本跟随客户端语言 新增对草稿和广告的支持。
+
 - 检查文本跟随客户端语言 新增对蓝图的支持。
 - 完善MOD选项中的描述。
-
 - 修复多处崩溃。
 - 新模块支持寄居蟹奶奶和称重。
 - 复活提示现在可以翻译部分来源。
@@ -26,8 +27,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Update STRCODE for blueprint and minisign.
+- Update STRCODE for sketches and tacklesketches.
 
+- Update STRCODE for blueprint and minisign.
 - Fix multi crashes.
 - Update STRCODE_TALKER for hermit_crab.
 - RezAnnouncementString now translates most sources.
