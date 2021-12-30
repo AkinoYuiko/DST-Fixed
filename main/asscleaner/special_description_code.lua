@@ -1019,7 +1019,7 @@ AddPrefabPostInit("tacklesketch", tacklesketch_postinit)
 local function insert_possiblenames(table, index, strcode)
     if table and #table > 0 then
         local lenth = #table
-        STRCODE_POSSIBLENAMES[index] = {}
+        STRCODE_POSSIBLENAMES[index] = STRCODE_POSSIBLENAMES[index] or {}
         for i = 1, lenth do
             STRCODE_POSSIBLENAMES[index][table[i]] = STRCODE_POSSIBLENAMES[index][table[i]] or {}
             STRCODE_POSSIBLENAMES[index][table[i]][ #STRCODE_POSSIBLENAMES[index][table[i]] + 1 ] = strcode .. i
@@ -1028,7 +1028,7 @@ local function insert_possiblenames(table, index, strcode)
 end
 
 local possiblenames_prefabs = {
-    ["mooseegg"] = {"NAMES.MOOSEEGG", "NAMES.MOOSENEST"},
+    -- ["mooseegg"] = {"NAMES.MOOSEEGG", "NAMES.MOOSENEST"},
     ["moose"] = "NAMES.MOOSE",
     ["bunnyman"] = "BUNNYMANNAMES.",
     ["carnival_crowkid"] = "CROWNAMES.",
@@ -1037,13 +1037,13 @@ local possiblenames_prefabs = {
     ["moonpig"] = "PIGNAMES.",
 }
 
-local function do_possiblenames_postinit(prefab, strcode)
+local function do_possiblenames_postinit(prefab, strcode, override_table)
     AddPrefabPostInit(prefab, function(inst)
         if not TheWorld.ismastersim then
             return
         end
 
-        insert_possiblenames(inst.components.named.possiblenames, prefab, strcode)
+        insert_possiblenames(override_table or inst.components.named.possiblenames, prefab, strcode)
         inst.components.named:PickNewName()
 
         local onload = inst.OnLoad
@@ -1056,11 +1056,8 @@ local function do_possiblenames_postinit(prefab, strcode)
 end
 
 for prefab, strcode in pairs(possiblenames_prefabs) do
-    if type(strcode) == "table" then
-        for _, strc in ipairs(strcode) do
-            do_possiblenames_postinit(prefab, strc)
-        end
-    else
-        do_possiblenames_postinit(prefab, strcode)
-    end
+    do_possiblenames_postinit(prefab, strcode)
 end
+
+do_possiblenames_postinit("mooseegg", "NAMES.MOOSEEGG", {STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"]})
+do_possiblenames_postinit("mooseegg", "NAMES.MOOSENEST", {STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"]})

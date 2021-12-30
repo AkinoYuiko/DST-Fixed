@@ -446,7 +446,7 @@ function Named:PickNewName()
         local ret
         if STRCODE_POSSIBLENAMES[self.inst.prefab] then
             local message = STRCODE_POSSIBLENAMES[self.inst.prefab][name]
-            message = message[math.random(#message)]
+            message = type(message) == "table" and message[math.random(#message)] or "NAMES.NONE"
             ret = {
                 content = {
                     message,
