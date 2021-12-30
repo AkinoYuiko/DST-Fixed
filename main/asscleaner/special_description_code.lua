@@ -836,7 +836,7 @@ local function get_blueprint_string_ret(inst)
             }
         }
 
-    return STRCODE_HEADER .. json.encode(ret)
+    return EncodeStrCode(ret)
 end
 
 local function blueprint_postinit(inst)
@@ -943,7 +943,7 @@ local function get_sketch_string_fn(inst)
         }
     }
 
-    return STRCODE_HEADER .. json.encode(ret)
+    return EncodeStrCode(ret)
 end
 
 local function sketch_postinit(inst)
@@ -958,17 +958,10 @@ local function sketch_postinit(inst)
         inst.drawnameoverride = get_sketch_string_fn(inst)
     end
 
-    -- local onhaunt = inst.components.hauntable.onhaunt
-    -- inst.components.hauntable:SetOnHauntFn(function(self, ...)
-    --     onhaunt(self, ...)
-    --     inst.components.named:SetName(get_sketch_string_fn(inst))
-    --     inst.drawnameoverride = get_sketch_string_fn(inst)
-    -- end)
-
     inst.drawnameoverride = get_sketch_string_fn(inst)
 end
 
--- AddPrefabPostInit("sketch", sketch_postinit)
+AddPrefabPostInit("sketch", sketch_postinit)
 
 --------------------------------------------------------------------------------
 --------------------------------- TACKLESKETCH ---------------------------------
@@ -999,7 +992,7 @@ local function get_tacklesketch_string_fn(inst)
         }
     }
 
-    return STRCODE_HEADER .. json.encode(ret)
+    return EncodeStrCode(ret)
 end
 
 local function tacklesketch_postinit(inst)
@@ -1013,13 +1006,6 @@ local function tacklesketch_postinit(inst)
         inst.components.named:SetName(get_tacklesketch_string_fn(inst))
         inst.drawnameoverride = get_tacklesketch_string_fn(inst)
     end
-
-    -- local onhaunt = inst.components.hauntable.onhaunt
-    -- inst.components.hauntable:SetOnHauntFn(function(self, ...)
-    --     onhaunt(self, ...)
-    --     inst.components.named:SetName(get_tacklesketch_string_fn(inst))
-    --     inst.drawnameoverride = get_tacklesketch_string_fn(inst)
-    -- end)
 
     inst.drawnameoverride = get_tacklesketch_string_fn(inst)
 end
