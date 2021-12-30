@@ -21,6 +21,8 @@ Custom Action Fail String
 
 Disable Ghost Hounded
 
+Enhanced Localized Description (New)
+
 
 - The Equipment
 
@@ -86,6 +88,8 @@ Enhanced Eyeturrets
 
 Gather Moon Dial's Glass
 
+Pigking Rewards Moon Glass
+
 Disable Forest Resouces Regen
 
 No Halloween Candies
@@ -100,4 +104,3 @@ Enlightened Crown Shard
 Archive Turf
 
 Prop Sign
-
