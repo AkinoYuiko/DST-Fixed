@@ -1016,13 +1016,17 @@ AddPrefabPostInit("tacklesketch", tacklesketch_postinit)
 -------------------------------- POSSIBLENAMES ---------------------------------
 --------------------------------------------------------------------------------
 
+local function rename_possiblenames(inst)
+    inst.components.named:PickNewName()
+end
+
 local function insert_possiblenames(table, index, strcode)
     if table and #table > 0 then
         local lenth = #table
         STRCODE_POSSIBLENAMES[index] = STRCODE_POSSIBLENAMES[index] or {}
         for i = 1, lenth do
             STRCODE_POSSIBLENAMES[index][table[i]] = STRCODE_POSSIBLENAMES[index][table[i]] or {}
-            STRCODE_POSSIBLENAMES[index][table[i]][ #STRCODE_POSSIBLENAMES[index][table[i]] + 1 ] = strcode .. i
+            STRCODE_POSSIBLENAMES[index][table[i]][#STRCODE_POSSIBLENAMES[index][table[i]] + 1] = strcode .. i
         end
     end
 end
@@ -1044,12 +1048,12 @@ local function do_possiblenames_postinit(prefab, strcode, override_table)
         end
 
         insert_possiblenames(override_table or inst.components.named.possiblenames, prefab, strcode)
-        inst.components.named:PickNewName()
+        rename_possiblenames(inst)
 
         local onload = inst.OnLoad
         inst.OnLoad = function(inst, data)
             if onload then onload(inst, data) end
-            inst.components.named:PickNewName()
+            rename_possiblenames(inst)
         end
 
     end)
@@ -1059,5 +1063,54 @@ for prefab, strcode in pairs(possiblenames_prefabs) do
     do_possiblenames_postinit(prefab, strcode)
 end
 
+-- local override_moose_strings
+scheduler:ExecuteInTime(0, function()
+    local moose_languages = {"zh", "zht", "chs"}
+    for i = 1, #moose_languages do
+        if LanguageTranslator.defaultlang == moose_languages[i] then
+            STRINGS.NAMES.MOOSE1        = "麋鹿鸭"
+            STRINGS.NAMES.MOOSE2        = "麋鹿鹅"
+            STRINGS.NAMES.MOOSEEGG1     = "麋鹿鸭蛋"
+            STRINGS.NAMES.MOOSEEGG2     = "麋鹿鹅蛋"
+            STRINGS.NAMES.MOOSENEST1    = "麋鹿鸭巢"
+            STRINGS.NAMES.MOOSENEST2    = "麋鹿鹅巢"
+            -- print("Moose Strings Hack!")
+        end
+    end
+end)
+
 do_possiblenames_postinit("mooseegg", "NAMES.MOOSEEGG", {STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"]})
 do_possiblenames_postinit("mooseegg", "NAMES.MOOSENEST", {STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"]})
+
+-- Fix string hack after loading.
+AddPrefabPostInit("mooseegg", function(inst)
+    if not TheWorld.ismastersim then return end
+    local onloadpostpass = inst.OnLoadPostPass
+    inst.OnLoadPostPass = function(inst, ents, data, ...)
+        if onloadpostpass then
+            onloadpostpass(inst, ents, data, ...)
+        end
+        if data.has_egg and not data.EggHatched then
+            if inst.components.timer:TimerExists("HatchTimer") then
+                inst:DoTaskInTime(3 * FRAMES, function(inst)
+                    inst.components.named.possiblenames = {STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"]}
+                    rename_possiblenames(inst)
+                end)
+            end
+        else
+            inst:DoTaskInTime(3 * FRAMES, function(inst)
+                inst.components.named.possiblenames = {STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"]}
+                rename_possiblenames(inst)
+            end)
+        end
+    end
+end)
+
+
+AddPrefabPostInit("moose", function(inst)
+    if not TheWorld.ismastersim then return end
+    inst:DoTaskInTime(3 * FRAMES, function(inst)
+        inst.components.named.possiblenames = {STRINGS.NAMES["MOOSE1"], STRINGS.NAMES["MOOSE2"]}
+        rename_possiblenames(inst)
+    end)
+end)
