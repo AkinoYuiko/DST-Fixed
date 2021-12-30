@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.25"
+version = "2.4.26"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 提高代码质量。
+- 检查文本跟随客户端语言 新增对随即取名的支持。
 
+- 提高代码质量。
 - 检查文本跟随客户端语言 新增对草稿和广告的支持。
 - 检查文本跟随客户端语言 新增对蓝图的支持。
 - 完善MOD选项中的描述。
@@ -28,7 +29,7 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Improve performance.
+- Update STRCODE for possiblenames.
 
 - Update STRCODE for sketches and tacklesketches.
 - Update STRCODE for blueprint and minisign.
@@ -120,7 +121,7 @@ configuration_options = {
     },
     {
         name = "LOCALIZEDESC",
-        label = zh and "检查文本跟随客户端语言（新）" or "Descriptions Follow Client Lang (NEW)",
+        label = zh and "检查文本跟随客户端语言（新）" or "Enhanced Localized Description (NEW)",
         hover = zh and "大部分检查文本将跟随客户端语言\n测试性功能，谨慎使用" or "Make most descriptions follow client language.\n Testing func. Use at your own risk.",
         options = boolean,
         default = false

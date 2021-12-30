@@ -11,6 +11,7 @@ STRCODE_HEADER = "/strcode "
 STRCODE_SUBFMT = {}
 STRCODE_ANNOUNCE = {}
 STRCODE_TALKER = {}
+STRCODE_POSSIBLENAMES = {}
 
 function IsStrCode(value)
     return type(value) == "string" and value:find("^"..STRCODE_HEADER)
@@ -435,6 +436,27 @@ function Named:SetName(name, ...)
     named_set_name(self, name, ...)
     if IsStrCode(name) then
         self.inst.name = ResolveStrCode(SubStrCode(name))
+    end
+end
+
+function Named:PickNewName()
+    if self.possiblenames ~= nil and #self.possiblenames > 0 then
+        local num = math.random(#self.possiblenames)
+        local name = self.possiblenames[num]
+        local ret
+        if STRCODE_POSSIBLENAMES[self.inst.prefab] then
+            local message = STRCODE_POSSIBLENAMES[self.inst.prefab][name]
+            message = message[math.random(#message)]
+            ret = {
+                content = {
+                    message,
+                }
+            }
+        end
+        self.name = self.possiblenames[num]
+        self.inst.name = self.nameformat ~= nil and string.format(self.nameformat, self.name) or self.name
+        self.inst.name_author_netid = self.name_author_netid
+        self.inst.replica.named:SetName(ret and EncodeStrCode(ret) or self.name, self.inst.name_author_netid or "")
     end
 end
 

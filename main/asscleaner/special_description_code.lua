@@ -1011,3 +1011,49 @@ local function tacklesketch_postinit(inst)
 end
 
 AddPrefabPostInit("tacklesketch", tacklesketch_postinit)
+
+--------------------------------------------------------------------------------
+-------------------------------- POSSIBLENAMES ---------------------------------
+--------------------------------------------------------------------------------
+
+local function insert_possiblenames(table, index, strcode)
+    if table and #table > 0 then
+        local lenth = #table
+        STRCODE_POSSIBLENAMES[index] = {}
+        for i = 1, lenth do
+            STRCODE_POSSIBLENAMES[index][table[i]] = STRCODE_POSSIBLENAMES[index][table[i]] or {}
+            STRCODE_POSSIBLENAMES[index][table[i]][ #STRCODE_POSSIBLENAMES[index][table[i]] + 1 ] = strcode .. i
+        end
+    end
+end
+
+local possiblenames_prefabs = {
+    ["mooseegg"] = {"NAMES.MOOSEEGG", "NAMES.MOOSENEST"},
+    ["moose"] = "NAMES.MOOSE",
+    ["bunnyman"] = "BUNNYMANNAMES.",
+    ["carnival_crowkid"] = "CROWNAMES.",
+    ["pigman"] = "PIGNAMES.",
+    ["pigguard"] = "PIGNAMES.",
+    ["moonpig"] = "PIGNAMES.",
+}
+
+local function do_possiblenames_postinit(prefab, strcode)
+    AddPrefabPostInit(prefab, function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
+
+        insert_possiblenames(inst.components.named.possiblenames, prefab, strcode)
+        inst.components.named:PickNewName()
+    end)
+end
+
+for prefab, strcode in pairs(possiblenames_prefabs) do
+    if type(strcode) == "table" then
+        for _, strc in ipairs(strcode) do
+            do_possiblenames_postinit(prefab, strc)
+        end
+    else
+        do_possiblenames_postinit(prefab, strcode)
+    end
+end
