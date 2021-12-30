@@ -1045,6 +1045,13 @@ local function do_possiblenames_postinit(prefab, strcode)
 
         insert_possiblenames(inst.components.named.possiblenames, prefab, strcode)
         inst.components.named:PickNewName()
+
+        local onload = inst.OnLoad
+        inst.OnLoad = function(inst, data)
+            if onload then onload(inst, data) end
+            inst.components.named:PickNewName()
+        end
+
     end)
 end
 
