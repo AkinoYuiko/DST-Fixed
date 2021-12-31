@@ -886,9 +886,10 @@ for _, sign in ipairs(minisigns) do
     AddPrefabPostInit(sign, minisign_postinit)
 end
 
+require("components/drawingtool")
 ACTIONS.DRAW.stroverridefn = function(act)
     local item = FindEntityToDraw(act.target, act.invobject)
-    local drawnameoverride = item.drawnameoverride
+    local drawnameoverride = item and item.drawnameoverride
     return item ~= nil
         and subfmt(STRINGS.ACTIONS.DRAWITEM,
                 { item = drawnameoverride
