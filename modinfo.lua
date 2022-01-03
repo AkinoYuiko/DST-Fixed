@@ -4,31 +4,19 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.4.30"
+version = "2.5"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 修复画小木牌可能导致的崩溃。
-
-- 麋鹿鹅翻译文本新增“麋鹿鸭”。
-- 修复鸭蛋会崩溃的问题。
-- 检查文本跟随客户端语言 新增对随即取名的支持。
-- <折叠了多个修复>
-- 新模块【玩家相关 - 检查文本跟随客户端语言】。
+- 新模块【玩家相关 - 沃托克斯时间旅行】。
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix a crash with ACTION.DRAW.
-
-- Hack Moose translate strings in Chinese.
-- Fix crash with mooseegg.
-- Update STRCODE for possiblenames.
-- < include multi fixes >
-- New Module (The Player): Description Follows Client Language.
+- New Module: Wortox the Time Traveler.
 ]]
 
 api_version = 10
@@ -109,8 +97,15 @@ configuration_options = {
     },
     {
         name = "LOCALIZEDESC",
-        label = zh and "检查文本跟随客户端语言（新）" or "Enhanced Localized Description (NEW)",
+        label = zh and "检查文本跟随客户端语言" or "Enhanced Localized Description",
         hover = zh and "大部分检查文本将跟随客户端语言\n测试性功能，谨慎使用" or "Make most descriptions follow client language.\n Testing func. Use at your own risk.",
+        options = boolean,
+        default = false
+    },
+    {
+        name = "WORTOXTIMETRAVEL",
+        label = zh and "沃托克斯时间旅行（新）" or "Wortox the Time Traveler (NEW)",
+        -- hover = zh and "大部分检查文本将跟随客户端语言\n测试性功能，谨慎使用" or "Make most descriptions follow client language.\n Testing func. Use at your own risk.",
         options = boolean,
         default = false
     },

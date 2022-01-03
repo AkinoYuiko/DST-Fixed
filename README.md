@@ -21,7 +21,9 @@ Custom Action Fail String
 
 Disable Ghost Hounded
 
-Enhanced Localized Description (New)
+Enhanced Localized Description
+
+Wortox the Time Traveler (NEW)
 
 
 - The Equipment

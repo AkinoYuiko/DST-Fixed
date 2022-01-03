@@ -12,6 +12,7 @@ local config_table = {
     CUSTOMFAILSTR = "custom_actionfail_strings",
     NOGHOSTHOUNDED = "no_ghost_hounded",
     LOCALIZEDESC = "localize_description",
+    WORTOXTIMETRAVEL = "jump_into_watch",
 
     -- The Equipment --
     EQUIPMENT = "repairable_equipment",
