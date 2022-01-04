@@ -87,6 +87,10 @@ AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, action
 end)
 
 
+local actionhandlers = {
+    ActionHandler(RENAME_WATCH, "rename_watch")
+}
+
 local states = {
     State{
         name = "rename_watch",
@@ -94,10 +98,12 @@ local states = {
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
-            inst.AnimState:OverrideSymbol("book_cook", "pocketwatch_recall", "watchprop")
             inst.AnimState:PlayAnimation("action_uniqueitem_pre")
             inst.AnimState:PushAnimation("reading_in", false)
             inst.AnimState:PushAnimation("reading_loop", true)
+            local buffaction = inst:GetBufferedAction()
+            local target = buffaction and buffaction.target
+            inst.AnimState:OverrideSymbol("book_cook", target and target.AnimState:GetBuild() or "pocketwatch_recall", "watchprop")
         end,
 
         timeline =
@@ -207,22 +213,17 @@ local states_client = {
     },
 }
 
+for _, actionhandler in pairs(actionhandlers) do
+    AddStategraphActionHandler("wilson", actionhandler)
+    AddStategraphActionHandler("wilson_client", actionhandler)
+end
+
 for _, state in pairs(states) do
     AddStategraphState("wilson", state)
 end
 for _, state in pairs(states_client) do
     AddStategraphState("wilson_client", state)
 end
-
-local actionhandlers = {
-    ActionHandler(RENAME_WATCH, "rename_watch")
-}
-
-for _, actionhandler in pairs(actionhandlers) do
-    AddStategraphActionHandler("wilson", actionhandler)
-    AddStategraphActionHandler("wilson_client", actionhandler)
-end
-
 
 local function OnWritten(inst, text)
     inst.watch_record_name:set(text and text ~= "" and text or "")
@@ -257,7 +258,7 @@ local function WatchPostInit(inst)
         if self.writer == doer and doer and doer.sg and doer.sg.currentstate.name == "rename_watch"
             and (text == nil or text:utf8len() <= MAX_WRITEABLE_LENGTH) then
 
-            local record_name = self.inst.watch_record_name:value()
+            -- local record_name = self.inst.watch_record_name:value()
             -- if text == record_name or text == nil and record_name == "" then
             if text == nil then
                 doer.sg:GoToState("idle", true)
