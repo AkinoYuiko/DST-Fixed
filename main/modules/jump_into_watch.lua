@@ -1,24 +1,33 @@
 local AddAction = AddAction
+local AddPrefabPostInit = AddPrefabPostInit
 local AddComponentAction = AddComponentAction
 local AddStategraphActionHandler = AddStategraphActionHandler
 local AddStategraphState = AddStategraphState
 GLOBAL.setfenv(1, GLOBAL)
 
+AddPrefabPostInit("pocketwatch_recall", function(inst)
+    if not inst.components.talker then
+        inst:AddComponent("talker")
+    end
+end)
+
 local JUMPINWATCH = Action({rmb = true, distance = 0.1, priority = 2})
 JUMPINWATCH.id = "JUMPINWATCH"
 JUMPINWATCH.str = ACTIONS.JUMPIN.str
 JUMPINWATCH.fn = function(act)
-    if act.doer
-        and act.doer.sg
-        and act.doer.sg.currentstate.name == "wortox_pocketwatch_jumpin_pre"
+    local doer = act.doer
+    if doer
+        and doer.sg
+        and doer.sg.currentstate.name == "wortox_pocketwatch_jumpin_pre"
         and act.target
         and act.target.components.pocketwatch
-        and act.doer.components.inventory
-        and act.doer.components.inventory:Has("wortox_soul", 1)
-        and act.target.components.pocketwatch:CastSpell(act.doer) then
+        and doer.components.inventory
+        and doer.components.inventory:Has("wortox_soul", 1)
+        and act.target.components.pocketwatch:CastSpell(doer) then
 
-        act.doer.components.inventory:ConsumeByName("wortox_soul", 1)
-        act.doer.sg:GoToState("wortox_pocketwatch_jumpin")
+        doer.components.inventory:ConsumeByName("wortox_soul", 1)
+        doer.sg.statemem.spell_watch = act.target
+        doer.sg:GoToState("wortox_pocketwatch_jumpin", doer.sg.statemem) -- 'warpback' is set by pocketwatch_recall
     end
     return true
 end
@@ -30,7 +39,7 @@ AddComponentAction("SCENE", "pocketwatch", function(inst, doer, actions, right)
         and inst:HasTag("pocketwatch_inactive")
         and not inst:HasTag("recall_unmarked")
         and doer:HasTag("souleater")
-        and inst.replica.inventory:Has("wortox_soul", 1) then
+        and doer.replica.inventory:Has("wortox_soul", 1) then
 
         table.insert(actions, ACTIONS.JUMPINWATCH)
     end
@@ -39,22 +48,6 @@ end)
 local actionhandlers = {
     ActionHandler(JUMPINWATCH, "wortox_pocketwatch_jumpin_pre")
 }
-
-local function ToggleOnPhysics(inst)
-    inst.sg.statemem.isphysicstoggle = nil
-    inst.Physics:ClearCollisionMask()
-    inst.Physics:CollidesWith(COLLISION.WORLD)
-    inst.Physics:CollidesWith(COLLISION.OBSTACLES)
-    inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
-    inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:CollidesWith(COLLISION.GIANTS)
-end
-
-local function ToggleOffPhysics(inst)
-    inst.sg.statemem.isphysicstoggle = true
-    inst.Physics:ClearCollisionMask()
-    inst.Physics:CollidesWith(COLLISION.GROUND)
-end
 
 local function DoWortoxPortalTint(inst, val)
     if val > 0 then
@@ -96,26 +89,27 @@ local states = {
         name = "wortox_pocketwatch_jumpin",
         tags = { "busy", "pausepredict", "nodangle", "nomorph" },
 
-        onenter = function(inst, dest)
+        onenter = function(inst, data)
+            inst.sg.statemem = data
+
             inst.components.locomotor:Stop()
             inst.AnimState:PlayAnimation("wortox_portal_jumpin")
-            local x, y, z = inst.Transform:GetWorldPosition()
-            SpawnPrefab("wortox_portal_jumpin_fx").Transform:SetPosition(x, y, z)
+            SpawnPrefab("wortox_portal_jumpin_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
             inst.sg:SetTimeout(11 * FRAMES)
-            if dest ~= nil then
-                inst.sg.statemem.dest = dest
-                inst:ForceFacePoint(dest:Get())
-            else
-                inst.sg.statemem.dest = Vector3(x, y, z)
+
+            local warpback = inst.sg.statemem.warpback
+            local dest_worldid = warpback.dest_worldid
+            if dest_worldid and dest_worldid == TheShard:GetShardId() then
+                inst:ForceFacePoint(warpback.dest_x, warpback.dest_y, warpback.dest_z)
             end
 
-            if inst.components.playercontroller ~= nil then
+            if inst.components.playercontroller then
                 inst.components.playercontroller:RemotePausePrediction()
             end
         end,
 
         onupdate = function(inst)
-            if inst.sg.statemem.tints ~= nil then
+            if inst.sg.statemem.tints then
                 DoWortoxPortalTint(inst, table.remove(inst.sg.statemem.tints))
                 if #inst.sg.statemem.tints <= 0 then
                     inst.sg.statemem.tints = nil
@@ -137,12 +131,33 @@ local states = {
                 inst.sg:AddStateTag("noattack")
                 inst.components.health:SetInvincible(true)
                 inst.DynamicShadow:Enable(false)
+                local spell_watch = inst.sg.statemem.spell_watch
+                if spell_watch:IsValid() then
+                    spell_watch.components.talker:Say("󰂡 ?")
+                    Launch(spell_watch, inst, 0.5)
+                end
             end),
         },
 
         ontimeout = function(inst)
+            local warpback = inst.sg.statemem.warpback
+            local dest_worldid = warpback.dest_worldid
+            if dest_worldid and dest_worldid ~= TheShard:GetShardId() then
+                if Shard_IsWorldAvailable(dest_worldid) then
+                    TheWorld:PushEvent("ms_playerdespawnandmigrate", {
+                        player = inst,
+                        worldid = dest_worldid,
+                        x = warpback.dest_x,
+                        y = warpback.dest_y,
+                        z = warpback.dest_z
+                    })
+                    return
+                else
+                    warpback.dest_x, warpback.dest_y, warpback.dest_z = inst.Transform:GetWorldPosition()
+                end
+            end
             inst.sg.statemem.portaljumping = true
-            inst.sg:GoToState("wortox_pocketwatch_jumpout", inst.sg.statemem.warpback)
+            inst.sg:GoToState("wortox_pocketwatch_jumpout", inst.sg.statemem)
         end,
 
         onexit = function(inst)
@@ -158,16 +173,17 @@ local states = {
         name = "wortox_pocketwatch_jumpout",
         tags = { "busy", "nopredict", "nomorph", "noattack", "nointerrupt" },
 
-        onenter = function(inst, dest)
-            ToggleOffPhysics(inst)
+        onenter = function(inst, data)
+            inst.sg.statemem = data
+
             inst.components.locomotor:Stop()
             inst.AnimState:PlayAnimation("wortox_portal_jumpout")
-            if dest ~= nil then
-                inst.Physics:Teleport(dest:Get())
-            else
-                dest = inst:GetPosition()
-            end
-            SpawnPrefab("wortox_portal_jumpout_fx").Transform:SetPosition(dest:Get())
+
+            local warpback = inst.sg.statemem.warpback
+            local x, y, z = warpback.dest_x, warpback.dest_y, warpback.dest_z
+            inst.Physics:Teleport(x, y, z)
+
+            SpawnPrefab("wortox_portal_jumpout_fx").Transform:SetPosition(x, y, z)
             inst.DynamicShadow:Enable(false)
             inst.sg:SetTimeout(14 * FRAMES)
             DoWortoxPortalTint(inst, 1)
@@ -197,7 +213,6 @@ local states = {
             end),
             TimeEvent(8 * FRAMES, function(inst)
                 inst.DynamicShadow:Enable(true)
-                ToggleOnPhysics(inst)
             end),
         },
 
@@ -209,9 +224,6 @@ local states = {
             inst.components.health:SetInvincible(false)
             inst.DynamicShadow:Enable(true)
             DoWortoxPortalTint(inst, 0)
-            if inst.sg.statemem.isphysicstoggle then
-                ToggleOnPhysics(inst)
-            end
         end,
     }
 }
