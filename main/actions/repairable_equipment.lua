@@ -6,7 +6,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local SEWINGNEW = Action({mount_valid=true})
 SEWINGNEW.id = "SEWINGNEW"
 SEWINGNEW.str = ACTIONS.REPAIR.str
-SEWINGNEW.fn = function ( act )
+SEWINGNEW.fn = function(act)
     local sewtool = act.invobject
     local item = act.target
     if sewtool and sewtool.components.sewingnew and item and (item.components.perishable or item.components.finiteuses or item.components.fueled or item.components.armor) then
@@ -25,5 +25,5 @@ AddComponentAction("USEITEM", "sewingnew", function( inst, doer, target, actions
     end
 end)
 for _, stage in ipairs({"wilson", "wilson_client"}) do
-    AddStategraphActionHandler("wilson", ActionHandler(SEWINGNEW, "dolongaction"))
+    AddStategraphActionHandler(stage, ActionHandler(SEWINGNEW, "dolongaction"))
 end

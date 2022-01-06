@@ -1,11 +1,12 @@
 table.insert(Assets, Asset("ANIM", "anim/ui_showbundle.zip"))
 table.insert(Assets, Asset("ANIM", "anim/ui_showbundle_3x2.zip"))
 
-local _G = GLOBAL
-local Vector3 = _G.Vector3
+local modname = modname
+local modimport = modimport
+local AddClassPostConstruct = AddClassPostConstruct
+GLOBAL.setfenv(1, GLOBAL)
 
-local SB = {}
-_G.SB = SB
+SB = {}
 
 modimport("main/util.lua")
 modimport("main/showbundle_widgetcreation.lua")
@@ -34,7 +35,7 @@ local Tipbox = require("widgets/sbtipbox")
 
 local function make_itemdata(items)
     local itemdata = {}
-    for slot, item in _G.orderedPairs(items) do
+    for _, slot, item in sorted_pairs(items) do
         local data = {}
         if item.components and item.replica then
             local c = item.components
@@ -43,11 +44,11 @@ local function make_itemdata(items)
 
             data.image = (c.inventoryitem and c.inventoryitem.imagename or data.prefab) .. ".tex"
             if c.inventoryitem then
-                if c.inventoryitem.atlasname ~= _G.GetInventoryItemAtlas(data.image, true) then
+                if c.inventoryitem.atlasname ~= GetInventoryItemAtlas(data.image, true) then
                     data.atlas = c.inventoryitem.atlasname
                 end
             else
-                data.atlas = _G.GetInventoryItemAtlas(data.image, true)
+                data.atlas = GetInventoryItemAtlas(data.image, true)
             end
 
             data.iswet = item:GetIsWet() or nil
@@ -79,7 +80,7 @@ local function make_itemdata(items)
                 if item:HasTag("show_spoilage") then
                     data.spoil = true
                 else
-                    for _, t in pairs(_G.FOODTYPE) do
+                    for _, t in pairs(FOODTYPE) do
                         if item:HasTag("edible_"..t) then
                             data.spoil = true
                             break
@@ -122,9 +123,9 @@ local function make_itemdata_for_unwrappable(unwrappable)
     -- print("make_itemdata_for", unwrappable.inst)
     if unwrappable and unwrappable.itemdata then
         local items = {}
-        local creator = unwrappable.origin and _G.TheWorld.meta.session_identifier ~= unwrappable.origin and { sessionid = unwrappable.origin } or nil
+        local creator = unwrappable.origin and TheWorld.meta.session_identifier ~= unwrappable.origin and { sessionid = unwrappable.origin } or nil
         for i, v in ipairs(unwrappable.itemdata) do
-            local item = _G.SpawnPrefab(v.prefab, v.skinname, v.skin_id, creator)
+            local item = SpawnPrefab(v.prefab, v.skinname, v.skin_id, creator)
             if item and item:IsValid() then
                 item:SetPersistData(v.data)
                 table.insert(items, item)
@@ -138,7 +139,7 @@ local function make_itemdata_for_unwrappable(unwrappable)
 end
 
 local function refresh_all_bundle_data()
-    for _, ent in pairs(_G.Ents) do
+    for _, ent in pairs(Ents) do
         local unwrappable = ent.components.unwrappable
         make_itemdata_for_unwrappable(unwrappable)
     end
@@ -171,11 +172,11 @@ local last_update = {
 
 local function draw_tipbox(data, target)
     if SB.tipbox then
-        local widget_settings = _G.FunctionOrValue(SB.supported_items[target.prefab], target) or {}
+        local widget_settings = FunctionOrValue(SB.supported_items[target.prefab], target) or {}
         SB.tipbox:WidgetSetup(widget_settings)
         SB.tipbox:SetData(data)
         if target.replica.container
-                and (not data or (_G.IsTableEmpty(data) and not widget_settings.show_on_empty)) then
+                and (not data or (IsTableEmpty(data) and not widget_settings.show_on_empty)) then
             SB.tipbox:Hide()
         elseif not SB.tipbox.shown or target ~= last_update.target then
             SB.tipbox:Show()
@@ -184,15 +185,15 @@ local function draw_tipbox(data, target)
 end
 
 local function should_show_tip(target)
-    local data = target and _G.FunctionOrValue(SB.supported_items[target.prefab], target)
+    local data = target and FunctionOrValue(SB.supported_items[target.prefab], target)
     return data and (not data.is_container
-            or target.replica.container and not target.replica.container:IsOpenedBy(_G.ThePlayer))
+            or target.replica.container and not target.replica.container:IsOpenedBy(ThePlayer))
 end
 
 local function send_showbundle_request(target)
     SendModRPCToServer(MOD_RPC[modname]["ShowBundle"], target)
     last_update.target = target
-    last_update.time = _G.GetTime()
+    last_update.time = GetTime()
 end
 
 local function show_tip(target)
@@ -205,7 +206,7 @@ local function show_tip(target)
         if target.showbundle_itemdata then
             draw_tipbox(target.showbundle_itemdata, target)
             if last_update.target ~= target
-                    or (target.replica.container and _G.GetTime() - last_update.time >= 1) then
+                    or (target.replica.container and GetTime() - last_update.time >= 1) then
                 send_showbundle_request(target)
             end
             return
@@ -216,7 +217,7 @@ local function show_tip(target)
 end
 
 AddClassPostConstruct("widgets/controls", function(self)
-    if self.owner and self.owner == _G.ThePlayer then
+    if self.owner and self.owner == ThePlayer then
         SB.tipbox = Tipbox()
         self.showbundle_tipbox = self:AddChild(SB.tipbox)
     end
@@ -224,7 +225,7 @@ AddClassPostConstruct("widgets/controls", function(self)
     local set_hud_size = self.SetHUDSize
     self.SetHUDSize = function(self, ...)
         if self.showbundle_tipbox then
-            self.showbundle_tipbox:ChangeScale(_G.TheFrontEnd:GetHUDScale())
+            self.showbundle_tipbox:ChangeScale(TheFrontEnd:GetHUDScale())
         end
         return set_hud_size(self, ...)
     end
@@ -233,9 +234,9 @@ end)
 AddClassPostConstruct("widgets/hoverer", function(self)
     local onshow = self.text.OnShow
     self.text.OnShow = function(_self, ...)
-        local player = _G.ThePlayer
+        local player = ThePlayer
         if player then
-            local hoverinst = _G.TheInput.hoverinst
+            local hoverinst = TheInput.hoverinst
             local target = hoverinst and hoverinst.entity:IsValid() and hoverinst.entity:IsVisible()
                 and (
                     hoverinst.Transform and hoverinst or
@@ -260,7 +261,7 @@ AddClientModRPCHandler(modname, "ShowBundleCallback", function(target, data)
 end)
 
 AddModRPCHandler(modname, "ShowBundle", function (player, target)
-    if not _G.checkentity(target) then
+    if not checkentity(target) then
         print(string.format("Invalid %s RPC from (%s) %s", "ShowBundle", player.userid or "", player.name or ""))
         return
     end
@@ -277,16 +278,16 @@ AddModRPCHandler(modname, "ShowBundle", function (player, target)
     SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, SB.serialize(itemdata))
 end)
 
-local ShowMe_Hint = _G.MOD_RPC.ShowMeSHint and _G.MOD_RPC.ShowMeSHint.Hint
+local ShowMe_Hint = MOD_RPC.ShowMeSHint and MOD_RPC.ShowMeSHint.Hint
 if ShowMe_Hint then
-    local Old_SendModRPCToServer = _G.SendModRPCToServer
-    _G.SendModRPCToServer = function(code, GUID, ...)
-        local ent = _G.Ents[GUID]
+    local send_mod_rpc_to_server = SendModRPCToServer
+    function SendModRPCToServer(code, GUID, ...)
+        local ent = Ents[GUID]
         if code == ShowMe_Hint
                 and ent and (ent.prefab == "bundle" or ent.prefab == "gift") then
             return
         end
-        return Old_SendModRPCToServer(code, GUID, ...)
+        return send_mod_rpc_to_server(code, GUID, ...)
     end
 end
 

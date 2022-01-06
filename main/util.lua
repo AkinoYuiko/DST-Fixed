@@ -1,4 +1,6 @@
-function serialize(obj)
+GLOBAL.setfenv(1, GLOBAL)
+
+local function serialize(obj)
     local lua = ""
     local t = type(obj)
     if t == "number" then
@@ -12,7 +14,7 @@ function serialize(obj)
         for k, v in pairs(obj) do
             lua = lua .. "[" .. serialize(k) .. "]=" .. serialize(v) .. ",\n"
         end
-        local metatable = GLOBAL.getmetatable(obj)
+        local metatable = getmetatable(obj)
         if metatable and type(metatable.__index) == "table" then
             for k, v in pairs(metatable.__index) do
                 lua = lua .. "[" .. serialize(k) .. "]=" .. serialize(v) .. ",\n"
@@ -27,7 +29,7 @@ function serialize(obj)
     return lua
 end
 
-function unserialize(lua)
+local function unserialize(lua)
     local t = type(lua)
     if t == "nil" or lua == "" then
         return nil
@@ -37,12 +39,12 @@ function unserialize(lua)
         print("can not unserialize a " .. t .. " type.")
     end
     lua = "return " .. lua
-    local func = GLOBAL.loadstring(lua)
+    local func = loadstring(lua)
     if func == nil then
         return nil
     end
     return func()
 end
 
-GLOBAL.SB.serialize = serialize
-GLOBAL.SB.unserialize = unserialize
+SB.serialize = serialize
+SB.unserialize = unserialize

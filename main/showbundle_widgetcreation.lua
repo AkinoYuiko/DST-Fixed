@@ -1,5 +1,5 @@
-local Vector3 = GLOBAL.Vector3
-local GetInventoryItemAtlas = GLOBAL.GetInventoryItemAtlas
+GLOBAL.setfenv(1, GLOBAL)
+
 local containers = require("containers")
 local params = containers.params
 
