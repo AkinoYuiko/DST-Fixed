@@ -4,18 +4,22 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.5"
+version = "2.5.1"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
+- 优化代码格式。
+
 - 新模块【玩家相关 - 沃托克斯时间旅行】。
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
+- Tweak code formating.
+
 - New Module: Wortox the Time Traveler.
 ]]
 
