@@ -104,7 +104,7 @@ configuration_options = {
     },
     {
         name = "WORTOXTIMETRAVEL",
-        label = zh and "沃托克斯时间旅行（新）" or "Wortox the Time Traveler (NEW)",
+        label = zh and "沃托克斯时间旅行" or "Wortox the Time Traveler",
         -- hover = zh and "大部分检查文本将跟随客户端语言\n测试性功能，谨慎使用" or "Make most descriptions follow client language.\n Testing func. Use at your own risk.",
         options = boolean,
         default = false
