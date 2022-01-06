@@ -50,6 +50,7 @@ local config_table = {
     PIGKINGMOONGLASS = "pigking_reward_moonglass",
     NOFORESTRESOURCEREGEN = "disable_forestresouce_regen",
     HALLOWEEN = "disable_halloween_candies",
+    WINTERSFEASTLOOTS = "disable_wintersfeast_trash",
 
     -- The Recipe --
     RANDOMLIGHTS = "random_winter_lights",
