@@ -23,7 +23,7 @@ Disable Ghost Hounded
 
 Enhanced Localized Description
 
-Wortox the Time Traveler (NEW)
+Wortox the Time Traveler
 
 
 - The Equipment
@@ -95,6 +95,8 @@ Pigking Rewards Moon Glass
 Disable Forest Resouces Regen
 
 No Halloween Candies
+
+Less Loots in Winter's Feast (New)
 
 
 - The Recipe
