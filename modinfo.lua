@@ -4,18 +4,22 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.6"
+version = "2.6.1"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
+- 优化【装备相关 - 装备耐久合并】对于容器的处理。
+
 - 新模块【世界相关 - 禁用部分冬季盛宴掉落】。
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
+- Fix containers not dropping on sewingnew.
+
 - New Module: Less Loots in Winter's Feast.
 ]]
 
