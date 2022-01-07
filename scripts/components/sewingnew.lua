@@ -74,6 +74,11 @@ function Sewingnew:DoSewing(target, doer)
         if self.inst.prefab == target.prefab then   --自己修复自己
             local getuses = self.inst.components.finiteuses:GetUses()
             target.components.finiteuses:Use(-1 * getuses)
+            -- Drops for socketed Dark Sword.
+            if self.inst.components.container then
+                self.inst.components.container:DropEverything()
+            end
+
             self.inst:Remove()
             needconsume = false
         elseif self.inst.prefab == "nightmarefuel" then
