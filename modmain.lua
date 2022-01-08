@@ -73,6 +73,7 @@ end
 local asscleaner = {
     "abandon_ship_board",
     "active_item_stack",
+    "dummytarget_dps"
 }
 
 for _, v in ipairs(asscleaner) do
