@@ -110,8 +110,8 @@ AddPrefabPostInit("alterguardianhat", function(inst)
     inst.onequip_prefns = inst.onequip_prefns or {}
     inst.onunequip_prefns = inst.onunequip_prefns or {}
     if inst.components.equippable then
-        inst.onequip_prefns["dst-fixed"] = inst.components.equippable.onequipfn
-        inst.onunequip_prefns["dst-fixed"] = inst.components.equippable.onunequipfn
+        inst.onequip_prefns["dst-fixed"] = inst.onequip_prefns["dst-fixed"] or inst.components.equippable.onequipfn
+        inst.onunequip_prefns["dst-fixed"] = inst.onunequip_prefns["dst-fixed"] or inst.components.equippable.onunequipfn
         inst.components.equippable:SetOnEquip(onequip)
         inst.components.equippable:SetOnUnequip(onunequip)
     end

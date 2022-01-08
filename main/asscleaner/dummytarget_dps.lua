@@ -2,8 +2,6 @@ local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local function count_dps(t)
-    if t == nil then return 0 end
-
     local dps = 0
     local time = GetTime() - 1
 
@@ -26,8 +24,6 @@ local function count_dps(t)
 end
 
 local function record_dps(t, amount)
-    if t == nil then return end
-
     t[#t + 1] = {amount = amount, time = GetTime()}
 end
 
