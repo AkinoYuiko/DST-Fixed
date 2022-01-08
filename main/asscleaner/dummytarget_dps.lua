@@ -11,7 +11,7 @@ local function count_dps(t)
         if val.time < time then
             t[i] = nil
         else
-            dps = dps + t[i].amount
+            dps = dps + val.amount
             if i ~= j then
                 t[j] = val
                 t[i] = nil
