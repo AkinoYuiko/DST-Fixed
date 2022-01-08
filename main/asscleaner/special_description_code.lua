@@ -926,7 +926,7 @@ local function add_drawname_override(inst)
             and inst.name_author_netid == nil
             then
         inst:DoTaskInTime(0, function(inst)
-            local name = inst.nameoverride or inst.name
+            local name = inst.nameoverride or inst.prefab
             inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode({content = "NAMES." .. string.upper(name)})
         end)
     end
