@@ -5,53 +5,44 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")
 
+local function target_testfn(target, owner)
+    return target and target ~= owner and target:IsValid() and
+            (target.components.health == nil or not target.components.health:IsDead() and
+            (target:HasTag("spiderden") or not target:HasTag("structure")) and
+            not target:HasTag("wall"))
+end
+
+local function owner_testfn(owner)
+    return owner and (owner.components.health == nil or not owner.components.health:IsDead())
+end
+
+local function launching_projectile_testfn(data)
+    return data.weapon and data.projectile == nil
+        and (data.weapon.components.projectile
+            or data.weapon.components.complexprojectile
+            or data.weapon.components.weapon:CanRangedAttack())
+end
+
 local function super_spawngestalt_fn(inst, owner, data)
+
+    if not inst.components.container:Has("moonglass", 1) then
+        return inst.alterguardian_spawngestalt_fn(owner, data)
+    end
+
     if not inst._is_active then
         return
     end
 
-    if owner and (owner.components.health == nil or not owner.components.health:IsDead()) then
+    if owner_testfn(owner) then
         local target = data.target
-        if target and target ~= owner and target:IsValid() and
-            (target.components.health == nil or not target.components.health:IsDead() and
-            (target:HasTag("spiderden") or not target:HasTag("structure")) and
-            not target:HasTag("wall"))
-            then
+        if target_testfn(target, owner) then
 
-            -- In combat, this is when we're just launching a projectile, so don't spawn a gestalt yet
-            if data.weapon and data.projectile == nil
-                    and (data.weapon.components.projectile
-                        or data.weapon.components.complexprojectile
-                        or data.weapon.components.weapon:CanRangedAttack()) then
-                return
-            end
+            if launching_projectile_testfn(data) then return end
 
-            local has_moonglass = inst.components.container:Has("moonglass", 1)
+            SpawnPrefab("gestalt_flash"):SetTarget(owner, target)
 
-            if has_moonglass then
-                local gestalt = SpawnPrefab("gestalt_flash"):SetTarget(owner, target)
-            else
-                local x, y, z = target.Transform:GetWorldPosition()
-
-                local gestalt = SpawnPrefab("alterguardianhat_projectile")
-                local r = GetRandomMinMax(3, 5)
-                local delta_angle = GetRandomMinMax(-90, 90)
-                local angle = (owner:GetAngleToPoint(x, y, z) + delta_angle) * DEGREES
-                gestalt.Transform:SetPosition(x + r * math.cos(angle), y, z + r * -math.sin(angle))
-                gestalt:ForceFacePoint(x, y, z)
-                gestalt:SetTargetPosition(Vector3(x, y, z))
-                gestalt.components.follower:SetLeader(owner)
-            end
-
-            if owner.components.sanity then
-                if has_moonglass then
-                -- if has_moonglass and not (target:HasTag("shadowcreature") or target:HasTag("nightmarecreature")) then
-                    if math.random() < 0.25 then
-                        inst.components.container:ConsumeByName("moonglass", 1)
-                    end
-                else
-                    owner.components.sanity:DoDelta(-1, true) -- using overtime so it doesnt make the sanity sfx every time you attack
-                end
+            if owner.components.sanity and math.random() < 0.25 then
+                inst.components.container:ConsumeByName("moonglass", 1)
             end
         end
     end
