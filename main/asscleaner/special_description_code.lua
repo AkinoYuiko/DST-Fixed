@@ -299,8 +299,26 @@ function GetNewRezAnnouncementString(theRezzed, source)
 end
 
 --------------------------------------------------------------------------------
+--------------------------------- MOD OUTDATE ----------------------------------
+--------------------------------------------------------------------------------
+
+local Networking_ModOutOfDateAnnouncement = Networking_ModOutOfDateAnnouncement
+function Networking_ModOutOfDateAnnouncement(mod)
+    local ret = {
+        strtype = "format",
+        content = IsRail() and "MODS.VERSIONING.OUT_OF_DATE_RAIL" or "MODS.VERSIONING.OUT_OF_DATE",
+        params = {
+            mod
+        }
+    }
+
+    Networking_Announcement(EncodeStrCode(ret), nil , "mod")
+end
+
+--------------------------------------------------------------------------------
 ---------------------------------- TERRARIUM -----------------------------------
 --------------------------------------------------------------------------------
+
 STRCODE_ANNOUNCE[STRINGS.EYEOFTERROR_CANCEL] = "EYEOFTERROR_CANCEL"
 STRCODE_ANNOUNCE[STRINGS.EYEOFTERROR_COMING] = "EYEOFTERROR_COMING"
 STRCODE_ANNOUNCE[STRINGS.TWINS_COMING] = "TWINS_COMING"
