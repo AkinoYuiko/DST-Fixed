@@ -4,16 +4,17 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.6.3"
+version = "2.6.4"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
+- 调整部分代码格式。
+
 - 新模块【装备相关 - 隐藏未激活启迪之冠】。
 - 模块【装备相关 - 强化启迪之冠】不再隐藏未激活的启迪之冠，如需使用请启用新模块。
 - 提升部分代码性能。
-
 - 启迪之冠仅在强化状态可以对蜘蛛巢生效。
 - Dummytarget 可以统计DPS。
 - 优化【装备相关 - 装备耐久合并】对于容器的处理。
@@ -23,10 +24,11 @@ or
 "[Version: "..version..[[]
 
 Changelog:
+- Tweak some code format.
+
 - New Module: Hide Inactive Enlightened Crown.
 - Module "Enhanced Enlightened Crown" no longer hides inactive crown. Meet the new module.
 - Improve code performance.
-
 - Enlightened Crown works on Spider Dens only when enhanced with Moon Glass.
 - Dummytarget counts DPS.
 - Fix containers not dropping on sewingnew.
