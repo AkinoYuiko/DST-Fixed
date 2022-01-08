@@ -1,5 +1,6 @@
 local AddPlayerPostInit = AddPlayerPostInit
 local AddPrefabPostInit = AddPrefabPostInit
+local AddPrefabPostInitAny = AddPrefabPostInitAny
 local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -915,6 +916,23 @@ ACTIONS.DRAW.stroverridefn = function(act)
                     or item:GetBasicDisplayName() })
         or nil
 end
+
+local function add_drawname_override(inst)
+    if not TheWorld.ismastersim then return end
+
+    if inst:HasTag("_inventoryitem")
+            and not (inst:HasTag("INLIMBO") or inst:HasTag("notdrawable"))
+            and inst.displaynamefn == nil
+            and inst.name_author_netid == nil
+            then
+        inst:DoTaskInTime(0, function(inst)
+            local name = inst.nameoverride or inst.name
+            inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode({content = "NAMES." .. string.upper(name)})
+        end)
+    end
+end
+
+AddPrefabPostInitAny(add_drawname_override)
 
 --------------------------------------------------------------------------------
 ------------------------------------ SKETCH ------------------------------------
