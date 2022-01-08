@@ -1,13 +1,14 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
-AddPrefabPostInit("flower_evil", function(inst)
-    local function on_dug_up(inst)
-        if inst.components.lootdropper then
-            inst.components.lootdropper:SpawnLootPrefab("petals_evil")
-        end
-        inst:Remove()
+local function on_dug_up(inst)
+    if inst.components.lootdropper then
+        inst.components.lootdropper:SpawnLootPrefab("petals_evil")
     end
+    inst:Remove()
+end
+
+AddPrefabPostInit("flower_evil", function(inst)
 
     if inst.components.pickable then
         inst:RemoveComponent("pickable")

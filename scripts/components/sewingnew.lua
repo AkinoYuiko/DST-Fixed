@@ -12,16 +12,20 @@ local Sewingnew = Class(function(self, inst)
     self.onsewn = onsewn
     self.quick = {}
 end)
+
 function Sewingnew:AddRepairMap(addmap)
     table.insert(self.repair_maps, addmap)
     self.inst:AddTag("sewingnew")
 end
+
 function Sewingnew:SetRepairMap(addmap)
     self.repair_maps = addmap
 end
+
 function Sewingnew:AddQuickTarget(prefab)
     table.insert(self.quick, prefab)
 end
+
 function Sewingnew:GetValue(targetname)
     for k,v in pairs(self.repair_maps) do
         if type(v) == "table" then
@@ -32,6 +36,7 @@ function Sewingnew:GetValue(targetname)
     end
     return 0
 end
+
 function Sewingnew:DoSewing(target, doer)
     local repair_value = self:GetValue(target.prefab)
     local needconsume = true   --是否需要还消耗

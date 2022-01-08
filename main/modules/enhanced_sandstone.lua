@@ -41,7 +41,7 @@ AddStategraphActionHandler("wilson", handler)
 AddStategraphActionHandler("wilson_client", handler)
 
 AddPrefabPostInit("townportaltalisman",function(inst)
-    if TheWorld.ismastersim then
-        inst:AddComponent("enhancedsandstone")
-    end
+    if not TheWorld.ismastersim then return end
+
+    inst:AddComponent("enhancedsandstone")
 end)

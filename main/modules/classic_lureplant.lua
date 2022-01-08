@@ -1,25 +1,21 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
-AddPrefabPostInit("lureplantbulb",function(inst)
-    if inst.components.deployable then
-        inst.components.deployable:SetDeployMode(DEPLOYMODE.ANYWHERE)
-        -- inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.DEFAULT)
-        inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.NONE)
-    end
-end)
+local function classic_deploy_postinit(inst)
+    if not TheWorld.ismaster then return end
 
-AddPrefabPostInit("spidereggsack",function(inst)
     if inst.components.deployable then
         inst.components.deployable:SetDeployMode(DEPLOYMODE.ANYWHERE)
-        -- inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.DEFAULT)
         inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.NONE)
     end
-end)
+end
 
-AddPrefabPostInit("fossil_piece",function(inst)
-    if inst.components.deployable then
-        inst.components.deployable:SetDeployMode(DEPLOYMODE.ANYWHERE)
-        inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.NONE)
-    end
-end)
+local classic_deploy_prefabs = {
+    "lureplantbulb",
+    "spidereggsack",
+    "fossil_piece",
+}
+
+for i = 1, #classic_deploy_prefabs do
+    AddPrefabPostInit(classic_deploy_prefabs[i], classic_deploy_postinit)
+end

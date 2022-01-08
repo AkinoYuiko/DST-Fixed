@@ -23,18 +23,18 @@ local CHARACTERLIST =
 }
 
 local CheckClientOwnership = InventoryProxy.CheckClientOwnership
-InventoryProxy.CheckClientOwnership = function(self, ...)
+function InventoryProxy:CheckClientOwnership(...)
     local args = {...}
     for _, character in ipairs(CHARACTERLIST) do
         if args[2] == character.."_none" then
             return true
         end
     end
-    return CheckClientOwnership(self, unpack(args))
+    return CheckClientOwnership(self, ...)
 end
 
-local OldValidateSpawnPrefabRequest = ValidateSpawnPrefabRequest
-ValidateSpawnPrefabRequest = function(...)
+local validate_spawn_prefab_request = ValidateSpawnPrefabRequest
+function ValidateSpawnPrefabRequest(...)
     local REAL_PREFAB_SKINS = deepcopy(PREFAB_SKINS)
     local characterlist = GetActiveCharacterList()
     for _, character in ipairs(characterlist) do
@@ -48,7 +48,7 @@ ValidateSpawnPrefabRequest = function(...)
             end
         end
     end
-    local ret = { OldValidateSpawnPrefabRequest(...) }
+    local ret = { validate_spawn_prefab_request(...) }
     PREFAB_SKINS = REAL_PREFAB_SKINS
     return unpack(ret)
 end

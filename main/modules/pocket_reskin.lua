@@ -26,7 +26,7 @@ local cantprefab = {
 }
 
 AddComponentAction("INVENTORY", "inventoryitem", function(inst, doer, actions)
-    if table.contains(cantprefab,inst.prefab) or
+    if table.contains(cantprefab, inst.prefab) or
         (inst.replica.equippable and inst.replica.equippable:IsEquipped()) or
         (not PREFAB_SKINS[inst.prefab])
         then return end

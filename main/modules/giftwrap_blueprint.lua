@@ -7,5 +7,7 @@ AddPrefabPostInit("beequeen", function(inst)
     for _,v in pairs(LootTables["beequeen"]) do
         if table.contains(v, "giftwrap_blueprint") then return end
     end
+
+    if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) then return end
     table.insert(LootTables["beequeen"], {"giftwrap_blueprint",1})
 end)

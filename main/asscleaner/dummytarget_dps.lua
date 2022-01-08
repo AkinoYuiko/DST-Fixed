@@ -50,3 +50,7 @@ AddPrefabPostInit("dummytarget", function(inst)
         inst:ListenForEvent("healthdelta", OnHealthDelta)
     end
 end)
+
+STRINGS.NAMES.DUMMYTARGET = table.contains({"zh", "zht", "chs"}, LanguageTranslator.defaultlang)
+                        and "伤害测试木桩"
+                        or "Dummy Target"
