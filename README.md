@@ -30,6 +30,8 @@ Wortox the Time Traveler
 
 Combinable Equipment
 
+Hide Inactive Enlightened Crown (New)
+
 Enhanced Enlightened Crown
 
 Enhanced Sand Stone
@@ -96,7 +98,7 @@ Disable Forest Resouces Regen
 
 No Halloween Candies
 
-Less Loots in Winter's Feast (New)
+Less Loots in Winter's Feast
 
 
 - The Recipe
