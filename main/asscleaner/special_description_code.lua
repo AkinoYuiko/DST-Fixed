@@ -917,22 +917,46 @@ ACTIONS.DRAW.stroverridefn = function(act)
         or nil
 end
 
+local function common_drawnameoverride_fn(inst)
+    local name = inst.nameoverride or inst.prefab
+    inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode({content = "NAMES." .. string.upper(name)})
+end
+
+local function spicedfoods_drawnameoverride_fn(inst)
+    local spicename = string.gsub(inst.prefab, (inst.nameoverride or "") .. "_", "")
+    spicename = string.upper(spicename)
+    local drawnameoverride = {
+        strtype = "subfmt",
+        content = "NAMES." .. spicename .. "_FOOD",
+        params = {
+            food = STRCODE_HEADER .. "NAMES." .. string.upper(inst.nameoverride)
+        }
+    }
+    -- subfmt(STRINGS.NAMES[data.spice.."_FOOD"], { food = STRINGS.NAMES[string.upper(inst.nameoverride)] })
+    inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode(drawnameoverride)
+end
+
 local function add_drawname_override(inst)
+
     if not TheWorld.ismastersim then return end
 
     if inst:HasTag("_inventoryitem")
-            and not (inst:HasTag("INLIMBO") or inst:HasTag("notdrawable"))
-            and inst.displaynamefn == nil
-            and inst.name_author_netid == nil
-            then
-        inst:DoTaskInTime(0, function(inst)
-            local name = inst.nameoverride or inst.prefab
-            inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode({content = "NAMES." .. string.upper(name)})
-        end)
+    and not (inst:HasTag("INLIMBO") or inst:HasTag("notdrawable"))
+    and inst.displaynamefn == nil
+    and inst.name_author_netid == nil
+    then
+        inst:DoTaskInTime(0, common_drawnameoverride_fn)
     end
+
+    if inst:HasTag("spicedfood") then
+        inst:DoTaskInTime(0, spicedfoods_drawnameoverride_fn)
+    end
+
 end
 
 AddPrefabPostInitAny(add_drawname_override)
+
+
 
 --------------------------------------------------------------------------------
 ------------------------------------ SKETCH ------------------------------------

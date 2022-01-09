@@ -293,6 +293,10 @@ local function WatchPostInit(inst)
             return on_load(inst, data, ...)
         end
     end
+
+    inst:DoTaskInTime(0, function(inst)
+        inst.drawnameoverride = rawget(_G, "EncodeStrCode") and EncodeStrCode({ content = "NAMES." .. string.upper(inst.prefab) })
+    end)
 end
 
 for _, v in ipairs(SUPPORTED_WATCHES) do

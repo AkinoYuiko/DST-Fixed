@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.6.6"
+version = "2.6.7"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 修复【玩家相关 - 检查文本跟随客户端语言】关于小木牌显示名字的问题（需要重画）。
+- 【玩家相关 - 检查文本跟随客户端语言】现在支持小木牌显示料理和溯源表的名字（需要重画）。
 
+- 修复【玩家相关 - 检查文本跟随客户端语言】关于小木牌显示名字的问题（需要重画）。
 - 优化【生物相关 - 蜂后掉落彩纸蓝图】的逻辑。
 - 调整部分代码格式。
 - 新模块【装备相关 - 隐藏未激活启迪之冠】。
@@ -26,6 +27,8 @@ or
 "[Version: "..version..[[]
 
 Changelog:
+- Add localized_desc support for spiced foods and pocket watches.
+
 - Fix minisign's display issue in "Enhanced Localized Description". Needs re-drawing.
 - Tweak code logic in "Bee Queen Extra Drops".
 - Tweak some code format.
