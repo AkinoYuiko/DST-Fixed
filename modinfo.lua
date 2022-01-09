@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.6.7"
+version = "2.6.8"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 【玩家相关 - 检查文本跟随客户端语言】现在支持小木牌显示料理和溯源表的名字（需要重画）。
+- 模块【世界相关 - 禁用部分冬季盛宴掉落】现在不会误伤天体英雄了。
 
+- 模块【玩家相关 - 检查文本跟随客户端语言】现在支持小木牌显示料理和溯源表的名字（需要重画）。
 - 修复【玩家相关 - 检查文本跟随客户端语言】关于小木牌显示名字的问题（需要重画）。
 - 优化【生物相关 - 蜂后掉落彩纸蓝图】的逻辑。
 - 调整部分代码格式。
@@ -27,8 +28,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Add localized_desc support for spiced foods and pocket watches.
+- "Less Loots in Winter's Feast" won't hack Celestial Champion now.
 
+- Add localized_desc support for spiced foods and pocket watches.
 - Fix minisign's display issue in "Enhanced Localized Description". Needs re-drawing.
 - Tweak code logic in "Bee Queen Extra Drops".
 - Tweak some code format.
@@ -347,7 +349,7 @@ configuration_options = {
     },
     {
         name = "WINTERSFEASTLOOTS",
-        label = zh and "减少冬季盛宴掉落（新）" or "Less Loots in Winter's Feast (New)",
+        label = zh and "减少冬季盛宴掉落" or "Less Loots in Winter's Feast",
         hover = zh and "禁用冬季盛宴期间小玩意儿和零食的掉落，但不影响BOSS的挂饰（减少垃圾产生）" or "Disable most loots in Winter's Feast, eipcs not included.",
         options = boolean,
         default = false
