@@ -4,43 +4,21 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.6.8"
+version = "2.7"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 模块【世界相关 - 禁用部分冬季盛宴掉落】现在不会误伤天体英雄了。
+- 重构了部分模块的代码以提升性能。
 
-- 模块【玩家相关 - 检查文本跟随客户端语言】现在支持小木牌显示料理和溯源表的名字（需要重画）。
-- 修复【玩家相关 - 检查文本跟随客户端语言】关于小木牌显示名字的问题（需要重画）。
-- 优化【生物相关 - 蜂后掉落彩纸蓝图】的逻辑。
-- 调整部分代码格式。
-- 新模块【装备相关 - 隐藏未激活启迪之冠】。
-- 模块【装备相关 - 强化启迪之冠】不再隐藏未激活的启迪之冠，如需使用请启用新模块。
-- 提升部分代码性能。
-- 启迪之冠仅在强化状态可以对蜘蛛巢生效。
-- Dummytarget 可以统计DPS。
-- 优化【装备相关 - 装备耐久合并】对于容器的处理。
-- 新模块【世界相关 - 禁用部分冬季盛宴掉落】。
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- "Less Loots in Winter's Feast" won't hack Celestial Champion now.
+- Improve code performance for most modules.
 
-- Add localized_desc support for spiced foods and pocket watches.
-- Fix minisign's display issue in "Enhanced Localized Description". Needs re-drawing.
-- Tweak code logic in "Bee Queen Extra Drops".
-- Tweak some code format.
-- New Module: Hide Inactive Enlightened Crown.
-- Module "Enhanced Enlightened Crown" no longer hides inactive crown. Meet the new module.
-- Improve code performance.
-- Enlightened Crown works on Spider Dens only when enhanced with Moon Glass.
-- Dummytarget counts DPS.
-- Fix containers not dropping on sewingnew.
-- New Module: Less Loots in Winter's Feast.
 ]]
 
 api_version = 10
