@@ -303,18 +303,18 @@ end
 --------------------------------- MOD OUTDATE ----------------------------------
 --------------------------------------------------------------------------------
 
-local Networking_ModOutOfDateAnnouncement = Networking_ModOutOfDateAnnouncement
-function Networking_ModOutOfDateAnnouncement(mod)
-    local ret = {
-        strtype = "format",
-        content = IsRail() and "MODS.VERSIONING.OUT_OF_DATE_RAIL" or "MODS.VERSIONING.OUT_OF_DATE",
-        params = {
-            mod
-        }
-    }
+-- local Networking_ModOutOfDateAnnouncement = Networking_ModOutOfDateAnnouncement
+-- function Networking_ModOutOfDateAnnouncement(mod)
+--     local ret = {
+--         strtype = "format",
+--         content = IsRail() and "MODS.VERSIONING.OUT_OF_DATE_RAIL" or "MODS.VERSIONING.OUT_OF_DATE",
+--         params = {
+--             mod
+--         }
+--     }
 
-    Networking_Announcement(EncodeStrCode(ret), nil , "mod")
-end
+--     Networking_Announcement(EncodeStrCode(ret), nil , "mod")
+-- end
 
 --------------------------------------------------------------------------------
 ---------------------------------- TERRARIUM -----------------------------------
