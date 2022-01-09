@@ -14,8 +14,8 @@ if not kinds then
 end
 
 local SUPPORTED_WATCHES = {
-    "pocketwatch_portal",
-    "pocketwatch_recall"
+    ["pocketwatch_portal"] = true,
+    ["pocketwatch_recall"] = true
 }
 
 local data = {
@@ -36,8 +36,8 @@ local data = {
         control = CONTROL_ACCEPT
     },
 }
-for _, v in ipairs(SUPPORTED_WATCHES) do
-    kinds[v] = data
+for k in ipairs(SUPPORTED_WATCHES) do
+    kinds[k] = data
 end
 
 
@@ -46,8 +46,8 @@ local RecallMark = require("components/recallmark")
 local Copy = RecallMark.Copy
 function RecallMark:Copy(rhs, ...)
     if rhs
-        and table.contains(SUPPORTED_WATCHES, self.inst.prefab)
-        and table.contains(SUPPORTED_WATCHES, rhs.prefab)
+        and SUPPORTED_WATCHES[self.inst.prefab]
+        and SUPPORTED_WATCHES[rhs.prefab]
         and self.inst.watch_record_name
         and rhs.watch_record_name then
 
@@ -81,7 +81,7 @@ end
 AddAction(RENAME_WATCH)
 
 AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, actions, right)
-    if table.contains(SUPPORTED_WATCHES, target.prefab) and target.watch_record_name then
+    if SUPPORTED_WATCHES[target.prefab] and target.watch_record_name then
         table.insert(actions, ACTIONS.RENAME_WATCH)
     end
 end)
@@ -299,6 +299,6 @@ local function WatchPostInit(inst)
     end)
 end
 
-for _, v in ipairs(SUPPORTED_WATCHES) do
-    AddPrefabPostInit(v, WatchPostInit)
+for k in ipairs(SUPPORTED_WATCHES) do
+    AddPrefabPostInit(k, WatchPostInit)
 end

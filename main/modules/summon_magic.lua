@@ -4,13 +4,16 @@ local AddShardModRPCHandler = AddShardModRPCHandler
 GLOBAL.setfenv(1, GLOBAL)
 
 local RPC_NAMESPACE = "summon_magic"
-local CAN_SUMMON_HAND_ITEMS = {"cane", "orangestaff"}
+local CAN_SUMMON_HAND_ITEMS = {
+    ["cane"] = true,
+    ["orangestaff"] = true
+}
 
 AddShardModRPCHandler(RPC_NAMESPACE, "Summon", function(shardid, summoner_id, x, z)
     for _, player in ipairs(AllPlayers) do
         if player:IsValid() then
             local hand_item = player.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            if table.contains(CAN_SUMMON_HAND_ITEMS, hand_item and hand_item.prefab) then
+            if hand_item and CAN_SUMMON_HAND_ITEMS[hand_item.prefab] then
                 TheWorld:PushEvent("ms_playerdespawnandmigrate", {
                     player = player,
                     worldid = shardid,

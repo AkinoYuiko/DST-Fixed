@@ -19,14 +19,14 @@ HANDRESKIN.fn = function(act)
 end
 
 AddAction(HANDRESKIN)
-local cantprefab = {
-    "cane",
-    "orangestaff",
-    "reskin_tool",
+local CANT_PREFABS = {
+    ["cane"] = true,
+    ["orangestaff"] = true,
+    ["reskin_tool"] = true,
 }
 
 AddComponentAction("INVENTORY", "inventoryitem", function(inst, doer, actions)
-    if table.contains(cantprefab, inst.prefab) or
+    if CANT_PREFABS[inst.prefab] or
         (inst.replica.equippable and inst.replica.equippable:IsEquipped()) or
         (not PREFAB_SKINS[inst.prefab])
         then return end

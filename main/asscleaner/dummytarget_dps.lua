@@ -51,6 +51,12 @@ AddPrefabPostInit("dummytarget", function(inst)
     end
 end)
 
-STRINGS.NAMES.DUMMYTARGET = table.contains({"zh", "zht", "chs"}, LanguageTranslator.defaultlang)
+local CHS_CODES = {
+    ["zh"] = true,
+    ["zht"] = true,
+    ["chs"] = true
+}
+
+STRINGS.NAMES.DUMMYTARGET = CHS_CODES[LanguageTranslator.defaultlang]
                         and "伤害测试木桩"
                         or "Dummy Target"

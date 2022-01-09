@@ -6,7 +6,6 @@ GLOBAL.setfenv(1, GLOBAL)
 local function MakeRepairable(inst)
     if not TheWorld.ismastersim then return end
     if not inst.components.inventoryitem then return end
-    -- if table.contains(block_list,inst.prefab) then return end
 
     if inst.components.finiteuses or inst.components.fueled or inst.components.armor
       or (inst.components.perishable and inst.components.equippable)
