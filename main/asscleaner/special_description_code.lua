@@ -1087,7 +1087,7 @@ local function insert_possiblenames(table, index, strcode)
         STRCODE_POSSIBLENAMES[index] = STRCODE_POSSIBLENAMES[index] or {}
         for i = 1, lenth do
             STRCODE_POSSIBLENAMES[index][table[i]] = STRCODE_POSSIBLENAMES[index][table[i]] or {}
-            STRCODE_POSSIBLENAMES[index][table[i]][#STRCODE_POSSIBLENAMES[index][table[i]] + 1] = strcode .. i
+            STRCODE_POSSIBLENAMES[index][table[i]][#STRCODE_POSSIBLENAMES[index][table[i]] + 1] = strcode .. tostring(i)
         end
     end
 end
