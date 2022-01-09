@@ -36,7 +36,8 @@ local data = {
         control = CONTROL_ACCEPT
     },
 }
-for k in ipairs(SUPPORTED_WATCHES) do
+
+for k in pairs(SUPPORTED_WATCHES) do
     kinds[k] = data
 end
 
@@ -299,6 +300,6 @@ local function WatchPostInit(inst)
     end)
 end
 
-for k in ipairs(SUPPORTED_WATCHES) do
+for k in pairs(SUPPORTED_WATCHES) do
     AddPrefabPostInit(k, WatchPostInit)
 end
