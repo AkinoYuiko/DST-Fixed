@@ -47,7 +47,7 @@ local function super_spawngestalt_fn(inst, owner, data)
 
             SpawnPrefab("gestalt_flash"):SetTarget(owner, target)
 
-            if owner.components.sanity and math.random() < 0.25 * get_attacker_mult(owner) then
+            if owner.components.sanity and math.random() < ( 0.25 * get_attacker_mult(owner) ) then
                 inst.components.container:ConsumeByName("moonglass", 1)
             end
         end

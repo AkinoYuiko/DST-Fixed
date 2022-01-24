@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.7.1"
+version = "2.7.2"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 修复 ipairs 在 SUPPORTED_WATCHES 中不起作用的问题。
+- 调整了强化启迪之冠的消耗率。
 
+- 修复 ipairs 在 SUPPORTED_WATCHES 中不起作用的问题。
 - 重构了部分模块的代码以提升性能。
 
 ]]
@@ -19,8 +20,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix issue that ipairs is not working in SUPPORTED_WATCHES.
+- Tweak moonglass consume rate with enhanced alterguardianhat.
 
+- Fix issue that ipairs is not working in SUPPORTED_WATCHES.
 - Improve code performance for most modules.
 
 ]]
