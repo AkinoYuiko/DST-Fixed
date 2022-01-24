@@ -3,6 +3,14 @@ table.insert(PrefabFiles, "gestalt_flash")
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
+local function get_attacker_mult(attacker)
+    local damagemult = attacker.components.combat.damagemultiplier or 1
+    damagemult = math.min(2, damagemult)
+    damagemult = math.max(1, damagemult)
+    local electricmult = attacker.components.electricattacks and 1.5 or 1
+    return damagemult * electricmult
+end
+
 local function target_testfn(target, owner)
     return target and target ~= owner and target:IsValid() and
             (target.components.health == nil or not target.components.health:IsDead() and
@@ -39,7 +47,7 @@ local function super_spawngestalt_fn(inst, owner, data)
 
             SpawnPrefab("gestalt_flash"):SetTarget(owner, target)
 
-            if owner.components.sanity and math.random() < 0.25 then
+            if owner.components.sanity and math.random() < 0.25 * get_attacker_mult(owner) then
                 inst.components.container:ConsumeByName("moonglass", 1)
             end
         end
