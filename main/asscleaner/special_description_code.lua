@@ -962,47 +962,12 @@ AddPrefabPostInitAny(add_drawname_override)
 ------------------------------------ SKETCH ------------------------------------
 --------------------------------------------------------------------------------
 
-local SKETCHES =
-{
-    { item = "chesspiece_pawn",				recipe = "chesspiece_pawn_builder" },
-    { item = "chesspiece_rook",				recipe = "chesspiece_rook_builder" },
-    { item = "chesspiece_knight",			recipe = "chesspiece_knight_builder" },
-    { item = "chesspiece_bishop",			recipe = "chesspiece_bishop_builder" },
-    { item = "chesspiece_muse",				recipe = "chesspiece_muse_builder" },
-    { item = "chesspiece_formal",			recipe = "chesspiece_formal_builder" },
-    { item = "chesspiece_deerclops",		recipe = "chesspiece_deerclops_builder" },
-    { item = "chesspiece_bearger",			recipe = "chesspiece_bearger_builder" },
-    { item = "chesspiece_moosegoose",		recipe = "chesspiece_moosegoose_builder" },
-    { item = "chesspiece_dragonfly",		recipe = "chesspiece_dragonfly_builder" },
-    { item = "chesspiece_clayhound",		recipe = "chesspiece_clayhound_builder",		image = "chesspiece_clayhound_sketch" },
-    { item = "chesspiece_claywarg",			recipe = "chesspiece_claywarg_builder",			image = "chesspiece_claywarg_sketch" },
-    { item = "chesspiece_butterfly",		recipe = "chesspiece_butterfly_builder",		image = "chesspiece_butterfly_sketch" },
-    { item = "chesspiece_anchor",			recipe = "chesspiece_anchor_builder",			image = "chesspiece_anchor_sketch" },
-    { item = "chesspiece_moon",				recipe = "chesspiece_moon_builder",				image = "chesspiece_moon_sketch" },
-    { item = "chesspiece_carrat",			recipe = "chesspiece_carrat_builder",			image = "chesspiece_carrat_sketch" },
-    { item = "chesspiece_malbatross",		recipe = "chesspiece_malbatross_builder" },
-    { item = "chesspiece_crabking",			recipe = "chesspiece_crabking_builder" },
-    { item = "chesspiece_toadstool",		recipe = "chesspiece_toadstool_builder" },
-    { item = "chesspiece_stalker",			recipe = "chesspiece_stalker_builder" },
-    { item = "chesspiece_klaus",			recipe = "chesspiece_klaus_builder" },
-    { item = "chesspiece_beequeen",			recipe = "chesspiece_beequeen_builder" },
-    { item = "chesspiece_antlion",			recipe = "chesspiece_antlion_builder" },
-    { item = "chesspiece_minotaur",			recipe = "chesspiece_minotaur_builder" },
-    { item = "chesspiece_beefalo",			recipe = "chesspiece_beefalo_builder",			image = "chesspiece_beefalo_sketch" },
-    { item = "chesspiece_guardianphase3",	recipe = "chesspiece_guardianphase3_builder",	image = "chesspiece_guardianphase3_sketch" },
-    { item = "chesspiece_eyeofterror",		recipe = "chesspiece_eyeofterror_builder" },
-    { item = "chesspiece_twinsofterror",	recipe = "chesspiece_twinsofterror_builder" },
-    { item = "chesspiece_kitcoon",			recipe = "chesspiece_kitcoon_builder",			image = "chesspiece_kitcoon_sketch" },
-    { item = "chesspiece_catcoon",			recipe = "chesspiece_catcoon_builder",			image = "chesspiece_catcoon_sketch" },
-
-}
-
 local function get_sketch_string_fn(inst)
     local ret = {
         strtype = "subfmt",
         content = "NAMES.SKETCH",
         params = {
-            item = STRCODE_HEADER .. "NAMES." .. string.upper(SKETCHES[inst.sketchid].recipe)
+            item = STRCODE_HEADER .. "NAMES." .. string.upper(inst:GetRecipeName())
         }
     }
 
@@ -1012,16 +977,18 @@ end
 local function sketch_postinit(inst)
     if not TheWorld.ismastersim then return end
 
-    inst.components.named:SetName(get_sketch_string_fn(inst))
+    local sketch_string = get_sketch_string_fn(inst)
+
+    inst.components.named:SetName(sketch_string)
 
     local onload = inst.OnLoad
     inst.OnLoad = function(inst, data)
         onload(inst, data)
-        inst.components.named:SetName(get_sketch_string_fn(inst))
-        inst.drawnameoverride = get_sketch_string_fn(inst)
+        inst.components.named:SetName(sketch_string)
+        inst.drawnameoverride = sketch_string
     end
 
-    inst.drawnameoverride = get_sketch_string_fn(inst)
+    inst.drawnameoverride = sketch_string
 end
 
 AddPrefabPostInit("sketch", sketch_postinit)
@@ -1030,28 +997,12 @@ AddPrefabPostInit("sketch", sketch_postinit)
 --------------------------------- TACKLESKETCH ---------------------------------
 --------------------------------------------------------------------------------
 
-local TACKLESKETCHES =
-{
-	{ item = "oceanfishingbobber_ball",				recipe = "oceanfishingbobber_ball" },
-	{ item = "oceanfishingbobber_oval",				recipe = "oceanfishingbobber_oval" },
-	{ item = "oceanfishingbobber_crow",				recipe = "oceanfishingbobber_crow" },
-	{ item = "oceanfishingbobber_robin",			recipe = "oceanfishingbobber_robin" },
-	{ item = "oceanfishingbobber_robin_winter",		recipe = "oceanfishingbobber_robin_winter" },
-	{ item = "oceanfishingbobber_canary",			recipe = "oceanfishingbobber_canary" },
-	{ item = "oceanfishingbobber_goose",			recipe = "oceanfishingbobber_goose" },
-	{ item = "oceanfishingbobber_malbatross",		recipe = "oceanfishingbobber_malbatross" },
-    { item = "oceanfishinglure_hermit_drowsy",      recipe = "oceanfishinglure_hermit_drowsy" },
-    { item = "oceanfishinglure_hermit_rain",        recipe = "oceanfishinglure_hermit_rain" },
-    { item = "oceanfishinglure_hermit_heavy",       recipe = "oceanfishinglure_hermit_heavy" },
-    { item = "oceanfishinglure_hermit_snow",        recipe = "oceanfishinglure_hermit_snow" },
-}
-
 local function get_tacklesketch_string_fn(inst)
     local ret = {
         strtype = "subfmt",
         content = "NAMES.TACKLESKETCH",
         params = {
-            item = STRCODE_HEADER .. "NAMES." .. string.upper(TACKLESKETCHES[inst.sketchid].recipe)
+            item = STRCODE_HEADER .. "NAMES." .. string.upper(inst:GetRecipeName())
         }
     }
 
@@ -1061,16 +1012,18 @@ end
 local function tacklesketch_postinit(inst)
     if not TheWorld.ismastersim then return end
 
-    inst.components.named:SetName(get_tacklesketch_string_fn(inst))
+    local sketch_string = get_tacklesketch_string_fn(inst)
+
+    inst.components.named:SetName(sketch_string)
 
     local onload = inst.OnLoad
     inst.OnLoad = function(inst, data)
         onload(inst, data)
-        inst.components.named:SetName(get_tacklesketch_string_fn(inst))
-        inst.drawnameoverride = get_tacklesketch_string_fn(inst)
+        inst.components.named:SetName(sketch_string)
+        inst.drawnameoverride = sketch_string
     end
 
-    inst.drawnameoverride = get_tacklesketch_string_fn(inst)
+    inst.drawnameoverride = sketch_string
 end
 
 AddPrefabPostInit("tacklesketch", tacklesketch_postinit)
