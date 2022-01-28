@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.7.4"
+version = "2.7.5"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 修复稿纸可能导致的崩溃。
+- 调整了稿纸获取名字的方案以提高兼容性。
 
+- 修复稿纸可能导致的崩溃。
 - 修复【蜂后掉落彩纸蓝图】导致的崩溃。
 - 调整了强化启迪之冠的消耗率。
 - 修复 ipairs 在 SUPPORTED_WATCHES 中不起作用的问题。
@@ -22,8 +23,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix crash on sketches.
+- Improve compatibility for sketch strings.
 
+- Fix crash on sketches.
 - Fix crash on "Bee Queen Extra Drops".
 - Tweak moonglass consume rate with enhanced alterguardianhat.
 - Fix issue that ipairs is not working in SUPPORTED_WATCHES.
