@@ -965,7 +965,7 @@ AddPrefabPostInitAny(add_drawname_override)
 local function get_sketch_string_fn(inst)
     local ret = {
         strtype = "subfmt",
-        content = "NAMES.SKETCH",
+        content = "NAMES." .. string.upper(inst.prefab),
         params = {
             item = STRCODE_HEADER .. "NAMES." .. string.upper(inst:GetRecipeName())
         }
@@ -978,55 +978,22 @@ local function sketch_postinit(inst)
     if not TheWorld.ismastersim then return end
 
     local sketch_string = get_sketch_string_fn(inst)
-
     inst.components.named:SetName(sketch_string)
+    inst.drawnameoverride = sketch_string
 
     local onload = inst.OnLoad
     inst.OnLoad = function(inst, data)
         onload(inst, data)
-        inst.components.named:SetName(sketch_string)
-        inst.drawnameoverride = sketch_string
+        local onload_sketch_string = get_sketch_string_fn(inst)
+        inst.components.named:SetName(onload_sketch_string)
+        inst.drawnameoverride = onload_sketch_string
     end
-
-    inst.drawnameoverride = sketch_string
 end
 
-AddPrefabPostInit("sketch", sketch_postinit)
-
---------------------------------------------------------------------------------
---------------------------------- TACKLESKETCH ---------------------------------
---------------------------------------------------------------------------------
-
-local function get_tacklesketch_string_fn(inst)
-    local ret = {
-        strtype = "subfmt",
-        content = "NAMES.TACKLESKETCH",
-        params = {
-            item = STRCODE_HEADER .. "NAMES." .. string.upper(inst:GetRecipeName())
-        }
-    }
-
-    return EncodeStrCode(ret)
+local sketch_prefabs = {"sketch", "tacklesketch"}
+for i = 1, #sketch_prefabs do
+    AddPrefabPostInit(sketch_prefabs[i], sketch_postinit)
 end
-
-local function tacklesketch_postinit(inst)
-    if not TheWorld.ismastersim then return end
-
-    local sketch_string = get_tacklesketch_string_fn(inst)
-
-    inst.components.named:SetName(sketch_string)
-
-    local onload = inst.OnLoad
-    inst.OnLoad = function(inst, data)
-        onload(inst, data)
-        inst.components.named:SetName(sketch_string)
-        inst.drawnameoverride = sketch_string
-    end
-
-    inst.drawnameoverride = sketch_string
-end
-
-AddPrefabPostInit("tacklesketch", tacklesketch_postinit)
 
 --------------------------------------------------------------------------------
 -------------------------------- POSSIBLENAMES ---------------------------------
