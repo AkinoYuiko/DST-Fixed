@@ -24,6 +24,7 @@ SB.supported_items = {
     redpouch_yotp = {},
     redpouch_yotc = {},
     redpouch_yotb = {},
+    redpouch_yot_catcoon = {},
     myth_bundle = {}, -- For Myth mod
     alterguardianhat = {
         prefab = "showbundle_alterguardianhat",
