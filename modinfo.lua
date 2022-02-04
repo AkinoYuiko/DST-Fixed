@@ -10,29 +10,29 @@ author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 进一步调整了稿纸获取名字的方案。
+- 添加显示包裹内容对[strike]虎[/strike]猫年红包的支持
 
+- 进一步调整了稿纸获取名字的方案。
 - 调整了稿纸获取名字的方案以提高兼容性。
 - 修复稿纸可能导致的崩溃。
 - 修复【蜂后掉落彩纸蓝图】导致的崩溃。
 - 调整了强化启迪之冠的消耗率。
 - 修复 ipairs 在 SUPPORTED_WATCHES 中不起作用的问题。
 - 重构了部分模块的代码以提升性能。
-- 添加显示包裹内容对[strike]虎[/strike]猫年红包的支持
 
 ]]
 or
 "[Version: "..version..[[]
 
 Changelog:
-- Improve compatibility for sketch strings.
+- Added year of [strike]tiger[/strike] catcoon red pouch support for Show Bundle.
 
+- Improve compatibility for sketch strings.
 - Fix crash on sketches.
 - Fix crash on "Bee Queen Extra Drops".
 - Tweak moonglass consume rate with enhanced alterguardianhat.
 - Fix issue that ipairs is not working in SUPPORTED_WATCHES.
 - Improve code performance for most modules.
-- Added year of [strike]tiger[/strike] catcoon red pouch support for Show Bundle.
 
 ]]
 
