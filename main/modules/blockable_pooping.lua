@@ -66,9 +66,9 @@ for _, v in ipairs(change_list) do
     AddPrefabPostInit(v, post_init)
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueUtil = require("upvalueutil")
 AddPrefabPostInit("beefaloherd", function(inst)
-    UpvalueHacker.SetUpvalue(inst.components.periodicspawner.onspawn, "SpawnableParent", function(inst)
+    UpvalueUtil.SetUpvalue(inst.components.periodicspawner.onspawn, "SpawnableParent", function(inst)
         for member in pairs(inst.components.herd.members) do
             if not member.no_periodicspawn then -- Changed Part
                 if member.components.domesticatable == nil

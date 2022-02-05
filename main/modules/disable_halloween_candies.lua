@@ -1,11 +1,11 @@
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueUtil = require("upvalueutil")
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 AddPrefabPostInit("pigking", function(inst)
     if not TheWorld.ismastersim then return end
     inst:DoTaskInTime(0, function(inst) -- Compatible with Mio the Nightmare Eater
-        local on_trade_for_gold = UpvalueHacker.GetUpvalue(inst.components.trader.onaccept, "ontradeforgold")
+        local on_trade_for_gold = UpvalueUtil.GetUpvalue(inst.components.trader.onaccept, "ontradeforgold")
 
         local function on_accept_fn(inst, item, giver)
             local is_special_event_active = IsSpecialEventActive
@@ -18,6 +18,6 @@ AddPrefabPostInit("pigking", function(inst)
             on_trade_for_gold(inst, item, giver)
             IsSpecialEventActive = is_special_event_active
         end
-        UpvalueHacker.SetUpvalue(inst.components.trader.onaccept, "ontradeforgold", on_accept_fn)
+        UpvalueUtil.SetUpvalue(inst.components.trader.onaccept, "ontradeforgold", on_accept_fn)
     end)
 end)

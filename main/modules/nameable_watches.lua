@@ -5,9 +5,9 @@ local AddStategraphState = AddStategraphState
 local AddStategraphActionHandler = AddStategraphActionHandler
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueUtil = require("upvalueutil")
 local writeables = require("writeables")
-local kinds = UpvalueHacker.GetUpvalue(writeables.makescreen, "kinds")
+local kinds = UpvalueUtil.GetUpvalue(writeables.makescreen, "kinds")
 if not kinds then
     print("Warning! Nameable CAN NOT gets kinds from writeables!")
     return

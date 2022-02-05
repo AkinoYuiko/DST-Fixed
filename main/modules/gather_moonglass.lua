@@ -2,7 +2,7 @@ local AddPrefabPostInit = AddPrefabPostInit
 local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueUtil = require("upvalueutil")
 
 local portal_moonrock
 local spawn_moonglass_task
@@ -66,7 +66,7 @@ end)
 local hooked = false
 AddPrefabPostInit("moondial", function(inst)
     if hooked or not TheWorld.ismastersim then return end
-    local _onalterawake, i, prev = UpvalueHacker.GetUpvalue(inst.OnLoad, "onalterawake")
+    local _onalterawake, i, prev = UpvalueUtil.GetUpvalue(inst.OnLoad, "onalterawake")
     if not _onalterawake then return end
     local function onalterawake_fn(inst, awake, ...)
         if portal_moonrock and inst.is_glassed and not awake and (POPULATING or not inst.entity:IsAwake()) then
