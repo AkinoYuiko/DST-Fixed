@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.7.7"
+version = "2.7.8"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 添加显示包裹内容对[strike]虎[/strike]猫年红包的支持
+- 重命名 UpvalueHacker 为 UpvalueUtil。
 
+- 添加显示包裹内容对[strike]虎[/strike]猫年红包的支持
 - 进一步调整了稿纸获取名字的方案。
 - 调整了稿纸获取名字的方案以提高兼容性。
 - 修复稿纸可能导致的崩溃。
@@ -25,8 +26,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Added year of [strike]tiger[/strike] catcoon red pouch support for Show Bundle.
+- Rename UpvalueHacker as UpvalueUtil.
 
+- Added year of [strike]tiger[/strike] catcoon red pouch support for Show Bundle.
 - Improve compatibility for sketch strings.
 - Fix crash on sketches.
 - Fix crash on "Bee Queen Extra Drops".
