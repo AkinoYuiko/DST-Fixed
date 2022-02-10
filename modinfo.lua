@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.7.8"
+version = "2.7.9"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 重命名 UpvalueHacker 为 UpvalueUtil。
+- 修复【隐藏未激活启迪之冠】潜在的一个问题。
 
+- 重命名 UpvalueHacker 为 UpvalueUtil。
 - 添加显示包裹内容对[strike]虎[/strike]猫年红包的支持
 - 进一步调整了稿纸获取名字的方案。
 - 调整了稿纸获取名字的方案以提高兼容性。
@@ -26,8 +27,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Rename UpvalueHacker as UpvalueUtil.
+- Fix a bug in module: Hide Inactive Enlightened Crown.
 
+- Rename UpvalueHacker as UpvalueUtil.
 - Added year of [strike]tiger[/strike] catcoon red pouch support for Show Bundle.
 - Improve compatibility for sketch strings.
 - Fix crash on sketches.
