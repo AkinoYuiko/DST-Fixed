@@ -1,7 +1,7 @@
 GLOBAL.setfenv(1, GLOBAL)
 
 local function check_build_name(s)
-    return type(s) == "string" and s:find("alterguardian")
+    return s == "hat_alterguardian" or table.contains(PREFAB_SKINS["alterguardianhat"], s)
 end
 
 local function check_alterguardianhat(s, b)
