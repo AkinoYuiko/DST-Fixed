@@ -4,22 +4,16 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.7.9"
+version = "2.7.10"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 修复【隐藏未激活启迪之冠】潜在的一个问题。
+- 更新适配 Glassic API。
 
-- 重命名 UpvalueHacker 为 UpvalueUtil。
-- 添加显示包裹内容对[strike]虎[/strike]猫年红包的支持
-- 进一步调整了稿纸获取名字的方案。
-- 调整了稿纸获取名字的方案以提高兼容性。
-- 修复稿纸可能导致的崩溃。
-- 修复【蜂后掉落彩纸蓝图】导致的崩溃。
-- 调整了强化启迪之冠的消耗率。
-- 修复 ipairs 在 SUPPORTED_WATCHES 中不起作用的问题。
+- 修复【隐藏未激活启迪之冠】潜在的一个问题。
+- <折叠了部分更改>
 - 重构了部分模块的代码以提升性能。
 
 ]]
@@ -27,15 +21,10 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Fix a bug in module: Hide Inactive Enlightened Crown.
+- Update for Glassic API.
 
-- Rename UpvalueHacker as UpvalueUtil.
-- Added year of [strike]tiger[/strike] catcoon red pouch support for Show Bundle.
-- Improve compatibility for sketch strings.
-- Fix crash on sketches.
-- Fix crash on "Bee Queen Extra Drops".
-- Tweak moonglass consume rate with enhanced alterguardianhat.
-- Fix issue that ipairs is not working in SUPPORTED_WATCHES.
+- Fix a bug in module: Hide Inactive Enlightened Crown.
+- <multi changes>.
 - Improve code performance for most modules.
 
 ]]
