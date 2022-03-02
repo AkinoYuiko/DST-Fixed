@@ -4,14 +4,15 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.7.11"
+version = "2.7.12"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
-- 更新适配 Glassic API。
+- 【玩家原皮扩展】新增：衣柜显示所有角色的头部皮肤
 
+- 更新适配 Glassic API。
 - 修复【隐藏未激活启迪之冠】潜在的一个问题。
 - <折叠了部分更改>
 - 重构了部分模块的代码以提升性能。
@@ -21,8 +22,9 @@ or
 "[Version: "..version..[[]
 
 Changelog:
-- Update for Glassic API.
+- Extended Player Skins new feature: show all players's head skins in the wardrob
 
+- Update for Glassic API.
 - Fix a bug in module: Hide Inactive Enlightened Crown.
 - <multi changes>.
 - Improve code performance for most modules.
