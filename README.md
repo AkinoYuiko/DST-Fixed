@@ -1,5 +1,5 @@
 # DST-Fixed
-Mods in DSTogayther Server. Each can be enabled or disabled.
+Mods in DuckParadise Server. Each can be enabled or disabled.
 
 
 - Default On
@@ -25,12 +25,14 @@ Enhanced Localized Description
 
 Wortox the Time Traveler
 
+FTK Memes (New)
+
 
 - The Equipment
 
 Combinable Equipment
 
-Hide Inactive Enlightened Crown (New)
+Hide Inactive Enlightened Crown
 
 Enhanced Enlightened Crown
 

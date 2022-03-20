@@ -281,7 +281,7 @@ function GetNewRezAnnouncementString(theRezzed, source)
     local strcode_source = source == STRINGS.NAMES.SHENANIGANS and STRCODE_HEADER .. "NAMES.SHENANIGANS"
             or STRCODE_REVIERS[source] and STRCODE_HEADER .. STRCODE_REVIERS[source]
             or source
-    print("GetNewRezAnnouncementString", strcode_source)
+    -- print("GetNewRezAnnouncementString", strcode_source)
     -- local message = theRezzed:GetDisplayName().." "..STRINGS.UI.HUD.REZ_ANNOUNCEMENT.." "..source.."."
     local msg_tab = {
         strtype = "format",

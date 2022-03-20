@@ -13,6 +13,7 @@ local config_table = {
     NOGHOSTHOUNDED = "no_ghost_hounded",
     LOCALIZEDESC = "localize_description",
     WORTOXTIMETRAVEL = "jump_into_watch",
+    FTKMEMES = "ftk_memes",
 
     -- The Equipment --
     EQUIPMENT = "repairable_equipment",
