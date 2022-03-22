@@ -4,12 +4,14 @@ local boolean = {
     {description = zh and "禁用" or "No",  data = false}
 }
 
-version = "2.8"
+version = "2.8.1"
 name = zh and "纯净辅助" or "DST Fixed"
 author = zh and "丁香女子学校" or "Civi, Tony"
 description = zh and "[版本: "..version..[[]
 
 更新内容:
+- 调整了新模块中相关的触发概率。
+
 - 新模块：为了吾王经典台词（阴间笑话）。
 
 ]]
@@ -17,6 +19,8 @@ or
 "[Version: "..version..[[]
 
 Changelog:
+- Tweak loot rate in the latest module.
+
 - New Module: FTK Memes.
 
 ]]

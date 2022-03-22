@@ -27,8 +27,8 @@ local function insert_loottable(prefab, loot, chance)
 end
 
 AddSimPostInit(function()
-    insert_loottable("penguin", "lightninggoathorn", 0.1)
-    insert_loottable("mutated_penguin", "lightninggoathorn", 0.1)
+    insert_loottable("penguin", "lightninggoathorn", 0.02)
+    insert_loottable("mutated_penguin", "lightninggoathorn", 0.02)
 
     -- FTK classic strings
     if CHINESE_CODES[LanguageTranslator.defaultlang] then
