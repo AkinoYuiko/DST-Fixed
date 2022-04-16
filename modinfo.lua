@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.9.1"
+version = "2.9.2"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 description = zh_en(
@@ -20,14 +20,17 @@ description = zh_en(
 "[版本: "..version..[[]
 
 更新内容:
+- 简化了一部分代码。
+
 - 更新 modinfo 的多语言文本功能。
 - 新增 RecipeUtil 以方便配方管理。]],
     -- en
 "[Version: "..version..[[]
 
 Changelog:
-- Update LOC fn in modinfo.
+- Tweak some code.
 
+- Update LOC fn in modinfo.
 - Add RecipeUtil(pwd: utils/recipe2util) for recipe filters management.
 ]]
 )
