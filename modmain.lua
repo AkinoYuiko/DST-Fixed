@@ -59,10 +59,8 @@ local config_table = {
     CROWNFRAGMENT = "crown_fragment_recipe",
     TURFARCHIVE = "turf_archive_recipe",
     PROPSIGN = "craftable_prop_sign",
+    CLASSICBOOKGARDENING = "book_gardening_recipe",
 
-    -- Removed --
-    -- STAFF = "caller_staff_use_on_equip",
-    -- BEEFALO = "beefalo_nogreeting",
 }
 
 for config, module in pairs(config_table) do

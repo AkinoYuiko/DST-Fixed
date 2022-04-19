@@ -48,34 +48,54 @@ local function AddRecipe(name, ingredients, tech, config, extra_filters)
     return rec
 end
 
-local function sort_recipe(a, b, filter_name, offset)
-    local filter = CRAFTING_FILTERS[filter_name]
-    if filter and filter.recipes then
-        for sortvalue, product in ipairs(filter.recipes) do
-            if product == a then
-                table.remove(filter.recipes, sortvalue)
-                break
-            end
+local function get_index(t, v)
+    for index, value in pairs(t) do
+        if value == v then
+            return index
         end
-
-        local target_position = #filter.recipes + 1
-        for sortvalue, product in ipairs(filter.recipes) do
-            if product == b then
-                target_position = sortvalue + offset
-                break
-            end
-        end
-
-        table.insert(filter.recipes, target_position, a)
     end
 end
 
-local function SortBefore(a, b, filter_name)
-    sort_recipe(a, b, filter_name, 0)
+local function do_sorting(a, b, filter_name, offset, force_sort)
+    local filter = CRAFTING_FILTERS[filter_name]
+    if filter and filter.recipes and type(filter.recipes) == "table" then
+        local target_position
+        local recipes = filter.recipes
+        if get_index(recipes, a) then
+            if force_sort or table.contains(recipes, b) then
+                recipes[get_index(recipes, a)] = nil
+                target_position = #recipes + 1
+            end
+        end
+
+        if get_index(recipes, b) then
+            print("Found recipe",b,"in",filter_name)
+            target_position = get_index(recipes, b) + offset
+        end
+
+        if type(target_position) == "number" then
+            table.insert(recipes, target_position, a)
+            filter.default_sort_values[a] = filter.default_sort_values[a] or #recipes
+        end
+    end
 end
 
-local function SortAfter(a, b, filter_name)
-    sort_recipe(a, b, filter_name, 1)
+local function try_sorting(a, b, filter_type, offset)
+    if filter_type then
+        do_sorting(a, b, filter_type, offset, true)
+    elseif b then
+        for filter, data in pairs(CRAFTING_FILTERS) do
+            do_sorting(a, b, filter, offset)
+        end
+    end
+end
+
+local function SortBefore(a, b, filter_type)
+    try_sorting(a, b, filter_type, 0)
+end
+
+local function SortAfter(a, b, filter_type)
+    try_sorting(a, b, filter_type, 1)
 end
 
 return {

@@ -1,7 +1,5 @@
 local RecipeUtil = require("utils/recipe2util")
 local AddRecipe = RecipeUtil.AddRecipe
-local SortBefore = RecipeUtil.SortBefore
-local SortAfter = RecipeUtil.SortAfter
 local AddDeconstructRecipe = AddDeconstructRecipe
 GLOBAL.setfenv(1, GLOBAL)
 

@@ -12,28 +12,30 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.9.2"
+version = "2.10"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
+
+local new_modules = {
+    CLASSICBOOKGARDENING = true
+}
+
 description = zh_en(
     -- zh
 "[版本: "..version..[[]
 
 更新内容:
-- 简化了一部分代码。
-
-- 更新 modinfo 的多语言文本功能。
-- 新增 RecipeUtil 以方便配方管理。]],
+- 重构了recipe2util。
+- 新模块：经典园艺学]],
     -- en
 "[Version: "..version..[[]
 
 Changelog:
-- Tweak some code.
-
-- Update LOC fn in modinfo.
-- Add RecipeUtil(pwd: utils/recipe2util) for recipe filters management.
+- Rework RecipeUtil(pwd: utils/recipe2util).
+- New Module: Classic Applied Horticulture.
 ]]
 )
+
 
 api_version = 10
 dst_compatible = true
@@ -148,7 +150,7 @@ configuration_options = {
     },
     {
         name = "HIDELUNARCROWN",
-        label = zh_en("隐藏未激活启迪之冠（新）", "Hide Inactive Enlightened Crown (New)"),
+        label = zh_en("隐藏未激活启迪之冠", "Hide Inactive Enlightened Crown"),
         -- hover = zh_en("", "Moon Shard into Enlightened Crown",
         options = boolean,
         default = false
@@ -356,7 +358,7 @@ configuration_options = {
         options = boolean,
         default = false
     },
-    AddTitle(zh_en("配方相关", "The Recipe")),
+    AddTitle(zh_en("配方相关", "The Crafting")),
     {
         name = "RANDOMLIGHTS",
         label = zh_en("随机彩灯合成", "Random Winter Lights"),
@@ -385,4 +387,19 @@ configuration_options = {
         options = boolean,
         default = false
     },
+    {
+        name = "CLASSICBOOKGARDENING",
+        label = zh_en("经典园艺学", "Classic Applied Horticulture"),
+        hover = zh_en("经典园艺学，但是新版配方", "Classic Applied Horticulture, butt new recipe"),
+        options = boolean,
+        default = false
+    },
 }
+
+
+local NEWSTR = zh_en("（新）", " (New)")
+for i = 1, #configuration_options do
+    if configuration_options[i].name and new_modules[configuration_options[i].name] and configuration_options[i].label then
+        configuration_options[i].label = configuration_options[i].label .. NEWSTR
+    end
+end
