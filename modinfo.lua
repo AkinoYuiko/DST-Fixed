@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.10.1"
+version = "2.11"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
@@ -25,14 +25,15 @@ description = zh_en(
 "[版本: "..version..[[]
 
 更新内容:
-- 重构了recipe2util。
-- 新模块：经典园艺学]],
+- 移除启迪之冠碎片配方对IA的兼容。
+- 更新了recipe2util。
+]],
     -- en
 "[Version: "..version..[[]
 
 Changelog:
-- Rework RecipeUtil(pwd: utils/recipe2util).
-- New Module: Classic Applied Horticulture.
+- Remove compatibility work for Island Adventures.
+- Update RecipeUtil(pwd: utils/recipe2util).
 ]]
 )
 
