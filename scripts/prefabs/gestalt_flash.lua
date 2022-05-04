@@ -50,7 +50,7 @@ local function SetTarget(inst, owner, target)
         inst:ListenForEvent("onattackother", onattackother)
 
         inst.entity:SetParent(owner.entity)
-        inst:DoTaskInTime( 8 * FRAMES , doattack, target)
+        inst:DoTaskInTime(8 * FRAMES, doattack, target)
     end
 end
 
@@ -69,7 +69,7 @@ local function fn()
 
     inst.SetTarget = SetTarget
 
-    inst:DoTaskInTime( 0.5 , function(inst) inst:Remove() end)
+    inst:DoTaskInTime(0.5, function(inst) inst:Remove() end)
 
     return inst
 end

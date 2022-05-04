@@ -1,9 +1,20 @@
--- local AddRecipeToFilter = AddRecipeToFilter
-
 local function initprint(...)
     if KnownModIndex:IsModInitPrintEnabled() then
         local modname = getfenvminfield(3, "modname")
         print(ModInfoname(modname), ...)
+    end
+end
+
+-- set a recipe not listed in search filter or "EVERYTHING".
+local function RecipeNoSearch(recipe)
+    local CraftingMenuWidget = require("widgets/redux/craftingmenu_widget")
+    local is_recipe_valid_for_search = CraftingMenuWidget.IsRecipeValidForSearch
+    function CraftingMenuWidget:IsRecipeValidForSearch(name)
+        local ret = {is_recipe_valid_for_search(self, name)}
+        if name == recipe then
+            return
+        end
+        return unpack(ret)
     end
 end
 
@@ -16,7 +27,10 @@ local function AddRecipeToFilter(recipe_name, filter_name)
     end
 end
 
-local function AddRecipe(name, ingredients, tech, config, extra_filters)
+-- a smarter way to add a mod recipe, and you don't need to think about filters too much.
+-- also, with confog.hidden, you can set your recipe no searching or in "EVERYTHING" filter.
+-- same format as AddRecipe2
+local function AddRecipe(name, ingredients, tech, config, filters)
     initprint("AddRecipe2", name)
     require("recipe")
     mod_protect_Recipe = false
@@ -28,7 +42,7 @@ local function AddRecipe(name, ingredients, tech, config, extra_filters)
             AddRecipeToFilter(name, CRAFTING_FILTERS.CRAFTING_STATION.name)
         end
 
-        if config and config.builder_tag then
+        if config and config.builder_tag and config.nochar == nil then
 			AddRecipeToFilter(name, CRAFTING_FILTERS.CHARACTER.name)
         end
 
@@ -36,8 +50,12 @@ local function AddRecipe(name, ingredients, tech, config, extra_filters)
 			AddRecipeToFilter(name, CRAFTING_FILTERS.MODS.name)
         end
 
-        if extra_filters then
-            for _, filter_name in ipairs(extra_filters) do
+        if config and config.hidden then
+			RecipeNoSearch(name)
+        end
+
+        if filters then
+            for _, filter_name in ipairs(filters) do
                 AddRecipeToFilter(name, filter_name)
             end
         end
@@ -47,7 +65,8 @@ local function AddRecipe(name, ingredients, tech, config, extra_filters)
     rec:SetModRPCID()
     return rec
 end
-
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 local function get_index(t, v)
     for index, value in pairs(t) do
         if value == v then
@@ -69,7 +88,6 @@ local function do_sorting(a, b, filter_name, offset, force_sort)
         end
 
         if get_index(recipes, b) then
-            print("Found recipe",b,"in",filter_name)
             target_position = get_index(recipes, b) + offset
         end
 
@@ -90,6 +108,14 @@ local function try_sorting(a, b, filter_type, offset)
     end
 end
 
+-- a quick way to sort recipes before or after current recipes.
+---@param a string - the recipe name that you want to sort
+---@param b string - the target recipe name that we base on.
+---@param filter_type string
+-- e.g. RecipeSortAfter("darkcrystal", "purplegem") will sort "darkcrystal" after "purplegem" in all filters that "purplegem" has.
+-- e.g. RecipeSortAfter("darkcrystal", "purplegem", "MAGIC") will only sort "darkcrystal" after "purplegem" in "MAGIC" filter.
+-- e.g. RecipeSortAfter("darkcrystal", "purplegem", "TOOLS") will only sort "darkcrystal" to the last in "TOOLS" because "purplegem" is not in "TOOLS".
+-- one of b and filter_type must not be nil.
 local function SortBefore(a, b, filter_type)
     try_sorting(a, b, filter_type, 0)
 end
@@ -101,5 +127,5 @@ end
 return {
     AddRecipe   = AddRecipe,
     SortBefore  = SortBefore,
-    SortAfter   = SortAfter
+    SortAfter   = SortAfter,
 }
