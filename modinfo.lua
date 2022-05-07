@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.11.1"
+version = "2.11.3"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
