@@ -43,15 +43,15 @@ local function AddRecipe(name, ingredients, tech, config, filters)
         end
 
         if config and config.builder_tag and config.nochar == nil then
-			AddRecipeToFilter(name, CRAFTING_FILTERS.CHARACTER.name)
+            AddRecipeToFilter(name, CRAFTING_FILTERS.CHARACTER.name)
         end
 
         if config and config.nomods == nil then
-			AddRecipeToFilter(name, CRAFTING_FILTERS.MODS.name)
+            AddRecipeToFilter(name, CRAFTING_FILTERS.MODS.name)
         end
 
         if config and config.hidden then
-			RecipeNoSearch(name)
+            RecipeNoSearch(name)
         end
 
         if filters then

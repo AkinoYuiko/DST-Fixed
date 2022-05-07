@@ -767,22 +767,22 @@ end)
 --------------------------------------------------------------------------------
 
 local function trophyscale_oversizedveggies_getdesc(inst, viewer)
-	if inst:HasTag("burnt") then
-		return GetDescriptionCode(viewer, inst, "BURNT")
-	elseif inst:HasTag("fire") then
-		return GetDescriptionCode(viewer, inst, "BURNING")
-	elseif IsHoldingItem(inst) then
-		local data = inst.components.trophyscale.item_data
+    if inst:HasTag("burnt") then
+        return GetDescriptionCode(viewer, inst, "BURNT")
+    elseif inst:HasTag("fire") then
+        return GetDescriptionCode(viewer, inst, "BURNING")
+    elseif IsHoldingItem(inst) then
+        local data = inst.components.trophyscale.item_data
 
-		if data.weight == nil or data.weight <= 0 then
-			return GetDescriptionCode(viewer, inst, "HAS_ITEM_LIGHT")
-		end
+        if data.weight == nil or data.weight <= 0 then
+            return GetDescriptionCode(viewer, inst, "HAS_ITEM_LIGHT")
+        end
 
-		local heavy_postfix =  (data.is_heavy and "_HEAVY" or "")
-		return GetDescriptionCode(viewer, inst, "HAS_ITEM"..heavy_postfix, "subfmt", {weight = data.weight or "", day = data.day or ""})
-	end
+        local heavy_postfix =  (data.is_heavy and "_HEAVY" or "")
+        return GetDescriptionCode(viewer, inst, "HAS_ITEM"..heavy_postfix, "subfmt", {weight = data.weight or "", day = data.day or ""})
+    end
 
-	return GetDescriptionCode(viewer, inst) or nil
+    return GetDescriptionCode(viewer, inst) or nil
 end
 
 AddPrefabPostInit("trophyscale_oversizedveggies", function(inst)
@@ -797,17 +797,17 @@ end)
 
 
 local function yotc_carrat_race_finish_getdesc(inst, viewer)
-	if inst:HasTag("burnt") then
-		return GetDescriptionCode(viewer, inst, "BURNT")
-	elseif inst._active and inst._winner ~= nil then
-		if inst._winner.userid ~= nil and inst._winner.userid == viewer.userid then
-			return GetDescriptionCode(viewer, inst, "I_WON")
-		elseif inst._winner.name ~= nil then
-			return GetDescriptionCode(viewer, inst, "SOMEONE_ELSE_WON", "subfmt", { winner = inst._winner.name })
-		end
-	end
+    if inst:HasTag("burnt") then
+        return GetDescriptionCode(viewer, inst, "BURNT")
+    elseif inst._active and inst._winner ~= nil then
+        if inst._winner.userid ~= nil and inst._winner.userid == viewer.userid then
+            return GetDescriptionCode(viewer, inst, "I_WON")
+        elseif inst._winner.name ~= nil then
+            return GetDescriptionCode(viewer, inst, "SOMEONE_ELSE_WON", "subfmt", { winner = inst._winner.name })
+        end
+    end
 
-	return GetDescriptionCode(viewer, inst) or nil
+    return GetDescriptionCode(viewer, inst) or nil
 end
 
 AddPrefabPostInit("yotc_carrat_race_finish", function(inst)
