@@ -73,7 +73,8 @@ end
 local asscleaner = {
     "abandon_ship_board",
     "active_item_stack",
-    "dummytarget_dps"
+    "dummytarget_dps",
+    "wx78_delay_remove_grueimmunity",
 }
 
 for _, v in ipairs(asscleaner) do

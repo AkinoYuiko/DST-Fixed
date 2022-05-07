@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.11"
+version = "2.11.1"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
@@ -25,6 +25,8 @@ description = zh_en(
 "[版本: "..version..[[]
 
 更新内容:
+- 临时给Klei修复机器人夜视模块在有洞穴服务器存在BUG的问题。
+
 - 移除启迪之冠碎片配方对IA的兼容。
 - 更新了recipe2util。
 ]],
@@ -32,6 +34,8 @@ description = zh_en(
 "[Version: "..version..[[]
 
 Changelog:
+- Fix issue with WX78's night vision module in dedicated servers for Klei, temporarily.
+
 - Remove compatibility work for Island Adventures.
 - Update RecipeUtil(pwd: utils/recipe2util).
 ]]
