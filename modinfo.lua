@@ -29,7 +29,7 @@ description = zh_en(
 - 更新了recipe2util。
 ]],
     -- en
-"[Version: "..version .. "\n\n" .. [[Changelog:
+"Version: "..version .. "\n\n" .. [[Changelog:
 - Fix issue with WX78's night vision module in dedicated servers for Klei, temporarily.
 
 - Remove compatibility work for Island Adventures.
