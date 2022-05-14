@@ -20,23 +20,19 @@ local new_modules = {
     CLASSICBOOKGARDENING = true
 }
 
-description = zh_en(
-    -- zh
-"版本: " .. version .. "\n\n" .. [[更新内容:
+changelog = zh_en([[
 - 临时给Klei修复机器人夜视模块在有洞穴服务器存在BUG的问题。
 
 - 移除启迪之冠碎片配方对IA的兼容。
 - 更新了recipe2util。
-]],
-    -- en
-"Version: "..version .. "\n\n" .. [[Changelog:
+]], [[
 - Fix issue with WX78's night vision module in dedicated servers for Klei, temporarily.
 
 - Remove compatibility work for Island Adventures.
 - Update RecipeUtil(pwd: utils/recipe2util).
-]]
-)
-
+]])
+description = zh_en("版本: ", "Version: ") .. version ..
+    zh_en("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
 
 api_version = 10
 dst_compatible = true
