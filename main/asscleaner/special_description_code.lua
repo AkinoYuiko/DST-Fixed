@@ -713,11 +713,6 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_GIVE_PEARL[1]] = "HERMITCRAB_GIVE_PEARL.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_GIVE_PEARL[2]] = "HERMITCRAB_GIVE_PEARL.2"
 STRCODE_TALKER[STRINGS.HERMITCRAB_GIVE_PEARL[3]] = "HERMITCRAB_GIVE_PEARL.3"
 
--- Glassic Cutter --
-if STRINGS.ANNOUNCE_GLASSICCUTTER_BROKE then
-    STRCODE_TALKER[STRINGS.ANNOUNCE_GLASSICCUTTER_BROKE] = "ANNOUNCE_GLASSICCUTTER_BROKE"
-end
-
 --------------------------------------------------------------------------------
 ------------------------------- TROPHYSCALE_FISH -------------------------------
 --------------------------------------------------------------------------------
