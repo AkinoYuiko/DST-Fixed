@@ -1,5 +1,8 @@
 local AddPrefabPostInit = AddPrefabPostInit
+local AddSimPostInit = AddSimPostInit
 GLOBAL.setfenv(1, GLOBAL)
+
+local BUNG_PREFAB = "trinket_8"
 
 local __dummy = function() end
 
@@ -13,12 +16,15 @@ local function do_block(inst)
     if inst.components.lootdropper then
         local lootsetupfn = inst.components.lootdropper.lootsetupfn or __dummy
         inst.components.lootdropper:SetLootSetupFn(function(lootdropper, ...)
-            local rt = lootsetupfn(lootdropper, ...)
-            local loot = lootdropper.loot or {}
-            table.insert(loot, "trinket_8")
-            lootdropper.loot = loot
-            return rt
+            lootdropper:AddChanceLoot(BUNG_PREFAB, 1)
+            return lootsetupfn(lootdropper, ...)
         end)
+    end
+end
+
+local function on_trade(inst, data)
+    if data.item.prefab == BUNG_PREFAB then
+        do_block(inst)
     end
 end
 
@@ -31,20 +37,13 @@ local function post_init(inst)
 
     local should_accept_fn = inst.components.trader.test or __dummy
     inst.components.trader:SetAcceptTest(function(inst, item, giver, ...)
-        if item and item.prefab == "trinket_8" and not inst.no_periodicspawn then
+        if item.prefab == BUNG_PREFAB and not inst.no_periodicspawn then
             return true
         end
         return should_accept_fn(inst, item, giver, ...)
     end)
 
-    local onaccept_fn = inst.components.trader.onaccept or __dummy
-    inst.components.trader.onaccept = function(inst, giver, item, ...)
-        if item and item.prefab == "trinket_8" then
-            do_block(inst)
-            return
-        end
-        return onaccept_fn(inst, giver, item, ...)
-    end
+    inst:ListenForEvent("trade", on_trade)
 
     local on_save = inst.OnSave or __dummy
     inst.OnSave = function(inst, data, ...)
@@ -67,8 +66,8 @@ for _, v in ipairs(change_list) do
 end
 
 local UpvalueUtil = require("upvalueutil")
-AddPrefabPostInit("beefaloherd", function(inst)
-    UpvalueUtil.SetUpvalue(inst.components.periodicspawner.onspawn, "SpawnableParent", function(inst)
+AddSimPostInit(function()
+    UpvalueUtil.SetUpvalue(Prefabs["beefaloherd"].fn, "OnSpawned.SpawnableParent", function(inst)
         for member in pairs(inst.components.herd.members) do
             if not member.no_periodicspawn then -- Changed Part
                 if member.components.domesticatable == nil
