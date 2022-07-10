@@ -20,7 +20,8 @@ local FREE_CHARACTERS =
     -- "wormwood",
     -- "wurt",
     -- "wanda",
-    "walter"
+    "walter",
+    "wonkey",
 }
 
 if TheNet:GetIsServer() then
@@ -74,7 +75,7 @@ if TheNet:GetIsServer() then
 
     local Skinner = require("components/skinner")
 
-    function Skinner:SetSkinMode(skintype, default_build, ...)
+    function Skinner:SetSkinMode(skintype, default_build)
         skintype = skintype or self.skintype
         local base_skin = ""
 
@@ -82,7 +83,7 @@ if TheNet:GetIsServer() then
 
         if self.skin_data == nil then
             --fix for legacy saved games with already spawned players that don't have a skin_name set
-            self:SetSkinName(self.inst.prefab.."_none")
+            self:SetSkinName(self.inst.prefab.."_none", nil, true)
         end
 
         if skintype == "ghost_skin" then
@@ -92,7 +93,7 @@ if TheNet:GetIsServer() then
             base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or default_build or self.inst.prefab -- Changed Part
         end
 
-        SetSkinsOnAnim( self.inst.AnimState, self.inst.prefab, base_skin, self.clothing, skintype, default_build )
+        SetSkinsOnAnim( self.inst.AnimState, self.inst.prefab, base_skin, self.clothing, self.monkey_curse, skintype, default_build )
 
         self.inst.Network:SetPlayerSkin( self.skin_name or "", self.clothing["body"] or "", self.clothing["hand"] or "", self.clothing["legs"] or "", self.clothing["feet"] or "" )
     end
