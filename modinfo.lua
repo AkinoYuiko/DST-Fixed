@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.11.4"
+version = "2.11.5"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
@@ -21,6 +21,9 @@ local new_modules = {
 }
 
 changelog = zh_en([[
+- 修复皮肤套用优化会使部分东西不显示的问题
+- 新增皮肤套用优化对猴子皮的支持
+
 - 修复堵一个生物的屁股会让所有同种类的生物掉落列表里都有橡胶塞的问题
 
 - 临时给Klei修复机器人夜视模块在有洞穴服务器存在BUG的问题。
@@ -28,6 +31,10 @@ changelog = zh_en([[
 - 移除启迪之冠碎片配方对IA的兼容。
 - 更新了recipe2util。
 ]], [[
+
+- Fix missing animation for entities caused by Extended Player Skins
+- Add Wonkey skin support for Extended Player Skins
+
 - Fix all blockable_pooping targets dropping a bung after one of them gets blocked
 
 - Fix issue with WX78's night vision module in dedicated servers for Klei, temporarily.
