@@ -25,10 +25,12 @@ Enhanced Localized Description
 
 Wortox the Time Traveler
 
-FTK Memes (New)
+FTK Memes
 
 
 - The Equipment
+
+Orange Staff Map Blink (New)
 
 Combinable Equipment
 
