@@ -10,19 +10,32 @@ local CHS_CODE = {
 STRINGS.ACTIONS.BLINK_MAP.GENERIC = CHS_CODE[LanguageTranslator.defaultlan] and "传送({uses})" or "Telepoof({uses})"
 
 local function IsMioBoosted(doer)
-    return doer and doer.prefab == "miotan" and doer.boosted_task
+    return doer and doer.prefab == "miotan" and doer:HasTag("mio_boosted_task")
 end
 
 local function ValidateUses(act)
     if act.invobject and act.invobject.components.blinkstaff then
         local num = act.distancecount
+        local staffuses = act.invobject.components.finiteuses:GetUses()
 
         if IsMioBoosted(act.doer) then
             local is_fuel_enough, fuel_num = act.doer.components.inventory:Has(FUELTYPE, num)
-            local staffuses = act.invobject.components.finiteuses.current
             return is_fuel_enough or (fuel_num + staffuses) >= num
         end
-        return act.invobject.components.finiteuses.current >= num
+        return staffuses >= num
+    end
+end
+
+local function ClientValidateUses(act)
+    if act.invobject and act.invobject.prefab == "orangestaff" then
+        local num = act.distancecount
+        local staffuses = ( act.invobject.replica.inventoryitem.classified.percentused:value() or 0 ) * TUNING.ORANGESTAFF_USES / 100
+
+        if IsMioBoosted(act.doer) then
+            local is_fuel_enough, fuel_num = act.doer.replica.inventory:Has(FUELTYPE, num)
+            return is_fuel_enough or (fuel_num + staffuses) >= num
+        end
+        return staffuses >= num
     end
 end
 
@@ -44,7 +57,8 @@ local blink_map_code = ACTIONS_MAP_REMAP[ACTIONS.BLINK.code]
 local action_can_map_soulhop = UpvalueUtil.GetUpvalue(ACTIONS.BLINK_MAP.fn, "ActionCanMapSoulhop")
 
 local function ActionCanMapSoulhop(act)
-    if act.invobject and act.invobject.components.blinkstaff and act.doer and ValidateUses(act) then
+    -- if act.invobject and act.invobject.components.blinkstaff and act.doer and ValidateUses(act) then
+    if act.invobject and act.invobject.prefab == "orangestaff" and act.doer and ClientValidateUses(act) then
         return true
     end
     return action_can_map_soulhop(act)
@@ -63,7 +77,7 @@ end
 
 local blink_map_stroverridefn = ACTIONS.BLINK_MAP.stroverridefn
 ACTIONS.BLINK_MAP.stroverridefn = function(act)
-    local blinkstaff = act.invobject and act.invobject.components.blinkstaff
+    local blinkstaff = act.invobject and act.invobject.prefab == "orangestaff"
     local doer = act.doer
 
     if blinkstaff and doer then
