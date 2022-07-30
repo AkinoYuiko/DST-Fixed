@@ -16,6 +16,7 @@ local config_table = {
     FTKMEMES = "ftk_memes",
 
     -- The Equipment --
+    BLINK_MAP = "blink_map",
     EQUIPMENT = "repairable_equipment",
     HIDELUNARCROWN = "hide_inactive_alterguardianhat",
     LUNARCROWN = "enhanced_alterguardianhat",
