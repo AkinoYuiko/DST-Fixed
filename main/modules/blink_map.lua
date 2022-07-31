@@ -7,7 +7,7 @@ local CHS_CODE = {
     zht = true,
     chs = true,
 }
-STRINGS.ACTIONS.BLINK_MAP.GENERIC = CHS_CODE[LanguageTranslator.defaultlan] and "传送({uses})" or "Telepoof({uses})"
+STRINGS.ACTIONS.BLINK_MAP.GENERIC = CHS_CODE[LanguageTranslator.defaultlang] and "传送({uses})" or "Telepoof({uses})"
 
 local function IsMioBoosted(doer)
     return doer and doer.prefab == "miotan" and doer:HasTag("mio_boosted_task")
