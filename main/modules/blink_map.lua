@@ -41,15 +41,18 @@ end
 
 local function onblink_map(act)
     local act_pos = act:GetActionPoint()
-    local ret = act.invobject.components.blinkstaff:Blink(act_pos, act.doer)
-    -- Cunsume Extra Uses
-    local num = act.distancecount - 1
-    if num > 0 then
-        for i = 1, num do
-            act.invobject.components.blinkstaff.onblinkfn(act.invobject, act_pos, act.doer)
+    if act.invobject.components.blinkstaff:Blink(act_pos, act.doer) then
+        if act.invobject and act.invobject.components.blinkstaff.onblinkfn then
+            -- Cunsume Extra Uses
+            local num = act.distancecount - 1
+            if num > 0 then
+                for i = 1, num do
+                    act.invobject.components.blinkstaff.onblinkfn(act.invobject, act_pos, act.doer)
+                end
+            end
         end
+        return true
     end
-    return ret
 end
 
 local blink_map_code = ACTIONS_MAP_REMAP[ACTIONS.BLINK.code]

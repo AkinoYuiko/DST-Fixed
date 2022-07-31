@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.12.1"
+version = "2.12.2"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
@@ -21,12 +21,14 @@ local new_modules = {
 }
 
 changelog = zh_en([[
-- 修复地图传送在客户端失效的问题。
+- 调整了部分代码逻辑。
 
+- 修复地图传送在客户端失效的问题。
 - 懒人魔杖可以使用地图传送 (仅测试版可使用)
 ]], [[
-- Fix issue with map blink on client side.
+- Slightly tweak onblink_map fn.
 
+- Fix issue with map blink on client side.
 - Players can teleproof on map with The Lazy Explorer (FOR BETA BUILD ONLY).
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
