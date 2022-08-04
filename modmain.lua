@@ -75,6 +75,7 @@ end
 local asscleaner = {
     "abandon_ship_board",
     "active_item_stack",
+    "book_layer",
     "dummytarget_dps",
     "wx78_delay_remove_grueimmunity",
 }

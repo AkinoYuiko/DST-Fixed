@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.12.3"
+version = "2.12.4"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
@@ -21,14 +21,16 @@ local new_modules = {
 }
 
 changelog = zh_en([[
-- 新模块：书架可以领礼物。
+- 给klei临时修复读书动画的图层错误问题。
 
+- 新模块：书架可以领礼物。
 - 调整了部分代码逻辑。
 - 修复地图传送在客户端失效的问题。
 - 懒人魔杖可以使用地图传送 (仅测试版可使用)
 ]], [[
-- New Module: Bookcase as Gift Machine.
+- Fix layer display error on reading books for klei, temp.
 
+- New Module: Bookcase as Gift Machine.
 - Slightly tweak onblink_map fn.
 - Fix issue with map blink on client side.
 - Players can teleproof on map with The Lazy Explorer (FOR BETA BUILD ONLY).
