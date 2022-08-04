@@ -18,6 +18,9 @@ local book_list = {
     "book_moon",
     "book_bees",
     "book_research_station",
+
+    "book_horticulture_upgraded",
+    "book_light_upgraded",
 }
 
 local function book_layer_fn(book)
