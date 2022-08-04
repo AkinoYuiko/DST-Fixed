@@ -12,22 +12,24 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.12.2"
+version = "2.12.3"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
 local new_modules = {
-    BLINK_MAP = true
+    BOOKSTATIONGIFT = true
 }
 
 changelog = zh_en([[
-- 调整了部分代码逻辑。
+- 新模块：书架可以领礼物。
 
+- 调整了部分代码逻辑。
 - 修复地图传送在客户端失效的问题。
 - 懒人魔杖可以使用地图传送 (仅测试版可使用)
 ]], [[
-- Slightly tweak onblink_map fn.
+- New Module: Bookcase as Gift Machine.
 
+- Slightly tweak onblink_map fn.
 - Fix issue with map blink on client side.
 - Players can teleproof on map with The Lazy Explorer (FOR BETA BUILD ONLY).
 ]])
@@ -256,6 +258,14 @@ configuration_options = {
         options = boolean,
         default = false
     },
+    {
+        name = "BOOKSTATIONGIFT",
+        label = zh_en("书架可以领礼物", "Bookcase as Gift Machine"),
+        hover = zh_en("让玩家可以在书架旁领礼物", "Players can get weekly gifts nearby Bookcase"),
+        options = boolean,
+        default = false
+    },
+
     AddTitle(zh_en("生物相关", "The Mob")),
     {
         name = "BIRD",

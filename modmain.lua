@@ -35,6 +35,7 @@ local config_table = {
     COOKPOT = "no_dismantle_cookpot",
     LUREPLANT = "classic_lureplant",
     ENDTABLE = "floating_burnt_endtable",
+    BOOKSTATIONGIFT = "bookstation_gift",
 
     -- The Mob --
     BIRD = "birds_no_sleep",
