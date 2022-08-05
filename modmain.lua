@@ -77,6 +77,7 @@ local asscleaner = {
     "active_item_stack",
     "book_layer",
     "dummytarget_dps",
+    "getmapaction_pos",
     "wx78_delay_remove_grueimmunity",
 }
 
