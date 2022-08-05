@@ -10,7 +10,7 @@ local CHS_CODE = {
 STRINGS.ACTIONS.BLINK_MAP.GENERIC = CHS_CODE[LanguageTranslator.defaultlang] and "传送({uses})" or "Telepoof({uses})"
 
 local function IsMioBoosted(doer)
-    return doer and doer.prefab == "miotan" and doer:HasTag("mio_boosted_task")
+    return doer and doer:HasTag("mio_boosted_task")
 end
 
 local function ValidateUses(act)
