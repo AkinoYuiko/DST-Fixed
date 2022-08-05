@@ -12,12 +12,13 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.12.5"
+version = "2.12.6"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
 local new_modules = {
-    BOOKSTATIONGIFT = true
+    BLINK_MAP = true,
+    BOOKSTATIONGIFT = true,
 }
 
 changelog = zh_en([[
