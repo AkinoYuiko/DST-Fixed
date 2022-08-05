@@ -15,10 +15,10 @@ function PlayerController:GetMapActions(position)
 
     local blinkstaff_fn = COMPONENT_ACTIONS.POINT.blinkstaff
     COMPONENT_ACTIONS.POINT.blinkstaff = function(...)
-        local is_above_ground_at_point = TheWorld.Map.IsAboveGroundAtPoint
-        TheWorld.Map.IsAboveGroundAtPoint = function() return true end
+        local is_above_ground_at_point = map.IsAboveGroundAtPoint
+        map.IsAboveGroundAtPoint = function() return true end
         local ret = blinkstaff_fn(...)
-        TheWorld.Map.IsAboveGroundAtPoint = is_above_ground_at_point
+        map.IsAboveGroundAtPoint = is_above_ground_at_point
         return ret
     end
 
