@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.12.6"
+version = "2.12.7"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("丁香女子学校", "Civi, Tony")
 
@@ -22,16 +22,18 @@ local new_modules = {
 }
 
 changelog = zh_en([[
-- 给klei临时修复GetMapAction代码逻辑问题(:angri:)。
+- 移除读书动画图层的临时修复（Klei已修复）。
 
+- 给klei临时修复GetMapAction代码逻辑问题(:angri:)。
 - 给klei临时修复读书动画的图层错误问题。
 - 新模块：书架可以领礼物。
 - 调整了部分代码逻辑。
 - 修复地图传送在客户端失效的问题。
 - 懒人魔杖可以使用地图传送 (仅测试版可使用)
 ]], [[
-- Fix code logic issue in fn "GetMapAction" (:angri:).
+- Remove temp fix for layer display error.
 
+- Fix code logic issue in fn "GetMapAction" (:angri:).
 - Fix layer display error on reading books for klei, temp.
 - New Module: Bookcase as Gift Machine.
 - Slightly tweak onblink_map fn.
