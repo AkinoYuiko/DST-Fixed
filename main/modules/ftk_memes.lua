@@ -33,10 +33,10 @@ AddSimPostInit(function()
     -- FTK classic strings
     if CHINESE_CODES[LanguageTranslator.defaultlang] then
         STRINGS.UI.NOTIFICATION.LEFTGAME = "%s 已断开连接。"
-        STRINGS.CHARACTERS.GENERIC.ANNOUNCE_STILLALIVE = "仍然活着"
+        STRINGS.CHARACTERS.GENERIC.ANNOUNCE_STILLALIVE = "仍然活着！"
     else
         STRINGS.UI.NOTIFICATION.LEFTGAME = "%s has disconnected."
-        STRINGS.CHARACTERS.GENERIC.ANNOUNCE_STILLALIVE = "Still Alive"
+        STRINGS.CHARACTERS.GENERIC.ANNOUNCE_STILLALIVE = "STILL ALIVE!"
     end
     if rawget(_G, "STRCODE_TALKER") then
         STRCODE_TALKER[STRINGS.UI.NOTIFICATION.LEFTGAME] = "UI.NOTIFICATION.LEFTGAM"
@@ -44,9 +44,15 @@ AddSimPostInit(function()
     end
 end)
 
-local still_alive_event = TimeEvent(3 * FRAMES, function(inst)
+local function announce_still_alive(inst)
+    if not inst.components.talker then
+        inst:AddComponent("talker")
+    end
     inst.components.talker:Say(GetString(inst, "ANNOUNCE_STILLALIVE"), 4)
-end)
+
+end
+
+local still_alive_event = TimeEvent(3 * FRAMES, announce_still_alive)
 AddStategraphPostInit("wilson", function(self)
     local timeline = self.states["amulet_rebirth"].timeline
     for i, v in ipairs(timeline) do
@@ -54,5 +60,14 @@ AddStategraphPostInit("wilson", function(self)
             table.insert(timeline, math.max(i, 1), still_alive_event)
             break
         end
+    end
+end)
+
+AddStategraphPostInit("SGklaus", function(self)
+    local onenter_resurrect = self.states["resurrect"].onenter
+    self.states["resurrect"].onenter = function(inst)
+        onenter_resurrect(inst)
+        announce_still_alive(inst)
+
     end
 end)

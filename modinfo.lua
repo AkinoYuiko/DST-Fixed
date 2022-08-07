@@ -12,9 +12,9 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.12.7"
+version = "2.12.8"
 name = zh_en("纯净辅助", "DST Fixed")
-author = zh_en("丁香女子学校", "Civi, Tony")
+author = zh_en("鸭子乐园", "Azur Circle")
 
 local new_modules = {
     BLINK_MAP = true,
@@ -22,8 +22,9 @@ local new_modules = {
 }
 
 changelog = zh_en([[
-- 移除读书动画图层的临时修复（Klei已修复）。
+- 为了吾王经典台词中为克劳斯加入"仍然活着"台词。
 
+- 移除读书动画图层的临时修复（Klei已修复）。
 - 给klei临时修复GetMapAction代码逻辑问题(:angri:)。
 - 给klei临时修复读书动画的图层错误问题。
 - 新模块：书架可以领礼物。
@@ -31,8 +32,9 @@ changelog = zh_en([[
 - 修复地图传送在客户端失效的问题。
 - 懒人魔杖可以使用地图传送 (仅测试版可使用)
 ]], [[
-- Remove temp fix for layer display error.
+- Add "STILL ALIVE" announce string for Klaus in Module: FTK Memes.
 
+- Remove temp fix for layer display error.
 - Fix code logic issue in fn "GetMapAction" (:angri:).
 - Fix layer display error on reading books for klei, temp.
 - New Module: Bookcase as Gift Machine.
