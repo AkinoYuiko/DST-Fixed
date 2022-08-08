@@ -12,35 +12,18 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.12.8"
+version = "2.13"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
 local new_modules = {
-    BLINK_MAP = true,
-    BOOKSTATIONGIFT = true,
+    FIXMINOTAURCHESTLOOTS = true,
 }
 
 changelog = zh_en([[
-- 为了吾王经典台词中为克劳斯加入"仍然活着"台词。
-
-- 移除读书动画图层的临时修复（Klei已修复）。
-- 给klei临时修复GetMapAction代码逻辑问题(:angri:)。
-- 给klei临时修复读书动画的图层错误问题。
-- 新模块：书架可以领礼物。
-- 调整了部分代码逻辑。
-- 修复地图传送在客户端失效的问题。
-- 懒人魔杖可以使用地图传送 (仅测试版可使用)
+- 新模块：固定远古守卫者掉落
 ]], [[
-- Add "STILL ALIVE" announce string for Klaus in Module: FTK Memes.
-
-- Remove temp fix for layer display error.
-- Fix code logic issue in fn "GetMapAction" (:angri:).
-- Fix layer display error on reading books for klei, temp.
-- New Module: Bookcase as Gift Machine.
-- Slightly tweak onblink_map fn.
-- Fix issue with map blink on client side.
-- Players can teleproof on map with The Lazy Explorer (FOR BETA BUILD ONLY).
+- New Module: Fix Guardian's Loot.
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
     zh_en("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
@@ -300,6 +283,13 @@ configuration_options = {
         name = "BEEQUEENGIFTWRAP",
         label = zh_en("蜂后掉落彩纸蓝图", "Bee Queen Extra Drops"),
         hover = zh_en("杀死蜂后掉落彩纸的蓝图", "Bee Queen drops Giftwrap Blueprint"),
+        options = boolean,
+        default = false
+    },
+    {
+        name = "FIXMINOTAURCHESTLOOTS",
+        label = zh_en("固定远古守卫者掉落", "Fix Guardian's Loot"),
+        hover = zh_en("远古守卫者箱子掉落物固定种类", "Fix chest loots from the Large Ornate Chest"),
         options = boolean,
         default = false
     },

@@ -42,6 +42,7 @@ local config_table = {
     BLOCKABLEPOOPING = "blockable_pooping",
     TENTACLE = "tentacle_pillar_noloot",
     BEEQUEENGIFTWRAP = "giftwrap_blueprint",
+    FIXMINOTAURCHESTLOOTS = "fix_minotaurchest_loots",
 
     -- The World --
     SEED = "disable_seedrots",
