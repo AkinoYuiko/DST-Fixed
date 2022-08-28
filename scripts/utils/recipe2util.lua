@@ -82,7 +82,7 @@ local function do_sorting(a, b, filter_name, offset, force_sort)
         local recipes = filter.recipes
         if get_index(recipes, a) then
             if force_sort or table.contains(recipes, b) then
-                recipes[get_index(recipes, a)] = nil
+                table.remove(recipes, get_index(recipes, a))
                 target_position = #recipes + 1
             end
         end
@@ -112,9 +112,9 @@ end
 ---@param a string - the recipe name that you want to sort
 ---@param b string - the target recipe name that we base on.
 ---@param filter_type string
--- e.g. RecipeSortAfter("darkcrystal", "purplegem") will sort "darkcrystal" after "purplegem" in all filters that "purplegem" has.
--- e.g. RecipeSortAfter("darkcrystal", "purplegem", "MAGIC") will only sort "darkcrystal" after "purplegem" in "MAGIC" filter.
--- e.g. RecipeSortAfter("darkcrystal", "purplegem", "TOOLS") will only sort "darkcrystal" to the last in "TOOLS" because "purplegem" is not in "TOOLS".
+-- e.g. SortAfter("darkcrystal", "purplegem") will sort "darkcrystal" after "purplegem" in all filters that "purplegem" has.
+-- e.g. SortAfter("darkcrystal", "purplegem", "MAGIC") will only sort "darkcrystal" after "purplegem" in "MAGIC" filter.
+-- e.g. SortAfter("darkcrystal", "purplegem", "TOOLS") will only sort "darkcrystal" to the last in "TOOLS" because "purplegem" is not in "TOOLS".
 -- one of b and filter_type must not be nil.
 local function SortBefore(a, b, filter_type)
     try_sorting(a, b, filter_type, 0)
