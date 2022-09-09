@@ -12,21 +12,26 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.13.3"
+version = "2.13.6"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
 local new_modules = {
     BLINK_MAP = true,
     BOOKSTATIONGIFT = true,
+    BOOKMOON = true,
 }
 
 changelog = zh_en([[
+- 新模块：强化月之魔典
+
 - 修复【远古石刻】配方排序错误问题。
 
 - 修复从船上传送到远处引起的显示问题。
 - 新模块：固定远古守卫者掉落
 ]], [[
+- New Module: Enhanced Lunar Grimoire
+
 - Fix a typo in recipe sorting for Ancient Stonework.
 
 - Fix display issue when teleporting far from map on an angri boat.
@@ -164,6 +169,13 @@ configuration_options = {
         name = "LUNARCROWN",
         label = zh_en("强化启迪之冠", "Enhanced Enlightened Crown"),
         hover = zh_en("启迪之冠可放入月亮碎片代替攻击时的精神消耗\n月灵被替换为另一种特效，且可以享受玩家的倍率（不会小于1倍率）和增益加成", "Moon Shard into Enlightened Crown"),
+        options = boolean,
+        default = false
+    },
+    {
+        name = "BOOKMOON",
+        label = zh_en("强化月之魔典", "Enhanced Lunar Grimoire"),
+        hover = zh_en("月之魔典在月圆的时候读会月黑", "Read Lunar Grimoire on full moon will change it to new moon"),
         options = boolean,
         default = false
     },
