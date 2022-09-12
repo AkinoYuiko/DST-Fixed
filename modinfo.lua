@@ -12,30 +12,18 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.13.6"
+version = "2.14"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
 local new_modules = {
-    BLINK_MAP = true,
-    BOOKSTATIONGIFT = true,
     BOOKMOON = true,
 }
 
 changelog = zh_en([[
 - 新模块：强化月之魔典
-
-- 修复【远古石刻】配方排序错误问题。
-
-- 修复从船上传送到远处引起的显示问题。
-- 新模块：固定远古守卫者掉落
 ]], [[
 - New Module: Enhanced Lunar Grimoire
-
-- Fix a typo in recipe sorting for Ancient Stonework.
-
-- Fix display issue when teleporting far from map on an angri boat.
-- New Module: Fix Guardian's Loot.
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
     zh_en("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
