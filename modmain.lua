@@ -36,7 +36,6 @@ local config_table = {
     COOKPOT = "no_dismantle_cookpot",
     LUREPLANT = "classic_lureplant",
     ENDTABLE = "floating_burnt_endtable",
-    BOOKSTATIONGIFT = "bookstation_gift",
 
     -- The Mob --
     BIRD = "birds_no_sleep",
@@ -60,7 +59,6 @@ local config_table = {
     -- The Recipe --
     RANDOMLIGHTS = "random_winter_lights",
     CROWNFRAGMENT = "crown_fragment_recipe",
-    TURFARCHIVE = "turf_archive_recipe",
     PROPSIGN = "craftable_prop_sign",
     CLASSICBOOKGARDENING = "book_gardening_recipe",
 
