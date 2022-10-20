@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.14"
+version = "2.15"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
@@ -21,9 +21,11 @@ local new_modules = {
 }
 
 changelog = zh_en([[
-- 新模块：强化月之魔典
+- 移除模块："书架可以领礼物"。
+- 移除模块："档案馆地皮"。
 ]], [[
-- New Module: Enhanced Lunar Grimoire
+- Remove Module: "Bookcase as Gift Machine".
+- Remove Module: "Archive Turf Recipe".
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
     zh_en("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
@@ -257,13 +259,6 @@ configuration_options = {
         options = boolean,
         default = false
     },
-    {
-        name = "BOOKSTATIONGIFT",
-        label = zh_en("书架可以领礼物", "Bookcase as Gift Machine"),
-        hover = zh_en("让玩家可以在书架旁领礼物", "Players can get weekly gifts nearby Bookcase"),
-        options = boolean,
-        default = false
-    },
 
     AddTitle(zh_en("生物相关", "The Mob")),
     {
@@ -383,13 +378,6 @@ configuration_options = {
         name = "CROWNFRAGMENT",
         label = zh_en("启迪之冠碎片", "Enlightened Crown Shard"),
         hover = zh_en("【合成栏解锁】新增启迪之冠碎片的合成配方"),
-        options = boolean,
-        default = false
-    },
-    {
-        name = "TURFARCHIVE",
-        label = zh_en("档案馆地皮", "Archive Turf"),
-        hover = zh_en("【夯土机制作】新增档案馆地皮配方"),
         options = boolean,
         default = false
     },
