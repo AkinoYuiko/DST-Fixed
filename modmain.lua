@@ -13,6 +13,7 @@ local config_table = {
     NOGHOSTHOUNDED = "no_ghost_hounded",
     LOCALIZEDESC = "localize_description",
     WORTOXTIMETRAVEL = "jump_into_watch",
+    EVERYONEMAGICHAT = "everyone_magic_hat",
     FTKMEMES = "ftk_memes",
 
     -- The Equipment --

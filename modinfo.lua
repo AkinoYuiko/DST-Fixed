@@ -12,20 +12,18 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.15"
+version = "2.16"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
 local new_modules = {
-    BOOKMOON = true,
+    EVERYONEMAGICHAT = true,
 }
 
 changelog = zh_en([[
-- 移除模块："书架可以领礼物"。
-- 移除模块："档案馆地皮"。
+- 新增模块："人人皆是魔术师"。
 ]], [[
-- Remove Module: "Bookcase as Gift Machine".
-- Remove Module: "Archive Turf Recipe".
+- New Module: "Magic Hat for Everyone".
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
     zh_en("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
@@ -122,6 +120,13 @@ configuration_options = {
         name = "WORTOXTIMETRAVEL",
         label = zh_en("沃托克斯时间旅行", "Wortox the Time Traveler"),
         -- hover = zh_en("大部分检查文本将跟随客户端语言\n测试性功能，谨慎使用", "Make most descriptions follow client language.\n Testing func. Use at your own risk.",
+        options = boolean,
+        default = false
+    },
+    {
+        name = "EVERYONEMAGICHAT",
+        label = zh_en("人人皆是魔术师", "Magic Hat for Everyone"),
+        hover = zh_en("所有玩家都可以使用魔术帽", ""),
         options = boolean,
         default = false
     },
