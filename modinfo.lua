@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.16"
+version = "2.16.1"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
@@ -21,8 +21,12 @@ local new_modules = {
 }
 
 changelog = zh_en([[
+- 修复一处代码逻辑错误。
+
 - 新增模块："人人皆是魔术师"。
 ]], [[
+- Fix a typo.
+
 - New Module: "Magic Hat for Everyone".
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
