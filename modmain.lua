@@ -37,6 +37,7 @@ local config_table = {
     COOKPOT = "no_dismantle_cookpot",
     LUREPLANT = "classic_lureplant",
     ENDTABLE = "floating_burnt_endtable",
+    FIREPITCHARCOAL = "no_firepit_charcoal",
 
     -- The Mob --
     BIRD = "birds_no_sleep",

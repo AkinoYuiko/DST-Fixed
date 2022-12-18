@@ -12,22 +12,18 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.16.2"
+version = "2.17"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
 local new_modules = {
-    EVERYONEMAGICHAT = true,
+    FIREPITCHARCOAL = true,
 }
 
 changelog = zh_en([[
-- 修复一处代码逻辑错误。
-
-- 新增模块："人人皆是魔术师"。
+- 新增模块：火堆不掉木炭。
 ]], [[
-- Fix a typo.
-
-- New Module: "Magic Hat for Everyone".
+- New Module: No Firepit Charcoal.
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
     zh_en("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
@@ -265,6 +261,12 @@ configuration_options = {
         name = "ENDTABLE",
         label = zh_en("漂浮的烧毁茶几", "Floating burnt End Table"),
         hover = zh_en("移除茶几烧毁动画（参考旧版本龙蝇皮肤茶几）"),
+        options = boolean,
+        default = false
+    },
+    {
+        name = "FIREPITCHARCOAL",
+        label = zh_en("火堆不掉木炭", "No Firepit Charcoal"),
         options = boolean,
         default = false
     },
