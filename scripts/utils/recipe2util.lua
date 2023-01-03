@@ -1,3 +1,14 @@
+local function getfenvminfield(level, fieldname)
+    level = level + 1 -- increase level due to this function call
+    -- tail call doesn't have full debug info, its func is nil
+    -- use rawget to circumvent strict.lua's checks of _G that we might hit
+    while debug.getinfo(level) ~= nil and (debug.getinfo(level).func == nil or rawget(getfenv(level), fieldname) == nil) do
+        level = level + 1
+    end
+    assert(debug.getinfo(level) ~= nil, "Field " .. tostring(fieldname) .. " not found in callstack's functions' environments")
+    return getfenv(level)[fieldname]
+end
+
 local function initprint(...)
     if KnownModIndex:IsModInitPrintEnabled() then
         local modname = getfenvminfield(3, "modname")
