@@ -12,7 +12,7 @@ local function zh_en(a, b)
     })
 end
 
-version = "2.17"
+version = "2.17.1"
 name = zh_en("纯净辅助", "DST Fixed")
 author = zh_en("鸭子乐园", "Azur Circle")
 
@@ -21,8 +21,12 @@ local new_modules = {
 }
 
 changelog = zh_en([[
+- 修复一处崩溃。
+
 - 新增模块：火堆不掉木炭。
 ]], [[
+- Fix a crash.
+
 - New Module: No Firepit Charcoal.
 ]])
 description = zh_en("版本: ", "Version: ") .. version ..
