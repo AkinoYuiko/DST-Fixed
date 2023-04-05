@@ -9,6 +9,7 @@ local config_table = {
     SMARTUNWRAP = "smart_unwrap",
     CHECKSKINOWNERSHIP = "check_skin_ownership",
     SITEMOTE = "static_sit_emote",
+    SCRATCHEMOTE = "scratch_emote",
     CUSTOMFAILSTR = "custom_actionfail_strings",
     NOGHOSTHOUNDED = "no_ghost_hounded",
     LOCALIZEDESC = "localize_description",

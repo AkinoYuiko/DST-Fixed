@@ -92,6 +92,12 @@ configuration_options = {
         options = boolean,
         default = false
     },
+    {
+        name = "SCRATCHEMOTE",
+        label = zheng("挠头表情", "Scratch Emote"),
+        options = boolean,
+        default = false
+    },
 
     {
         name = "CUSTOMFAILSTR",
