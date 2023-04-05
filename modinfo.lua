@@ -6,22 +6,22 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.17.1"
+version = "2.18"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-    FIREPITCHARCOAL = true,
+    SCRATCHEMOTE = true,
 }
 
 changelog = zheng([[
-- 修复一处崩溃。
+- 新功能：挠头表情
 
-- 新增模块：火堆不掉木炭。
+- 现在 显示包裹 会显示物品到它实际所在的格子了
 ]], [[
-- Fix a crash.
+- New Module: Scratch Emote
 
-- New Module: No Firepit Charcoal.
+- Show Bundle shows the exact slot of the item now
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
     zheng("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
