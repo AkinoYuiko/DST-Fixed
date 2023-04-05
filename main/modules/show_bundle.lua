@@ -96,7 +96,7 @@ local function make_itemdata(items)
                 data.nameoverride = item.nameoverride
             end
         end
-        table.insert(itemdata, data)
+        itemdata[slot] = data
     end
     return itemdata
 end
@@ -104,7 +104,7 @@ end
 local function handle_redpouch_data(target, data)
     if not (target and string.find(target.prefab, "redpouch")) then return end
     local nugget_count = 0
-    for _, v in ipairs(data) do
+    for _, v in pairs(data) do
         if v.prefab == "lucky_goldnugget" then
             nugget_count = nugget_count + (v.stack or 1)
         else
