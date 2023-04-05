@@ -8,12 +8,11 @@ GLOBAL.setfenv(1, GLOBAL)
 
 SB = {}
 
-modimport("main/util.lua")
 modimport("main/showbundle_widgetcreation.lua")
 
 -- Default Values:
 -- pos:         Vector3(0, 95)
--- scale:       0.52, 0.6 will be as same as normal slot size)
+-- scale:       0.52 (0.6 will be as same as normal slot size)
 -- slot_scale:  1
 -- bg_scale:    1
 
@@ -235,7 +234,7 @@ end)
 
 AddClassPostConstruct("widgets/hoverer", function(self)
     local onshow = self.text.OnShow
-    self.text.OnShow = function(_self, ...)
+    self.text.OnShow = function(...)
         local player = ThePlayer
         if player then
             local hoverinst = TheInput.hoverinst
@@ -246,19 +245,35 @@ AddClassPostConstruct("widgets/hoverer", function(self)
                 )
             show_tip(target)
         end
-        return onshow(_self, ...)
+        return onshow(...)
     end
 
     local onhide = self.text.OnHide
-    self.text.OnHide = function(_self, ...)
+    self.text.OnHide = function(...)
         show_tip(nil)
-        return onhide(_self, ...)
+        return onhide(...)
     end
 end)
 
+local function serialize(data_table)
+    local serialized = DataDumper(data_table, nil, true)
+    -- return {data}, remove return {} part
+    -- 123456789
+    return string.sub(serialized, 9, -2)
+end
+
+local function unserialize(data_str)
+    local succeed, result = RunInSandboxSafe("return {" .. data_str .. "}")
+    if succeed then
+        return result
+    else
+        print("Failed to unserialize", data_str)
+    end
+end
+
 -- RPC data handler
 AddClientModRPCHandler(modname, "ShowBundleCallback", function(target, data)
-    target.showbundle_itemdata = SB.unserialize(data) or {}
+    target.showbundle_itemdata = unserialize(data) or {}
     draw_tipbox(target.showbundle_itemdata, target)
 end)
 
@@ -277,7 +292,7 @@ AddModRPCHandler(modname, "ShowBundle", function (player, target)
         itemdata = make_itemdata(target.components.container.slots)
     end
     itemdata = handle_redpouch_data(target, itemdata) or itemdata
-    SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, SB.serialize(itemdata))
+    SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, serialize(itemdata))
 end)
 
 local ShowMe_Hint = MOD_RPC.ShowMeSHint and MOD_RPC.ShowMeSHint.Hint
