@@ -14,7 +14,7 @@ end
 local function target_testfn(target, owner)
     return target and target ~= owner and target:IsValid() and
             (target.components.health == nil or not target.components.health:IsDead() and
-            (target:HasTag("spiderden") or not target:HasTag("structure")) and
+            (target:HasTag("spiderden") or target:HasTag("wooden") or not target:HasTag("structure")) and
             not target:HasTag("wall"))
 end
 
