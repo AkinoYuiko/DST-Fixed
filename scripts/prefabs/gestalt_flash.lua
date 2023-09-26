@@ -48,6 +48,8 @@ local function fn()
 
     inst.entity:AddTransform()
 
+    inst:AddTag("ignore_planar_entity")
+
     if not TheWorld.ismastersim then
         return inst
     end

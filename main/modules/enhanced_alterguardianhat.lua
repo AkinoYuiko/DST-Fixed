@@ -1,5 +1,5 @@
 table.insert(PrefabFiles, "gestalt_flash")
-
+local AddComponentAction = AddComponentAction
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -128,3 +128,14 @@ end)
 AddPrefabPostInit("moonglass", function(inst)
     inst:AddTag("alterguardianhatbattery")
 end)
+
+local PlanarEntity = require("components/planarentity")
+local AbsorbDamage = PlanarEntity.AbsorbDamage
+
+function PlanarEntity:AbsorbDamage(damage, attacker, weapon, spdmg, ...)
+    -- print(attacker)
+    if (attacker and attacker:HasTag("ignore_planar_entity")) or (weapon and weapon:HasTag("ignore_planar_entity")) then
+        return damage, spdmg
+    end
+    return AbsorbDamage(self, damage, attacker, weapon, spdmg, ...)
+end
