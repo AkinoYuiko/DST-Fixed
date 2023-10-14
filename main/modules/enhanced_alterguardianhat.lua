@@ -1,4 +1,4 @@
-table.insert(PrefabFiles, "gestalt_flash")
+table.insert(PrefabFiles, "gflash")
 
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
@@ -45,7 +45,7 @@ local function super_spawngestalt_fn(inst, owner, data)
 
             if launching_projectile_testfn(data) then return end
 
-            SpawnPrefab("gestalt_flash"):SetTarget(owner, target)
+            SpawnPrefab("gflash"):SetTarget(owner, target)
 
             if owner.components.sanity and math.random() < ( 0.25 * get_attacker_mult(owner) ) then
                 inst.components.container:ConsumeByName("moonglass", 1)

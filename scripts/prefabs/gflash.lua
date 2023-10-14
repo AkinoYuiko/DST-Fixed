@@ -3,7 +3,7 @@ require "prefabutil"
 local assets = {}
 
 local prefabs = {
-    "gestalt_flash_fx",
+    -- "gflash_fx",
     "electrichitsparks",
     "hitsparks_fx",
 }
@@ -55,8 +55,8 @@ local function fn()
     end
 
     inst:AddComponent("combat")
-    inst.components.combat:SetDefaultDamage(TUNING.ALTERGUARDIANHAT_GESTALT_DAMAGE)
-    inst.components.combat:SetRange(TUNING.GESTALTGUARD_ATTACK_RANGE * 10)
+    inst.components.combat:SetDefaultDamage(34)
+    inst.components.combat:SetRange(40)
 
     inst.SetTarget = SetTarget
 
@@ -65,4 +65,4 @@ local function fn()
     return inst
 end
 
-return Prefab("gestalt_flash", fn, assets, prefabs)
+return Prefab("gflash", fn, assets, prefabs)
