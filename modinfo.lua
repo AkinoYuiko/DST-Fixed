@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.18.4"
+version = "2.18.5"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,12 +15,14 @@ local new_modules = {
 }
 
 changelog = zheng([[
-- 【强化启迪之冠】伤害从42.5调整为34。
+- 修复一处崩溃。
 
+- 【强化启迪之冠】伤害从42.5调整为34。
 - 【强化启迪之冠】现在无视位面实体抵抗了。
 ]], [[
-- <Enhanced Enlightened Crown> changed damage from 42.5 to 34.
+- Fix a crash.
 
+- <Enhanced Enlightened Crown> changed damage from 42.5 to 34.
 - <Enhanced Enlightened Crown> now ignores Planar Entity Protection.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
