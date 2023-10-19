@@ -129,7 +129,7 @@ AddPrefabPostInit("moonglass", function(inst)
     inst:AddTag("alterguardianhatbattery")
 end)
 
-if not rawget(_G, NS_PLANARENTITY_HACKING) then
+if not rawget(_G, "NS_PLANARENTITY_HACKING") then
     local PlanarEntity = require("components/planarentity")
     local AbsorbDamage = PlanarEntity.AbsorbDamage
 
