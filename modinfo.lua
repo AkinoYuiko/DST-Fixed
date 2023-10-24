@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.18.6"
+version = "2.18.7"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,11 +15,13 @@ local new_modules = {
 }
 
 changelog = zheng([[
+- 修复显示包裹会偶尔给显示容器是空的
 - 修复一处崩溃。
 
 - 【强化启迪之冠】伤害从42.5调整为34。
 - 【强化启迪之冠】现在无视位面实体抵抗了。
 ]], [[
+- Fix Show Bundle sometimes shows an empty tipbox for containers
 - Fix a crash.
 
 - <Enhanced Enlightened Crown> changed damage from 42.5 to 34.
