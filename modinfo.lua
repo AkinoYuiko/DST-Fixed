@@ -6,26 +6,18 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.18.7"
+version = "2.19"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-    SCRATCHEMOTE = true,
+    BEARGERFUR_SACK = true,
 }
 
 changelog = zheng([[
-- 修复显示包裹会偶尔给显示容器是空的
-- 修复一处崩溃。
-
-- 【强化启迪之冠】伤害从42.5调整为34。
-- 【强化启迪之冠】现在无视位面实体抵抗了。
+- 新模块：【极地熊獾桶打开不掉落】
 ]], [[
-- Fix Show Bundle sometimes shows an empty tipbox for containers
-- Fix a crash.
-
-- <Enhanced Enlightened Crown> changed damage from 42.5 to 34.
-- <Enhanced Enlightened Crown> now ignores Planar Entity Protection.
+- New Module: Inventory Polar Bearger Bin.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
     zheng("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
@@ -220,6 +212,12 @@ configuration_options = {
     {
         name = "MHATS",
         label = zheng("蘑菇帽可以发光", "Glowing Mushroom Hats"),
+        options = boolean,
+        default = false
+    },
+    {
+        name = "BEARGERFUR_SACK",
+        label = zheng("极地熊獾桶打开不掉落", "Inventory Polar Bearger Bin"),
         options = boolean,
         default = false
     },
