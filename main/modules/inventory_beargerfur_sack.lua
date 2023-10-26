@@ -9,11 +9,9 @@ AddPrefabPostInit("beargerfur_sack", function(inst)
         local _onclose = inst.components.container.onclosefn
         inst.components.container.onclosefn = function(inst)
             _onclose(inst)
-            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
+            local owner = inst.components.inventoryitem.owner
             if owner then
-                if owner.SoundEmitter then
-                    owner.SoundEmitter:PlaySound(inst._sounds.close)
-                end
+                inst.SoundEmitter:PlaySound(inst._sounds.close)
             end
         end
     end
