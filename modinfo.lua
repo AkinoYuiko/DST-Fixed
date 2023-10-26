@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.19"
+version = "2.19.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,8 +15,12 @@ local new_modules = {
 }
 
 changelog = zheng([[
+- 优化了【极地熊獾桶打开不掉落】的音效表现。
+
 - 新模块：【极地熊獾桶打开不掉落】
 ]], [[
+- Tweak sound behavior for Module "Inventory Polar Bearger Bin".
+
 - New Module: Inventory Polar Bearger Bin.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
