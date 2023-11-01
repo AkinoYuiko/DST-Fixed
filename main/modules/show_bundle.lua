@@ -246,19 +246,37 @@ AddClassPostConstruct("widgets/controls", function(self)
     end
 end)
 
+local ItemTile = require("widgets/itemtile")
+
+local function text_on_show()
+    if not ThePlayer then
+        return
+    end
+
+    local hoverinst = TheInput.hoverinst
+    if hoverinst and hoverinst.entity:IsValid() and hoverinst.entity:IsVisible() then
+        -- None UI entity
+        if hoverinst.Transform then
+            show_tip(hoverinst)
+            return
+        end
+        -- UI entity
+        local parent = hoverinst.widget and hoverinst.widget.parent
+        if parent and parent.is_a and parent:is_a(ItemTile) then
+            local item = parent.item
+            if item and item.is_a and item:is_a(EntityScript) and item:IsValid() then
+                show_tip(item)
+                return
+            end
+        end
+    end
+    show_tip(nil)
+end
+
 AddClassPostConstruct("widgets/hoverer", function(self)
     local onshow = self.text.OnShow
     self.text.OnShow = function(...)
-        local player = ThePlayer
-        if player then
-            local hoverinst = TheInput.hoverinst
-            local target = hoverinst and hoverinst.entity:IsValid() and hoverinst.entity:IsVisible()
-                and (
-                    hoverinst.Transform and hoverinst or
-                    hoverinst.widget and hoverinst.widget.parent and hoverinst.widget.parent.item
-                )
-            show_tip(target)
-        end
+        text_on_show()
         return onshow(...)
     end
 
