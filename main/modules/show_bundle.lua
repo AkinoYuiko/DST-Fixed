@@ -264,7 +264,7 @@ local function text_on_show()
         local parent = hoverinst.widget and hoverinst.widget.parent
         if parent and parent.is_a and parent:is_a(ItemTile) then
             local item = parent.item
-            if item and item.is_a and item:is_a(EntityScript) and item:IsValid() then
+            if item and item.is_a and item:is_a(EntityScript) and item:IsValid() and item.Transform then
                 show_tip(item)
                 return
             end
