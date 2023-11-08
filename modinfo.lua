@@ -6,22 +6,18 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.19.1.1"
+version = "2.20"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-    BEARGERFUR_SACK = true,
+    HOWLITZER = true,
 }
 
 changelog = zheng([[
-- 优化了【极地熊獾桶打开不掉落】的音效表现。
-
-- 新模块：【极地熊獾桶打开不掉落】
+- 新模块：【强化嚎弹炮】
 ]], [[
-- Tweak sound behavior for Module "Inventory Polar Bearger Bin".
-
-- New Module: Inventory Polar Bearger Bin.
+- New Module: Enhanced Howlitzer.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
     zheng("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
@@ -168,6 +164,13 @@ configuration_options = {
         name = "LUNARCROWN",
         label = zheng("强化启迪之冠", "Enhanced Enlightened Crown"),
         hover = zheng("启迪之冠可放入月亮碎片代替攻击时的精神消耗\n月灵被替换为另一种特效，且可以享受玩家的倍率（不会小于1倍率）和增益加成", "Moon Shard into Enlightened Crown"),
+        options = boolean,
+        default = false
+    },
+    {
+        name = "HOWLITZER",
+        label = zheng("强化嚎弹炮", "Enhanced Howlitzer"),
+        hover = zheng("嚎弹炮可以放入月亮碎片", "Moon Shard into Howlitzer"),
         options = boolean,
         default = false
     },

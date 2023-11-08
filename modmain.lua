@@ -22,6 +22,7 @@ local config_table = {
     EQUIPMENT = "repairable_equipment",
     HIDELUNARCROWN = "hide_inactive_alterguardianhat",
     LUNARCROWN = "enhanced_alterguardianhat",
+    HOWLITZER = "enhanced_howlitzer",
     BOOKMOON = "enhanced_book_moon",
     SANDSTONE = "enhanced_sandstone",
     NAMEABLE_WATCHES = "nameable_watches",
