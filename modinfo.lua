@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.20"
+version = "2.20.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,8 +15,12 @@ local new_modules = {
 }
 
 changelog = zheng([[
+- 【强化嚎弹炮】自动从背包装填。
+
 - 新模块：【强化嚎弹炮】
 ]], [[
+- Enhanced Howlitzer now auto refills ammo from inventory.
+
 - New Module: Enhanced Howlitzer.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
