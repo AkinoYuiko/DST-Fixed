@@ -29,7 +29,9 @@ SB.supported_items = {
     alterguardianhat = {
         prefab = "showbundle_alterguardianhat",
         is_container = true,
-    }
+    },
+    cookpackage = {},
+    cookgift = {},
 }
 
 local Tipbox = require("widgets/sbtipbox")
