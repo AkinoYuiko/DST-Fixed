@@ -314,12 +314,12 @@ configuration_options = {
     },
     {
         name = "FIXMINOTAURCHESTLOOTS",
-        label = zh_en("固定远古守卫者掉落", "Fix Guardian's Loot"),
-        hover = zh_en("远古守卫者箱子掉落物固定种类", "Fix chest loots from the Large Ornate Chest"),
+        label = zheng("固定远古守卫者掉落", "Fix Guardian's Loot"),
+        hover = zheng("远古守卫者箱子掉落物固定种类", "Fix chest loots from the Large Ornate Chest"),
         options = boolean,
         default = false
     },
-    AddTitle(zh_en("世界相关", "The World")),
+    AddTitle(zheng("世界相关", "The World")),
     {
         name = "SEED",
         label = zheng("普通种子腐烂后消失", "Seeds Disappear on Perished"),
