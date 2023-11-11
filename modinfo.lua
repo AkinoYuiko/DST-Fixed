@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.20.2"
+version = "2.21"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,15 +15,9 @@ local new_modules = {
 }
 
 changelog = zheng([[
-- 兼容性更新。
-
-- 【强化嚎弹炮】自动从背包装填。
-- 新模块：【强化嚎弹炮】
+- 恢复模块：【固定犀牛掉落】
 ]], [[
-- Compatibility update.
-
-- Enhanced Howlitzer now auto refills ammo from inventory.
-- New Module: Enhanced Howlitzer.
+- Revert Module: Fix Guardian's Loot
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
     zheng("\n\n更新内容:\n", "\n\nChangelog:\n") .. changelog
@@ -318,7 +312,14 @@ configuration_options = {
         options = boolean,
         default = false
     },
-    AddTitle(zheng("世界相关", "The World")),
+    {
+        name = "FIXMINOTAURCHESTLOOTS",
+        label = zh_en("固定远古守卫者掉落", "Fix Guardian's Loot"),
+        hover = zh_en("远古守卫者箱子掉落物固定种类", "Fix chest loots from the Large Ornate Chest"),
+        options = boolean,
+        default = false
+    },
+    AddTitle(zh_en("世界相关", "The World")),
     {
         name = "SEED",
         label = zheng("普通种子腐烂后消失", "Seeds Disappear on Perished"),
