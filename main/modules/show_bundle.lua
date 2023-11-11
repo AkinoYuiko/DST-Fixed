@@ -8,12 +8,11 @@ GLOBAL.setfenv(1, GLOBAL)
 
 SB = {}
 
-modimport("main/util.lua")
 modimport("main/showbundle_widgetcreation.lua")
 
 -- Default Values:
 -- pos:         Vector3(0, 95)
--- scale:       0.52, 0.6 will be as same as normal slot size)
+-- scale:       0.52 (0.6 will be as same as normal slot size)
 -- slot_scale:  1
 -- bg_scale:    1
 
@@ -25,11 +24,14 @@ SB.supported_items = {
     redpouch_yotc = {},
     redpouch_yotb = {},
     redpouch_yot_catcoon = {},
+    redpouch_yotr = {},
     myth_bundle = {}, -- For Myth mod
     alterguardianhat = {
         prefab = "showbundle_alterguardianhat",
         is_container = true,
-    }
+    },
+    cookpackage = {},
+    cookgift = {},
 }
 
 local Tipbox = require("widgets/sbtipbox")
@@ -96,7 +98,7 @@ local function make_itemdata(items)
                 data.nameoverride = item.nameoverride
             end
         end
-        table.insert(itemdata, data)
+        itemdata[slot] = data
     end
     return itemdata
 end
@@ -104,7 +106,7 @@ end
 local function handle_redpouch_data(target, data)
     if not (target and string.find(target.prefab, "redpouch")) then return end
     local nugget_count = 0
-    for _, v in ipairs(data) do
+    for _, v in pairs(data) do
         if v.prefab == "lucky_goldnugget" then
             nugget_count = nugget_count + (v.stack or 1)
         else
@@ -166,11 +168,6 @@ function Unwrappable:OnLoad(data, ...)
     return ret
 end
 
-local last_update = {
-    target = nil,
-    time = 0
-}
-
 local function draw_tipbox(data, target)
     if SB.tipbox then
         local widget_settings = FunctionOrValue(SB.supported_items[target.prefab], target) or {}
@@ -179,7 +176,7 @@ local function draw_tipbox(data, target)
         if target.replica.container
                 and (not data or (IsTableEmpty(data) and not widget_settings.show_on_empty)) then
             SB.tipbox:Hide()
-        elseif not SB.tipbox.shown or target ~= last_update.target then
+        elseif not SB.tipbox.shown then
             SB.tipbox:Show()
         end
    end
@@ -191,30 +188,49 @@ local function should_show_tip(target)
             or target.replica.container and not target.replica.container:IsOpenedBy(ThePlayer))
 end
 
+-- Refresh/invalidate tipbox for containers (because items inside container can change)
+-- when changing target or after 1s
+-- Always show tipbox for others (currently unwrappables only)
+
+local last_target
+
 local function send_showbundle_request(target)
     SendModRPCToServer(MOD_RPC[modname]["ShowBundle"], target)
-    last_update.target = target
-    last_update.time = GetTime()
+    target.showbundle_last_update_request_time = GetTime()
+end
+
+local function should_invalidate_last_data(target)
+    return target.showbundle_last_update_request_time
+        and GetTime() - target.showbundle_last_update_request_time >= 1
 end
 
 local function show_tip(target)
-    if last_update.target and last_update.target.replica.container
-            and (target == nil or target ~= last_update.target) then -- If it's a container, clear showbundle_itemdata so we'll always try to send_showbundle_request when mouse focus on it again
-        last_update.target.showbundle_itemdata = {}
-        last_update.target = nil
+    -- Invalidate show bundle data on moving focus away and when the data is stale
+    -- (can happen because we add in itemdata asynchronously)
+    if target ~= last_target then
+        -- Moving target away
+        if last_target and last_target.replica.container then
+            last_target.showbundle_itemdata = nil
+        -- Invalidate stale data
+        elseif target and target.replica.container and should_invalidate_last_data(target) then
+            target.showbundle_itemdata = nil
+        end
     end
+    last_target = target
+
     if should_show_tip(target) then
         if target.showbundle_itemdata then
             draw_tipbox(target.showbundle_itemdata, target)
-            if last_update.target ~= target
-                    or (target.replica.container and GetTime() - last_update.time >= 1) then
+            if target.replica.container and GetTime() - target.showbundle_last_update_request_time >= 1 then
                 send_showbundle_request(target)
             end
-            return
+        else
+            send_showbundle_request(target)
+            SB.tipbox:Hide()
         end
-        send_showbundle_request(target)
+    else
+        SB.tipbox:Hide()
     end
-    SB.tipbox:Hide()
 end
 
 AddClassPostConstruct("widgets/controls", function(self)
@@ -232,33 +248,69 @@ AddClassPostConstruct("widgets/controls", function(self)
     end
 end)
 
+local ItemTile = require("widgets/itemtile")
+
+local function text_on_show()
+    if not ThePlayer then
+        return
+    end
+
+    local hoverinst = TheInput.hoverinst
+    if hoverinst and hoverinst.entity:IsValid() and hoverinst.entity:IsVisible() then
+        -- None UI entity
+        if hoverinst.Transform then
+            show_tip(hoverinst)
+            return
+        end
+        -- UI entity
+        local parent = hoverinst.widget and hoverinst.widget.parent
+        if parent and parent.is_a and parent:is_a(ItemTile) then
+            local item = parent.item
+            if item and item.is_a and item:is_a(EntityScript) and item:IsValid() and item.Transform then
+                show_tip(item)
+                return
+            end
+        end
+    end
+    show_tip(nil)
+end
+
 AddClassPostConstruct("widgets/hoverer", function(self)
     local onshow = self.text.OnShow
-    self.text.OnShow = function(_self, ...)
-        local player = ThePlayer
-        if player then
-            local hoverinst = TheInput.hoverinst
-            local target = hoverinst and hoverinst.entity:IsValid() and hoverinst.entity:IsVisible()
-                and (
-                    hoverinst.Transform and hoverinst or
-                    hoverinst.widget and hoverinst.widget.parent and hoverinst.widget.parent.item
-                )
-            show_tip(target)
-        end
-        return onshow(_self, ...)
+    self.text.OnShow = function(...)
+        text_on_show()
+        return onshow(...)
     end
 
     local onhide = self.text.OnHide
-    self.text.OnHide = function(_self, ...)
+    self.text.OnHide = function(...)
         show_tip(nil)
-        return onhide(_self, ...)
+        return onhide(...)
     end
 end)
 
+local function serialize(data_table)
+    local serialized = DataDumper(data_table, nil, true)
+    -- return {data}, remove return {} part
+    -- 123456789
+    return string.sub(serialized, 9, -2)
+end
+
+local function unserialize(data_str)
+    local succeed, result = RunInSandboxSafe("return {" .. data_str .. "}")
+    if succeed then
+        return result
+    else
+        print("Failed to unserialize", data_str)
+    end
+end
+
 -- RPC data handler
 AddClientModRPCHandler(modname, "ShowBundleCallback", function(target, data)
-    target.showbundle_itemdata = SB.unserialize(data) or {}
-    draw_tipbox(target.showbundle_itemdata, target)
+    target.showbundle_itemdata = unserialize(data) or {}
+    if target == last_target then
+        draw_tipbox(target.showbundle_itemdata, target)
+    end
 end)
 
 AddModRPCHandler(modname, "ShowBundle", function (player, target)
@@ -276,7 +328,11 @@ AddModRPCHandler(modname, "ShowBundle", function (player, target)
         itemdata = make_itemdata(target.components.container.slots)
     end
     itemdata = handle_redpouch_data(target, itemdata) or itemdata
-    SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, SB.serialize(itemdata))
+    -- Test code for simulating network delay
+    -- player:DoTaskInTime(1, function()
+    --     SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, serialize(itemdata))
+    -- end)
+    SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, serialize(itemdata))
 end)
 
 local ShowMe_Hint = MOD_RPC.ShowMeSHint and MOD_RPC.ShowMeSHint.Hint

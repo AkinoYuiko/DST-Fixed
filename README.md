@@ -1,13 +1,14 @@
 # DST-Fixed
+
 Mods in DuckParadise Server. Each can be enabled or disabled.
 
 
-- Default On
+## Default On
 
 Show Bundle
 
 
-- The Player
+## The Player
 
 Enable Quick Attack
 
@@ -28,7 +29,7 @@ Wortox the Time Traveler
 FTK Memes
 
 
-- The Equipment
+## The Equipment
 
 Orange Staff Map Blink (New)
 
@@ -51,7 +52,7 @@ No bowing for Bee Queen Crown
 Glowing Mushroom Hats
 
 
-- The Builder
+## The Builder
 
 Better Fossil Repairing
 
@@ -68,7 +69,7 @@ Classic Lure Plants
 Floating burnt End Table
 
 
-- The Mob
+## The Mob
 
 Birds no sleeping
 
@@ -80,7 +81,7 @@ Bee Queen Extra Drops
 
 
 
-- The World
+## The World
 
 Seeds Disappear on Perished
 
@@ -105,7 +106,7 @@ No Halloween Candies
 Less Loots in Winter's Feast
 
 
-- The Recipe
+## The Recipe
 
 Random Winter Lights
 

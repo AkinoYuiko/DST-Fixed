@@ -9,10 +9,12 @@ local config_table = {
     SMARTUNWRAP = "smart_unwrap",
     CHECKSKINOWNERSHIP = "check_skin_ownership",
     SITEMOTE = "static_sit_emote",
+    SCRATCHEMOTE = "scratch_emote",
     CUSTOMFAILSTR = "custom_actionfail_strings",
     NOGHOSTHOUNDED = "no_ghost_hounded",
     LOCALIZEDESC = "localize_description",
     WORTOXTIMETRAVEL = "jump_into_watch",
+    EVERYONEMAGICHAT = "everyone_magic_hat",
     FTKMEMES = "ftk_memes",
 
     -- The Equipment --
@@ -20,12 +22,15 @@ local config_table = {
     EQUIPMENT = "repairable_equipment",
     HIDELUNARCROWN = "hide_inactive_alterguardianhat",
     LUNARCROWN = "enhanced_alterguardianhat",
+    HOWLITZER = "enhanced_howlitzer",
+    BOOKMOON = "enhanced_book_moon",
     SANDSTONE = "enhanced_sandstone",
     NAMEABLE_WATCHES = "nameable_watches",
     NODARTWASTE = "no_lost_blowdart",
     POCKETRESKIN = "pocket_reskin",
     BEEQUEENHAT = "facking_hivehat",
     MHATS = "glowing_mushroom_hats",
+    BEARGERFUR_SACK = "inventory_beargerfur_sack",
 
     -- The Builder --
     BETTERFOSSIL = "easy_fossil_stalker",
@@ -35,7 +40,7 @@ local config_table = {
     COOKPOT = "no_dismantle_cookpot",
     LUREPLANT = "classic_lureplant",
     ENDTABLE = "floating_burnt_endtable",
-    BOOKSTATIONGIFT = "bookstation_gift",
+    FIREPITCHARCOAL = "no_firepit_charcoal",
 
     -- The Mob --
     BIRD = "birds_no_sleep",
@@ -60,7 +65,6 @@ local config_table = {
     -- The Recipe --
     RANDOMLIGHTS = "random_winter_lights",
     CROWNFRAGMENT = "crown_fragment_recipe",
-    TURFARCHIVE = "turf_archive_recipe",
     PROPSIGN = "craftable_prop_sign",
     CLASSICBOOKGARDENING = "book_gardening_recipe",
 

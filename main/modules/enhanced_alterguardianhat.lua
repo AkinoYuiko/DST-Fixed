@@ -1,4 +1,4 @@
-table.insert(PrefabFiles, "gestalt_flash")
+table.insert(PrefabFiles, "gflash")
 
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
@@ -14,7 +14,7 @@ end
 local function target_testfn(target, owner)
     return target and target ~= owner and target:IsValid() and
             (target.components.health == nil or not target.components.health:IsDead() and
-            (target:HasTag("spiderden") or not target:HasTag("structure")) and
+            (target:HasTag("spiderden") or target:HasTag("wooden") or not target:HasTag("structure")) and
             not target:HasTag("wall"))
 end
 
@@ -45,7 +45,7 @@ local function super_spawngestalt_fn(inst, owner, data)
 
             if launching_projectile_testfn(data) then return end
 
-            SpawnPrefab("gestalt_flash"):SetTarget(owner, target)
+            SpawnPrefab("gflash"):SetTarget(owner, target)
 
             if owner.components.sanity and math.random() < ( 0.25 * get_attacker_mult(owner) ) then
                 inst.components.container:ConsumeByName("moonglass", 1)
@@ -128,3 +128,16 @@ end)
 AddPrefabPostInit("moonglass", function(inst)
     inst:AddTag("alterguardianhatbattery")
 end)
+
+if not rawget(_G, "NS_PLANARENTITY_HACKING") then
+    local PlanarEntity = require("components/planarentity")
+    local AbsorbDamage = PlanarEntity.AbsorbDamage
+
+    function PlanarEntity:AbsorbDamage(damage, attacker, weapon, spdmg, ...)
+        -- print(attacker)
+        if (attacker and attacker:HasTag("ignore_planar_entity")) or (weapon and weapon:HasTag("ignore_planar_entity")) then
+            return damage, spdmg
+        end
+        return AbsorbDamage(self, damage, attacker, weapon, spdmg, ...)
+    end
+end
