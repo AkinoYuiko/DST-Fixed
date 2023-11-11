@@ -46,8 +46,9 @@ AddPrefabPostInit("statueglommer", function(inst)
     inst.components.repairable.onrepaired = OnRepaired
     inst.components.repairable.noannounce = true
 
-    inst.components.workable:SetMaxWork(inst.components.workable.workleft)
-
+    inst:DoTaskInTime(0, function()
+        inst.components.workable:SetMaxWork(TUNING.ROCKS_MINE)
+    end)
     inst.components.workable:SetOnWorkCallback(MakeRemoveComponentProxy(inst.components.workable.onwork))
     inst.components.workable:SetOnLoadFn(MakeRemoveComponentProxy(inst.components.workable.onloadfn))
     inst.OnLoad = MakeRemoveComponentProxy(inst.OnLoad)
@@ -61,4 +62,5 @@ AddPrefabPostInit("marble", function(inst)
     end
     inst.components.repairer.repairmaterial = MATERIALS.MARBLE
     inst.components.repairer.workrepairvalue = 2
+    -- inst:AddTag("work_" .. MATERIALS.MARBLE)
 end)
