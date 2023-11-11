@@ -30,12 +30,11 @@ local function launching_projectile_testfn(data)
 end
 
 local function super_spawngestalt_fn(inst, owner, data)
-
-    if not inst.components.container:Has("moonglass", 1) then
+    if owner.components.debuffable:HasDebuff("buff_moonlight") then
+        return
+    elseif not inst.components.container:Has("moonglass", 1) then
         return inst.alterguardian_spawngestalt_fn(owner, data)
-    end
-
-    if not inst._is_active then
+    elseif not inst._is_active then
         return
     end
 

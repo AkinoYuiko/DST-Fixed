@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.21"
+version = "2.21.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,8 +15,12 @@ local new_modules = {
 }
 
 changelog = zheng([[
+- 【强化启迪之冠】调整代码逻辑。
+
 - 恢复模块：【固定犀牛掉落】
 ]], [[
+- Tweak code logic for module: Enhanced Enlightened Crown.
+
 - Revert Module: Fix Guardian's Loot
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
