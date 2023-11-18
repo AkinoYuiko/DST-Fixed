@@ -17,10 +17,19 @@ AddPrefabPostInit("beargerfur_sack", function(inst)
     end
 end)
 
-AddPrefabPostInit("tacklecontainer", function(inst)
-    if not TheWorld.ismastersim then return end
+local TACKLECONTAINERS =
+{
+    "tacklecontainer",
+    "supertacklecontainer",
 
-    if inst.components.container then
-        inst.components.container.droponopen = false
-    end
-end)
+}
+
+for _, prefab in ipairs(TACKLECONTAINERS) do
+    AddPrefabPostInit(prefab, function(inst)
+        if not TheWorld.ismastersim then return end
+
+        if inst.components.container then
+            inst.components.container.droponopen = false
+        end
+    end)
+end
