@@ -13,6 +13,13 @@ STRCODE_ANNOUNCE = {}
 STRCODE_TALKER = {}
 STRCODE_POSSIBLENAMES = {}
 
+function EncodeDrawNameCode(ent)
+    ent:DoTaskInTime(0, function(inst)
+        inst.drawnameoverride = EncodeStrCode({content = "NAMES." .. string.upper(inst.prefab)})
+    end)
+end
+
+
 function IsStrCode(value)
     return type(value) == "string" and value:find("^"..STRCODE_HEADER)
 end
