@@ -1,7 +1,15 @@
-table.insert(PrefabFiles, "gflash")
+-- table.insert(PrefabFiles, "gflash")
 
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
+
+local function do_glash_attack(inst, attacker, target)
+    local prev_damagemultiplier = attacker.components.combat.damagemultiplier
+    attacker.components.combat.damagemultiplier = math.max(1, (prev_damagemultiplier or 1))
+    attacker.components.combat:DoAttack(target, inst)
+    attacker.components.combat.damagemultiplier = prev_damagemultiplier
+end
+
 
 local function get_attacker_mult(attacker)
     local damagemult = attacker.components.combat.damagemultiplier or 1
@@ -29,11 +37,13 @@ local function launching_projectile_testfn(data)
             or data.weapon.components.weapon:CanRangedAttack())
 end
 
-local function super_spawngestalt_fn(inst, owner, data)
+local function glash_fn(inst, owner, data)
     if owner.components.debuffable:HasDebuff("buff_moonlight") then
         return
     elseif not inst.components.container:Has("moonglass", 1) then
         return inst.alterguardian_spawngestalt_fn(owner, data)
+    elseif data and data.weapon == inst then
+        return
     elseif not inst._is_active then
         return
     end
@@ -44,7 +54,7 @@ local function super_spawngestalt_fn(inst, owner, data)
 
             if launching_projectile_testfn(data) then return end
 
-            SpawnPrefab("gflash"):SetTarget(owner, target)
+            do_glash_attack(inst, owner, target)
 
             if owner.components.sanity and math.random() < ( 0.25 * get_attacker_mult(owner) ) then
                 inst.components.container:ConsumeByName("moonglass", 1)
@@ -69,8 +79,8 @@ local function onequip(inst, owner, ...)
 
     inst:RemoveEventCallback("onattackother", inst.alterguardian_spawngestalt_fn, owner)
 
-    inst.new_spawngestalt_fn = function(_owner, _data) super_spawngestalt_fn(inst, _owner, _data) end
-    inst:ListenForEvent("onattackother", inst.new_spawngestalt_fn, owner)
+    inst.glash_fn = function(_owner, _data) glash_fn(inst, _owner, _data) end
+    inst:ListenForEvent("onattackother", inst.glash_fn, owner)
 
     if open_fn and inst.components.container then
         inst.components.container.Open = open_fn
@@ -80,7 +90,7 @@ end
 
 local function onunequip(inst, owner, ...)
     inst.onunequip_prefns["dst-fixed"](inst, owner, ...)
-    inst:RemoveEventCallback("onattackother", inst.new_spawngestalt_fn, owner)
+    inst:RemoveEventCallback("onattackother", inst.glash_fn, owner)
 end
 
 local function OnEntityReplicated(inst)
@@ -91,8 +101,14 @@ local function OnEntityReplicated(inst)
     end
 end
 
-AddPrefabPostInit("alterguardianhat", function(inst)
+local function on_attack(inst, attacker, target)
+    if target and target:IsValid() then
+        SpawnPrefab("hitsparks_fx"):Setup(inst, target)
+    end
+end
 
+AddPrefabPostInit("alterguardianhat", function(inst)
+    inst:AddTag("ignore_planar_entity")
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = OnEntityReplicated
         return
@@ -122,6 +138,12 @@ AddPrefabPostInit("alterguardianhat", function(inst)
         inst.components.equippable:SetOnEquip(onequip)
         inst.components.equippable:SetOnUnequip(onunequip)
     end
+
+    inst:AddComponent("weapon")
+    inst.components.weapon:SetDamage(34)
+    inst.components.weapon:SetRange(40)
+    inst.components.weapon:SetOnAttack(on_attack)
+
 end)
 
 AddPrefabPostInit("moonglass", function(inst)
