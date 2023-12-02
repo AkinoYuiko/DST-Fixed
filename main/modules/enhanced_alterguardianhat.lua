@@ -38,7 +38,7 @@ local function launching_projectile_testfn(data)
 end
 
 local function glash_fn(inst, owner, data)
-    if owner.components.debuffable:HasDebuff("buff_moonlight") then
+    if owner.components.debuffable:HasDebuff("buff_moonglass") then
         return
     elseif not inst.components.container:Has("moonglass", 1) then
         return inst.alterguardian_spawngestalt_fn(owner, data)
