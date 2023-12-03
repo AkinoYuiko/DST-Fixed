@@ -152,9 +152,8 @@ local function fn()
     inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.HOUNDSTOOTH_BLOWPIPE_VS_SHADOW_BONUS)
 
     inst:AddComponent("projectile")
-    inst.components.projectile:SetSpeed(TUNING.HOUNDSTOOTH_BLOWPIPE_PROJECTILE_SPEED) -- 25
     inst.components.projectile:SetSpeed(50)
-    inst.components.projectile:SetHoming(false)
+    inst.components.projectile:SetHoming(true)
     inst.components.projectile:SetOnThrownFn(Projectile_OnThrown)
     inst.components.projectile:SetOnPreHitFn(Projectile_OnPreHit)
     inst.components.projectile:SetOnHitFn(inst.Remove)
