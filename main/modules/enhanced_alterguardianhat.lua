@@ -6,7 +6,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function do_glash_attack(inst, attacker, target)
     local prev_damagemultiplier = attacker.components.combat.damagemultiplier
     attacker.components.combat.damagemultiplier = math.max(1, (prev_damagemultiplier or 1))
-    attacker.components.combat:DoAttack(target, inst)
+    attacker.components.combat:DoAttack(target, inst, inst)
     attacker.components.combat.damagemultiplier = prev_damagemultiplier
 end
 
@@ -144,6 +144,7 @@ AddPrefabPostInit("alterguardianhat", function(inst)
     inst.components.weapon:SetRange(40)
     inst.components.weapon:SetOnAttack(on_attack)
 
+    inst:AddComponent("projectile")
 end)
 
 AddPrefabPostInit("moonglass", function(inst)
