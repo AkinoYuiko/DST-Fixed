@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.21.5"
+version = "2.21.6"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,18 +15,20 @@ local new_modules = {
 }
 
 changelog = zheng([[
-- 修复一处拼写错误。
+- 修复一个攻击判定问题。
 
 版本更新历史：
+- 修复一处拼写错误。
 - 优化了部分代码。
 - 修复模块【可修复格罗姆雕像】。
 - 【火堆不掉木炭】新增完美无瑕咩咩雕像。
 - 【强化启迪之冠】调整代码逻辑。
 - 恢复模块：【固定犀牛掉落】
 ]], [[
-- Fix a typo.
+- Fix issue with attacking rule.
 
 Version Change Notes:
+- Fix a typo.
 - Improve code performance.
 - Fix module: Glommer Statue Repairing.
 - "No Firepit Charcoal" includes Immaculate Lamb Idol.
