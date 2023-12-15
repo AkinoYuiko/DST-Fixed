@@ -57,7 +57,6 @@ local config_table = {
     HONORMOUND = "honor_mound",
     BAT = "bats_attack_eyeturret",
     GATHERMOONGLASS = "gather_moonglass",
-    PIGKINGMOONGLASS = "pigking_reward_moonglass",
     NOFORESTRESOURCEREGEN = "disable_forestresouce_regen",
     HALLOWEEN = "disable_halloween_candies",
     WINTERSFEASTLOOTS = "disable_wintersfeast_trash",
@@ -68,6 +67,8 @@ local config_table = {
     PROPSIGN = "craftable_prop_sign",
     CLASSICBOOKGARDENING = "book_gardening_recipe",
 
+    -- To Be Removed --
+    PIGKINGMOONGLASS = "pigking_reward_moonglass",
 }
 
 for config, module in pairs(config_table) do

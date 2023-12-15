@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.21.6"
+version = "2.22"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,25 +15,11 @@ local new_modules = {
 }
 
 changelog = zheng([[
-- 修复一个攻击判定问题。
-
-版本更新历史：
-- 修复一处拼写错误。
-- 优化了部分代码。
-- 修复模块【可修复格罗姆雕像】。
-- 【火堆不掉木炭】新增完美无瑕咩咩雕像。
-- 【强化启迪之冠】调整代码逻辑。
-- 恢复模块：【固定犀牛掉落】
+- 【强化嚎弹炮】变更月亮碎片作为弹药时的速度为与狗牙相同。
+- 即将移除模块：【猪王给月亮碎片】如有保留需求，请在工坊页面反馈。
 ]], [[
-- Fix issue with attacking rule.
-
-Version Change Notes:
-- Fix a typo.
-- Improve code performance.
-- Fix module: Glommer Statue Repairing.
-- "No Firepit Charcoal" includes Immaculate Lamb Idol.
-- Tweak code logic for module: Enhanced Enlightened Crown.
-- Revert Module: Fix Guardian's Loot
+- Enhanced Howlitzer: Tweak projectile speed of Moon Shards to 25.
+- Module to be removed in comming updates: Pig King Reward Moon Shard.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
     zheng("\n\n本次更新内容:\n", "\n\nChange:\n") .. changelog
@@ -381,14 +367,7 @@ configuration_options = {
     {
         name = "GATHERMOONGLASS",
         label = zheng("月相盘在出生门掉落", "Gather Moon Dial's Glass"),
-        hover = zheng("风暴事件结束时月相盘在出生门处掉落玻璃碎片", "Moon Glass dropped from Moon Dials will be teleported to Celestial Portal."),
-        options = boolean,
-        default = false
-    },
-    {
-        name = "PIGKINGMOONGLASS",
-        label = zheng("猪王给月亮碎片", "Pig King Reward Moonglass"),
-        hover = zheng("月亮风暴期间猪王给月亮碎片", "Pig King reward Moon Glass during Moonstorm."),
+        hover = zheng("风暴事件结束时月相盘在出生门处掉落玻璃碎片", "Moon Shard dropped from Moon Dials will be teleported to Celestial Portal."),
         options = boolean,
         default = false
     },
@@ -439,6 +418,14 @@ configuration_options = {
         name = "CLASSICBOOKGARDENING",
         label = zheng("经典园艺学", "Classic Applied Horticulture"),
         hover = zheng("经典园艺学，但是新版配方", "Classic Applied Horticulture, butt new recipe"),
+        options = boolean,
+        default = false
+    },
+    AddTitle(zheng("即将移除", "To Be Removed")),
+    {
+        name = "PIGKINGMOONGLASS",
+        label = zheng("猪王给月亮碎片", "Pig King Reward Moong Shard"),
+        hover = zheng("月亮风暴期间猪王给月亮碎片", "Pig King reward Moon Shard during Moonstorm."),
         options = boolean,
         default = false
     },
