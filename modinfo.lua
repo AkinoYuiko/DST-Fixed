@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.22"
+version = "2.22.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,11 +15,11 @@ local new_modules = {
 }
 
 changelog = zheng([[
-- 【强化嚎弹炮】变更月亮碎片作为弹药时的速度为与狗牙相同。
-- 即将移除模块：【猪王给月亮碎片】如有保留需求，请在工坊页面反馈。
+- 【极地熊獾桶打开不掉落】变更为【罐子容器打开不掉落】（需要重新设置）。
+- 移除模块：【猪王给月亮碎片】
 ]], [[
-- Enhanced Howlitzer: Tweak projectile speed of Moon Shards to 25.
-- Module to be removed in comming updates: Pig King Reward Moon Shard.
+- Rename Module: Inventory Polar Bearger Bin -> Inventory Box Containers (Re-config required).
+- Remove Module: Pig King Reward Moon Shard.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
     zheng("\n\n本次更新内容:\n", "\n\nChange:\n") .. changelog
@@ -225,8 +225,8 @@ configuration_options = {
         default = false
     },
     {
-        name = "BEARGERFUR_SACK",
-        label = zheng("极地熊獾桶打开不掉落", "Inventory Polar Bearger Bin"),
+        name = "INVENTORY_CONTAINER",
+        label = zheng("罐子容器打开不掉落", "Inventory Box Containers"),
         options = boolean,
         default = false
     },
@@ -421,14 +421,14 @@ configuration_options = {
         options = boolean,
         default = false
     },
-    AddTitle(zheng("即将移除", "To Be Removed")),
-    {
-        name = "PIGKINGMOONGLASS",
-        label = zheng("猪王给月亮碎片", "Pig King Reward Moong Shard"),
-        hover = zheng("月亮风暴期间猪王给月亮碎片", "Pig King reward Moon Shard during Moonstorm."),
-        options = boolean,
-        default = false
-    },
+    -- AddTitle(zheng("即将移除", "To Be Removed")),
+    -- {
+    --     name = "PIGKINGMOONGLASS",
+    --     label = zheng("猪王给月亮碎片", "Pig King Reward Moong Shard"),
+    --     hover = zheng("月亮风暴期间猪王给月亮碎片", "Pig King reward Moon Shard during Moonstorm."),
+    --     options = boolean,
+    --     default = false
+    -- },
 }
 
 

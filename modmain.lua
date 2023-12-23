@@ -30,7 +30,7 @@ local config_table = {
     POCKETRESKIN = "pocket_reskin",
     BEEQUEENHAT = "facking_hivehat",
     MHATS = "glowing_mushroom_hats",
-    BEARGERFUR_SACK = "inventory_beargerfur_sack",
+    INVENTORY_CONTAINER = "inventory_box_containers",
 
     -- The Builder --
     BETTERFOSSIL = "easy_fossil_stalker",
@@ -68,7 +68,7 @@ local config_table = {
     CLASSICBOOKGARDENING = "book_gardening_recipe",
 
     -- To Be Removed --
-    PIGKINGMOONGLASS = "pigking_reward_moonglass",
+    -- PIGKINGMOONGLASS = "pigking_reward_moonglass",
 }
 
 for config, module in pairs(config_table) do
