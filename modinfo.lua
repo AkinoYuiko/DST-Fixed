@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.22.2"
+version = "2.22.2.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,15 +15,17 @@ local new_modules = {
 }
 
 changelog = zheng([[
-- 修复亮茄魔杖耐久在2%时的攻击逻辑问题。
+- 修复修复过的亮茄魔杖不掉耐久的问题。
 
 最近更新：
+- 修复亮茄魔杖耐久在2%时的攻击逻辑问题。
 - 【极地熊獾桶打开不掉落】变更为【罐子容器打开不掉落】（需要重新设置）。
 - 移除模块：【猪王给月亮碎片】
 ]], [[
-- Fix issue where projectile of Brightshade Staff is incorrect at 2% durability.
+- Fix issue where repaired Brightshade Staff doesn't lose durability.
 
 Recent Changes:
+- Fix issue where projectile of Brightshade Staff is incorrect at 2% durability.
 - Rename Module: Inventory Polar Bearger Bin -> Inventory Box Containers (Re-config required).
 - Remove Module: Pig King Reward Moon Shard.
 ]])
