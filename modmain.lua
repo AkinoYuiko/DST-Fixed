@@ -82,6 +82,7 @@ local asscleaner = {
     "abandon_ship_board",
     "active_item_stack",
     "dummytarget_dps",
+    "fix_staff_lunarplant",
     "getmapaction_pos",
     "wx78_delay_remove_grueimmunity",
 }
