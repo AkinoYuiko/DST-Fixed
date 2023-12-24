@@ -15,20 +15,20 @@ local function on_projectile_launched(inst, attacker, target, proj)
 end
 
 local function SetOnProjectileLaunched(inst)
-    if inst.components.weapon then
-        inst.components.weapon:SetOnProjectileLaunched(on_projectile_launched)
-    end
+    inst.components.weapon:SetOnProjectileLaunched(on_projectile_launched)
 end
 
 AddPrefabPostInit("staff_lunarplant", function(inst)
     if not TheWorld.ismastersim then return end
     UpvalueUtil.SetUpvalue(inst.components.finiteuses.onfinished, "onbroken.DisableComponents", disable_components)
 
-    SetOnProjectileLaunched(inst)
-    inst.components.finiteuses:SetIgnoreCombatDurabilityLoss(true)
-    inst:ListenForEvent("percentusedchange", function()
-        SetOnProjectileLaunched(inst)
+    inst:DoTaskInTime(0, SetOnProjectileLaunched)
+    inst:ListenForEvent("percentusedchange", function(src, data)
+        if data and data.percent == 1 then
+            inst:DoTaskInTime(0, SetOnProjectileLaunched)
+        end
     end)
+    inst.components.finiteuses:SetIgnoreCombatDurabilityLoss(true)
 end)
 
 local FiniteUses = require("components/finiteuses")
