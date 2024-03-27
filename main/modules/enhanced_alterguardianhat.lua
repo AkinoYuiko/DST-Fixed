@@ -69,11 +69,11 @@ end
 
 local function onequip(inst, owner, ...)
 
-    local open_fn
-    if inst.components.container then
-        open_fn = inst.components.container.Open
-        inst.components.container.Open = function() --[[ Disabled ]] end
-    end
+    -- local open_fn
+    -- if inst.components.container then
+    --     open_fn = inst.components.container.Open
+    --     inst.components.container.Open = function() --[[ Disabled ]] end
+    -- end
 
     inst.onequip_prefns["dst-fixed"](inst, owner, ...)
 
@@ -82,9 +82,9 @@ local function onequip(inst, owner, ...)
     inst.glash_fn = function(_owner, _data) glash_fn(inst, _owner, _data) end
     inst:ListenForEvent("onattackother", inst.glash_fn, owner)
 
-    if open_fn and inst.components.container then
-        inst.components.container.Open = open_fn
-    end
+    -- if open_fn and inst.components.container then
+    --     inst.components.container.Open = open_fn
+    -- end
 
 end
 
