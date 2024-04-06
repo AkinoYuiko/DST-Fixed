@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.22.3.1"
+version = "2.22.4"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
