@@ -34,6 +34,50 @@ local function auto_refill(inst, prev_item_prefab)
     end
 end
 
+-- [[ Upgradeable]] --
+local function on_upgrade(inst, doer, upgraded_from_item)
+    local numupgrades = inst.components.upgradeable.numupgrades
+    if numupgrades == 1 then
+        if inst.components.container then
+            inst.components.container:EnableInfiniteStackSize(true)
+        end
+        if upgraded_from_item then
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local fx = SpawnPrefab("chestupgrade_stacksize_fx")
+            fx.Transform:SetPosition(x, y, z)
+        end
+    end
+    inst:AddComponent("lootdropper")
+    inst.components.lootdropper:SetLoot({ "alterguardianhatshard" })
+
+    inst.components.upgradeable.upgradetype = nil
+end
+
+local function on_decontruction(inst, caster)
+    if inst.components.upgradeable ~= nil and inst.components.upgradeable.numupgrades > 0 then
+        if inst.components.lootdropper ~= nil then
+            inst.components.lootdropper:SpawnLootPrefab("alterguardianhatshard")
+        end
+    end
+    inst.components.container:DropEverything()
+end
+
+local function on_load(inst, data)
+    if inst.components.upgradeable ~= nil and inst.components.upgradeable.numupgrades > 0 then
+        on_upgrade(inst)
+    end
+end
+
+local function set_upgradeable(inst)
+    local upgradeable = inst:AddComponent("upgradeable")
+    upgradeable.upgradetype = UPGRADETYPES.CHEST
+    upgradeable:SetOnUpgradeFn(on_upgrade)
+
+    inst:ListenForEvent("ondeconstructstructure", on_decontruction)
+    inst.OnLoad = on_load
+end
+
+----------------------
 AddPrefabPostInit("houndstooth_blowpipe", function(inst)
     if not TheWorld.ismastersim then return end
 
@@ -62,4 +106,6 @@ AddPrefabPostInit("houndstooth_blowpipe", function(inst)
             end
         end
     end)
+
+    set_upgradeable(inst)
 end)
