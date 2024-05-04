@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.23"
+version = "2.23.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -15,14 +15,16 @@ local new_modules = {
 }
 
 changelog = zheng([[
-- 模块【强化嚎弹炮】允许使用弹性空间制造器。
+- 【强化嚎弹炮】使用狗牙时亦有追踪效果。
 
 最近更新：
+- 模块【强化嚎弹炮】允许使用弹性空间制造器。
 - 修复寄居蟹奶奶语言包导致的崩溃问题。
 ]], [[
-- Enhanced Howlitzer accepts Elastispacer.
+- Hounds' Tooth is homing with Enhanced Howlitzer.
 
 Recent Changes:
+- Enhanced Howlitzer accepts Elastispacer.
 - Fix crash for string texts of Hermit Crab.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
