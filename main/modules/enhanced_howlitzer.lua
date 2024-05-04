@@ -19,18 +19,18 @@ local function auto_refill(inst, prev_item_prefab)
     local inv = owner.components.inventory
     local container = inst.components.container
     local hat = inv and inv:GetEquippedItem(EQUIPSLOTS.HEAD)
-    local hat_container = hat and hat.prefab == "alterguardianhat" and hat.components.container
+    -- local hat_container = hat and hat.prefab == "alterguardianhat" and hat.components.container
     local item_fn = function(item) return item.prefab == prev_item_prefab end
     local new_item = inv and inv:FindItem(item_fn)
     if new_item then
         inv:RemoveItem(new_item, true)
         container:GiveItem(new_item)
-    elseif hat_container then
-        local new_hat_item = hat_container:FindItem(item_fn)
-        if new_hat_item then
-            hat_container:RemoveItem(new_hat_item, true)
-            container:GiveItem(new_hat_item)
-        end
+    -- elseif hat_container then
+    --     local new_hat_item = hat_container:FindItem(item_fn)
+    --     if new_hat_item then
+    --         hat_container:RemoveItem(new_hat_item, true)
+    --         container:GiveItem(new_hat_item)
+    --     end
     end
 end
 
@@ -53,7 +53,7 @@ local function on_upgrade(inst, doer, upgraded_from_item)
     inst.components.upgradeable.upgradetype = nil
 end
 
-local function on_decontruction(inst, caster)
+local function ondeconstructstructure(inst, caster)
     if inst.components.upgradeable ~= nil and inst.components.upgradeable.numupgrades > 0 then
         if inst.components.lootdropper ~= nil then
             inst.components.lootdropper:SpawnLootPrefab("alterguardianhatshard")
@@ -73,7 +73,7 @@ local function set_upgradeable(inst)
     upgradeable.upgradetype = UPGRADETYPES.CHEST
     upgradeable:SetOnUpgradeFn(on_upgrade)
 
-    inst:ListenForEvent("ondeconstructstructure", on_decontruction)
+    inst:ListenForEvent("ondeconstructstructure", ondeconstructstructure)
     inst.OnLoad = on_load
 end
 
@@ -108,4 +108,12 @@ AddPrefabPostInit("houndstooth_blowpipe", function(inst)
     end)
 
     set_upgradeable(inst)
+end)
+
+AddPrefabPostInit("houndstooth_proj", function(inst)
+    if not TheWorld.ismastersim then return end
+
+    if inst.components.projectile then
+        inst.components.projectile:SetHoming(true)
+    end
 end)
