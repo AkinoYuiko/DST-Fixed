@@ -34,6 +34,6 @@ end)
 local FiniteUses = require("components/finiteuses")
 local set_uses = FiniteUses.SetUses
 function FiniteUses:SetUses(val)
-    val = type(val) == "number" and math.clamp(val, 0, self.total) or val
+    val = type(val) == "number" and math.max(val, 0) or val
     set_uses(self, val)
 end
