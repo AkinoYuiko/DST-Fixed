@@ -30,7 +30,6 @@ local config_table = {
     POCKETRESKIN = "pocket_reskin",
     BEEQUEENHAT = "facking_hivehat",
     MHATS = "glowing_mushroom_hats",
-    INVENTORY_CONTAINER = "inventory_box_containers",
 
     -- The Builder --
     BETTERFOSSIL = "easy_fossil_stalker",
