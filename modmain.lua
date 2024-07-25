@@ -82,7 +82,7 @@ local asscleaner = {
     "active_item_stack",
     "dummytarget_dps",
     "fix_staff_lunarplant",
-    "getmapaction_pos",
+    -- "getmapaction_pos", -- Cancel for debugging.
     "wx78_delay_remove_grueimmunity",
 }
 
