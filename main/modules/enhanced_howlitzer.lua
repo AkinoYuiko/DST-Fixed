@@ -77,8 +77,14 @@ local function set_upgradeable(inst)
     inst.OnLoad = on_load
 end
 
+local function displaynamefn(inst)
+    return inst:HasTag("chest_upgradeable") and STRINGS.NAMES.HOUNDSTOOTH_BLOWPIPE or (STRINGS.NAMES.HOUNDSTOOTH_BLOWPIPE .. " +")
+end
+
 ----------------------
 AddPrefabPostInit("houndstooth_blowpipe", function(inst)
+    inst.displaynamefn = displaynamefn
+
     if not TheWorld.ismastersim then return end
 
     inst:RemoveEventCallback("itemget", inst.OnAmmoLoaded)
@@ -90,7 +96,6 @@ AddPrefabPostInit("houndstooth_blowpipe", function(inst)
             weapon:SetProjectile("moonglass_blow_proj")
         end
     end
-
     inst:ListenForEvent("itemget", inst.OnAmmoLoaded)
 
     local OnProjectileLaunched = inst.components.weapon.onprojectilelaunched
