@@ -6,7 +6,7 @@ local function zheng(zh, en)
     return LOC[locale] or en
 end
 
-version = "2.24.0"
+version = "2.24.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,26 +16,8 @@ local new_modules = {
 
 changelog = zheng([[
 新模块：阴郁双回旋镖
-
-最近更新：
-- 为扩容的嚎弹炮增加名字辨识。
-- 暂时移除对地图动作的修改。
-- 移除模块【罐子容器打开不掉落】（官方已包含）。
-- 修复薇诺娜暗影技能不能选择虫洞的问题。
-- 【强化嚎弹炮】使用狗牙时亦有追踪效果。
-- 模块【强化嚎弹炮】允许使用弹性空间制造器。
-- 修复寄居蟹奶奶语言包导致的崩溃问题。
 ]], [[
 New module: Double Gloomerang Projectiles
-
-Recent Changes:
-- Add Display Name function for upgraded Howlitzer.
-- Remove map action modification temporarily due to unknown issue.
-- Remove module "Inventory Box Containers" due to Klei's work.
-- Fix issue where Winona can't specify target wormhole via Rose-Colored Glasses.
-- Hounds' Tooth is homing with Enhanced Howlitzer.
-- Enhanced Howlitzer accepts Elastispacer.
-- Fix crash for string texts of Hermit Crab.
 ]])
 description = zheng("版本: ", "Version: ") .. version ..
     zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
