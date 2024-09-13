@@ -11,13 +11,14 @@ name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-    HOWLITZER = true,
+    DOUBLE_VBOOMERANG_PROJECTILES = true,
 }
 
 changelog = zheng([[
-- 为扩容的嚎弹炮增加名字辨识。
+新模块：阴郁双回旋镖
 
 最近更新：
+- 为扩容的嚎弹炮增加名字辨识。
 - 暂时移除对地图动作的修改。
 - 移除模块【罐子容器打开不掉落】（官方已包含）。
 - 修复薇诺娜暗影技能不能选择虫洞的问题。
@@ -25,9 +26,10 @@ changelog = zheng([[
 - 模块【强化嚎弹炮】允许使用弹性空间制造器。
 - 修复寄居蟹奶奶语言包导致的崩溃问题。
 ]], [[
-- Add Display Name function for upgraded Howlitzer.
+New module: Double Gloomerang Projectiles
 
 Recent Changes:
+- Add Display Name function for upgraded Howlitzer.
 - Remove map action modification temporarily due to unknown issue.
 - Remove module "Inventory Box Containers" due to Klei's work.
 - Fix issue where Winona can't specify target wormhole via Rose-Colored Glasses.
@@ -235,6 +237,12 @@ configuration_options = {
     {
         name = "MHATS",
         label = zheng("蘑菇帽可以发光", "Glowing Mushroom Hats"),
+        options = boolean,
+        default = false
+    },
+    {
+        name = "DOUBLE_VBOOMERANG_PROJECTILES",
+        label = zheng("阴郁双回旋镖", "Double Gloomerang Projectiles"),
         options = boolean,
         default = false
     },
