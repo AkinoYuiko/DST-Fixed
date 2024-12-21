@@ -40,6 +40,10 @@ local function make_itemdata(items)
     local itemdata = {}
     for _, slot, item in sorted_pairs(items) do
         local data = {}
+        local is_string = type(item) == "string"
+        if is_string then
+            item = SpawnPrefab(item)
+        end
         if item.components and item.replica then
             local c = item.components
 
@@ -97,6 +101,9 @@ local function make_itemdata(items)
                 --print(item.nameoverride)
                 data.nameoverride = item.nameoverride
             end
+        end
+        if is_string then
+            item:Remove()
         end
         itemdata[slot] = data
     end
