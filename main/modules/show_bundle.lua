@@ -39,12 +39,12 @@ local Tipbox = require("widgets/sbtipbox")
 local function make_itemdata(items)
     local itemdata = {}
     for _, slot, item in sorted_pairs(items) do
-        local data = {}
         local is_string = type(item) == "string"
         if is_string then
             item = SpawnPrefab(item)
         end
-        if item.components and item.replica then
+        if item.components then
+            local data = {}
             local c = item.components
 
             data.prefab = item.prefab
@@ -101,11 +101,13 @@ local function make_itemdata(items)
                 --print(item.nameoverride)
                 data.nameoverride = item.nameoverride
             end
+            itemdata[slot] = data
+        else
+            print("SHOW BUNDLE WARNING: this wrap contains an item without components", slot, item)
         end
         if is_string then
             item:Remove()
         end
-        itemdata[slot] = data
     end
     return itemdata
 end
@@ -169,8 +171,25 @@ end
 local onload = Unwrappable.OnLoad or function() end
 function Unwrappable:OnLoad(data, ...)
     local ret = onload(self, data, ...)
-    if self.itemdata and not self.itemdata.showbundle_itemdata then
-        make_itemdata_for_unwrappable(self)
+    if self.itemdata then
+        local should_regenerate_itemdata = false
+        if not self.itemdata.showbundle_itemdata then
+            -- Migrate bundles made before this mod is enabled
+            should_regenerate_itemdata = true
+        else
+            -- Klei changed Unwrappable:WrapItems to take strings,
+            -- so some old ones contain bad data,
+            -- we need to catch them here and refresh the bundle data in that case
+            for _, data in ipairs(self.itemdata.showbundle_itemdata) do
+                if IsTableEmpty(data) then
+                    should_regenerate_itemdata = true
+                    break
+                end
+            end
+        end
+        if should_regenerate_itemdata then
+            make_itemdata_for_unwrappable(self)
+        end
     end
     return ret
 end
