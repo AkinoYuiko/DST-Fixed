@@ -21,9 +21,9 @@ end
 
 local function target_testfn(target, owner)
     return target and target ~= owner and target:IsValid() and
-            (target.components.health == nil or not target.components.health:IsDead() and
-            (target:HasTag("spiderden") or target:HasTag("wooden") or not target:HasTag("structure")) and
-            not target:HasTag("wall"))
+        (target.components.health == nil or not target.components.health:IsDead() and
+        not target:HasTag("structure") and
+        not target:HasTag("wall"))
 end
 
 local function owner_testfn(owner)
@@ -63,8 +63,9 @@ local function glash_fn(inst, owner, data)
     end
 end
 
+local ALTERGUARDIANHAT_ITEMS = {"alterguardianhatbattery", "spore", "lunarseed"}
 local function alterguardianhat_test_fn(container, item, slot)
-    return item:HasTag("alterguardianhatbattery") or item:HasTag("spore")
+    return item:HasAnyTag(ALTERGUARDIANHAT_ITEMS)
 end
 
 local function onequip(inst, owner, ...)
