@@ -79,10 +79,10 @@ local function OnUpdateDapperness(owner)
 		else
 			inst.components.equippable.dapperness = -TUNING.CRAZINESS_SMALL
 		end
-		if inst._cache_dapperness ~= inst.components.equippable.dapperness then
-			print("Dapperness changes:", inst.components.equippable.dapperness)
-			inst._cache_dapperness = inst.components.equippable.dapperness
-		end
+		-- if inst._cache_dapperness ~= inst.components.equippable.dapperness then
+		-- 	print("Dapperness changes:", inst.components.equippable.dapperness)
+		-- 	inst._cache_dapperness = inst.components.equippable.dapperness
+		-- end
 	end
 end
 
