@@ -9,41 +9,43 @@ GLOBAL.setfenv(1, GLOBAL)
 --------------------------------------------------------------------------------
 
 local function TryDescribe(base_str, descstrings, modifier)
-    return descstrings and (
-            type(descstrings) == "string" and base_str
-            or descstrings[modifier] and base_str.."."..modifier
-            or descstrings.GENERIC and base_str..".GENERIC"
-        )
+	return descstrings
+		and (
+			type(descstrings) == "string" and base_str
+			or descstrings[modifier] and base_str .. "." .. modifier
+			or descstrings.GENERIC and base_str .. ".GENERIC"
+		)
 end
 
 local function TryCharStrings(inst, base_str, charstrings, modifier)
-    if charstrings then
-        base_str = base_str..".DESCRIBE."
-        local character = string.upper(inst.prefab)
-        return TryDescribe(base_str..character, charstrings.DESCRIBE[character], modifier)
-            or TryDescribe(base_str.."PLAYER", charstrings.DESCRIBE.PLAYER, modifier)
-    end
+	if charstrings then
+		base_str = base_str .. ".DESCRIBE."
+		local character = string.upper(inst.prefab)
+		return TryDescribe(base_str .. character, charstrings.DESCRIBE[character], modifier)
+			or TryDescribe(base_str .. "PLAYER", charstrings.DESCRIBE.PLAYER, modifier)
+	end
 end
 
 local function player_common_get_special_desc_fn(inst, viewer)
-    local modifier = inst.components.inspectable:GetStatus(viewer) or "GENERIC"
-    local character = string.upper(viewer.prefab)
-    local str = character
-            and TryCharStrings(inst, "CHARACTERS."..character, STRINGS.CHARACTERS[character], modifier)
-            or TryCharStrings(inst, "CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, modifier)
-    local ret = {
-        strtype = "format",
-        content = str,
-        params = {inst:GetDisplayName()}
-    }
-    return EncodeStrCode(ret)
+	local modifier = inst.components.inspectable:GetStatus(viewer) or "GENERIC"
+	local character = string.upper(viewer.prefab)
+	local str = character and TryCharStrings(inst, "CHARACTERS." .. character, STRINGS.CHARACTERS[character], modifier)
+		or TryCharStrings(inst, "CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, modifier)
+	local ret = {
+		strtype = "format",
+		content = str,
+		params = { inst:GetDisplayName() },
+	}
+	return EncodeStrCode(ret)
 end
 
 AddPlayerPostInit(function(inst)
-    if not TheWorld.ismastersim then return end
-    if inst.components.inspectable then
-        inst.components.inspectable.getspecialdescription = player_common_get_special_desc_fn
-    end
+	if not TheWorld.ismastersim then
+		return
+	end
+	if inst.components.inspectable then
+		inst.components.inspectable.getspecialdescription = player_common_get_special_desc_fn
+	end
 end)
 
 --------------------------------------------------------------------------------
@@ -51,95 +53,93 @@ end)
 --------------------------------------------------------------------------------
 
 local function skeleton_getdesc(inst, viewer)
-    if inst.char and not viewer:HasTag("playerghost") then
-        local mod = GetGenderStrings(inst.char)
-        -- local desc = GetDescriptionCode(viewer, inst, mod)
-        local char = string.upper(inst.char)
-        local name = inst.playername or STRINGS.NAMES[char] and STRCODE_HEADER..".NAMES."..char
-        local params = {}
-        --no translations for player killer's name
-        if inst.pkname then
-            params = {name, inst.pkname}
-            return GetDescriptionCode(viewer, inst, mod, "format", params)
-        end
+	if inst.char and not viewer:HasTag("playerghost") then
+		local mod = GetGenderStrings(inst.char)
+		-- local desc = GetDescriptionCode(viewer, inst, mod)
+		local char = string.upper(inst.char)
+		local name = inst.playername or STRINGS.NAMES[char] and STRCODE_HEADER .. ".NAMES." .. char
+		local params = {}
+		--no translations for player killer's name
+		if inst.pkname then
+			params = { name, inst.pkname }
+			return GetDescriptionCode(viewer, inst, mod, "format", params)
+		end
 
-        --permanent translations for death cause
-        if inst.cause == "unknown" then
-            inst.cause = "shenanigans"
-        elseif inst.cause == "moose" then
-            inst.cause = math.random() < .5 and "moose1" or "moose2"
-        end
+		--permanent translations for death cause
+		if inst.cause == "unknown" then
+			inst.cause = "shenanigans"
+		elseif inst.cause == "moose" then
+			inst.cause = math.random() < 0.5 and "moose1" or "moose2"
+		end
 
-        --viewer based temp translations for death cause
-        local cause =
-            inst.cause == "nil"
-            and (viewer == "waxwell" and
-                "charlie" or
-                "darkness")
-            or inst.cause
+		--viewer based temp translations for death cause
+		local cause = inst.cause == "nil" and (viewer == "waxwell" and "charlie" or "darkness") or inst.cause
 
-        local caus = string.upper(cause)
-        params = {name, STRCODE_HEADER .. "NAMES.".. (STRINGS.NAMES[caus] and caus or "SHENANIGANS")}
-        return GetDescriptionCode(viewer, inst, mod, "format", params)
-    end
+		local caus = string.upper(cause)
+		params = { name, STRCODE_HEADER .. "NAMES." .. (STRINGS.NAMES[caus] and caus or "SHENANIGANS") }
+		return GetDescriptionCode(viewer, inst, mod, "format", params)
+	end
 end
 
 AddPrefabPostInit("skeleton_player", function(inst)
-    if not TheWorld.ismastersim then return end
+	if not TheWorld.ismastersim then
+		return
+	end
 
-    local SetSkeletonDescription = inst.SetSkeletonDescription
-    inst.SetSkeletonDescription = function(...)
-        SetSkeletonDescription(...)
-        inst.components.inspectable.getspecialdescription = skeleton_getdesc
-    end
+	local SetSkeletonDescription = inst.SetSkeletonDescription
+	inst.SetSkeletonDescription = function(...)
+		SetSkeletonDescription(...)
+		inst.components.inspectable.getspecialdescription = skeleton_getdesc
+	end
 
-    local onload = inst.OnLoad
-    inst.OnLoad = function(...)
-        onload(...)
-        if inst.components.inspectable then
-            inst.components.inspectable.getspecialdescription = skeleton_getdesc
-        end
-    end
+	local onload = inst.OnLoad
+	inst.OnLoad = function(...)
+		onload(...)
+		if inst.components.inspectable then
+			inst.components.inspectable.getspecialdescription = skeleton_getdesc
+		end
+	end
 end)
 
 --------------------------------------------------------------------------------
 -------------------------------- SINGING SHELL ---------------------------------
 --------------------------------------------------------------------------------
 
-local NOTES =
-{
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B",
+local NOTES = {
+	"C",
+	"C#",
+	"D",
+	"D#",
+	"E",
+	"F",
+	"F#",
+	"G",
+	"G#",
+	"A",
+	"A#",
+	"B",
 }
 
 local function shell_getdescription(inst, viewer)
-    -- return subfmt(GetDescription(viewer, inst, "GENERIC"), {note = NOTES[inst.components.cyclable.step]})
-    return GetDescriptionCode(viewer, inst, "GENERIC", "subfmt", {note = NOTES[inst.components.cyclable.step]})
+	-- return subfmt(GetDescription(viewer, inst, "GENERIC"), {note = NOTES[inst.components.cyclable.step]})
+	return GetDescriptionCode(viewer, inst, "GENERIC", "subfmt", { note = NOTES[inst.components.cyclable.step] })
 end
 
 local shells = {
-    "singingshell_octave5",
-    "singingshell_octave4",
-    "singingshell_octave3",
+	"singingshell_octave5",
+	"singingshell_octave4",
+	"singingshell_octave3",
 }
 
 local function shell_postinit(inst)
-    if not TheWorld.ismastersim then return end
-    inst.components.inspectable.descriptionfn = shell_getdescription
+	if not TheWorld.ismastersim then
+		return
+	end
+	inst.components.inspectable.descriptionfn = shell_getdescription
 end
 
 for _, prefab in ipairs(shells) do
-    AddPrefabPostInit(prefab, shell_postinit)
+	AddPrefabPostInit(prefab, shell_postinit)
 end
 
 --------------------------------------------------------------------------------
@@ -149,122 +149,123 @@ end
 -- local EventAnnouncer = require("widgets/eventannouncer")
 require("widgets/eventannouncer")
 function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
-    if not theDead or not source then return "" end
+	if not theDead or not source then
+		return ""
+	end
 
-    -- local message = ""
-    local msg_tab = {
-        strtype = "format",
-        content = {},
-        params = {}
-    }
-    if source and not theDead:HasTag("playerghost") then
-        if pkname ~= nil then
-            local petname = sourceispet and STRINGS.NAMES[string.upper(source)] or nil
-            if petname ~= nil then
-                msg_tab.content = {
-                    "$%s ",
-                    "UI.HUD.DEATH_ANNOUNCEMENT_1",
-                    "$ ",
-                    "UI.HUD.DEATH_PET_NAME",
-                }
-                msg_tab.params = {
-                    theDead:GetDisplayName(),
-                    STRCODE_HEADER .. "NAMES." .. string.upper(source)
-                }
-                -- theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..string.format(STRINGS.UI.HUD.DEATH_PET_NAME, pkname, petname)
-            else
-                msg_tab.content = {
-                    "$%s ",
-                    "UI.HUD.DEATH_ANNOUNCEMENT_1",
-                    "$ %s",
-                }
-                msg_tab.params = {
-                    theDead:GetDisplayName(),
-                    pkname
-                }
-                -- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..pkname
-            end
-        elseif table.contains(GetActiveCharacterList(), source) then
-            msg_tab.content = {
-                "$%s ",
-                "UI.HUD.DEATH_ANNOUNCEMENT_1",
-                "$ %s",
-            }
-            msg_tab.params = {
-                theDead:GetDisplayName(),
-                FirstToUpper(source)
-            }
-            -- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..FirstToUpper(source)
-        else
-            source = string.upper(source)
-            if source == "NIL" then
-                if theDead == "WAXWELL" then
-                    source = "CHARLIE"
-                else
-                    source = "DARKNESS"
-                end
-            elseif source == "UNKNOWN" then
-                source = "SHENANIGANS"
-            elseif source == "MOOSE" then
-                if math.random() < .5 then
-                    source = "MOOSE1"
-                else
-                    source = "MOOSE2"
-                end
-            end
-            msg_tab.content = {
-                "$%s ",
-                "UI.HUD.DEATH_ANNOUNCEMENT_1",
-                "$ %s",
-            }
-            msg_tab.params = {
-                theDead:GetDisplayName(),
-                STRCODE_HEADER .. "NAMES." .. (STRINGS.NAMES[source] and source or "SHENANIGANS")
-            }
-            -- source = source and STRINGS.NAMES[source] or STRINGS.NAMES.SHENANIGANS
-            -- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..source
-        end
+	-- local message = ""
+	local msg_tab = {
+		strtype = "format",
+		content = {},
+		params = {},
+	}
+	if source and not theDead:HasTag("playerghost") then
+		if pkname ~= nil then
+			local petname = sourceispet and STRINGS.NAMES[string.upper(source)] or nil
+			if petname ~= nil then
+				msg_tab.content = {
+					"$%s ",
+					"UI.HUD.DEATH_ANNOUNCEMENT_1",
+					"$ ",
+					"UI.HUD.DEATH_PET_NAME",
+				}
+				msg_tab.params = {
+					theDead:GetDisplayName(),
+					STRCODE_HEADER .. "NAMES." .. string.upper(source),
+				}
+				-- theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..string.format(STRINGS.UI.HUD.DEATH_PET_NAME, pkname, petname)
+			else
+				msg_tab.content = {
+					"$%s ",
+					"UI.HUD.DEATH_ANNOUNCEMENT_1",
+					"$ %s",
+				}
+				msg_tab.params = {
+					theDead:GetDisplayName(),
+					pkname,
+				}
+				-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..pkname
+			end
+		elseif table.contains(GetActiveCharacterList(), source) then
+			msg_tab.content = {
+				"$%s ",
+				"UI.HUD.DEATH_ANNOUNCEMENT_1",
+				"$ %s",
+			}
+			msg_tab.params = {
+				theDead:GetDisplayName(),
+				FirstToUpper(source),
+			}
+			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..FirstToUpper(source)
+		else
+			source = string.upper(source)
+			if source == "NIL" then
+				if theDead == "WAXWELL" then
+					source = "CHARLIE"
+				else
+					source = "DARKNESS"
+				end
+			elseif source == "UNKNOWN" then
+				source = "SHENANIGANS"
+			elseif source == "MOOSE" then
+				if math.random() < 0.5 then
+					source = "MOOSE1"
+				else
+					source = "MOOSE2"
+				end
+			end
+			msg_tab.content = {
+				"$%s ",
+				"UI.HUD.DEATH_ANNOUNCEMENT_1",
+				"$ %s",
+			}
+			msg_tab.params = {
+				theDead:GetDisplayName(),
+				STRCODE_HEADER .. "NAMES." .. (STRINGS.NAMES[source] and source or "SHENANIGANS"),
+			}
+			-- source = source and STRINGS.NAMES[source] or STRINGS.NAMES.SHENANIGANS
+			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..source
+		end
 
-        if not theDead.ghostenabled then
-            table.insert(msg_tab.content, "$.")
-            -- message = message.."."
-        else
-            local gender = GetGenderStrings(theDead.prefab)
-            if STRINGS.UI.HUD["DEATH_ANNOUNCEMENT_2_"..gender] then
-                table.insert(msg_tab.content, "UI.HUD.DEATH_ANNOUNCEMENT_2_"..gender)
-                -- message = message..STRINGS.UI.HUD["DEATH_ANNOUNCEMENT_2_"..gender]
-            else
-                table.insert(msg_tab.content, "UI.HUD.DEATH_ANNOUNCEMENT_2_DEFAULT")
-                -- message = message..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_2_DEFAULT
-            end
-        end
-    else
-        local gender = GetGenderStrings(theDead.prefab)
+		if not theDead.ghostenabled then
+			table.insert(msg_tab.content, "$.")
+			-- message = message.."."
+		else
+			local gender = GetGenderStrings(theDead.prefab)
+			if STRINGS.UI.HUD["DEATH_ANNOUNCEMENT_2_" .. gender] then
+				table.insert(msg_tab.content, "UI.HUD.DEATH_ANNOUNCEMENT_2_" .. gender)
+				-- message = message..STRINGS.UI.HUD["DEATH_ANNOUNCEMENT_2_"..gender]
+			else
+				table.insert(msg_tab.content, "UI.HUD.DEATH_ANNOUNCEMENT_2_DEFAULT")
+				-- message = message..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_2_DEFAULT
+			end
+		end
+	else
+		local gender = GetGenderStrings(theDead.prefab)
 
-        if STRINGS.UI.HUD["GHOST_DEATH_ANNOUNCEMENT_"..gender] then
-            msg_tab.content = {
-                "$%s ",
-                "UI.HUD.GHOST_DEATH_ANNOUNCEMENT_" .. gender,
-            }
-            msg_tab.params = {
-                theDead:GetDisplayName()
-            }
-            -- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD["GHOST_DEATH_ANNOUNCEMENT_"..gender]
-        else
-            msg_tab.content = {
-                "$%s ",
-                "UI.HUD.GHOST_DEATH_ANNOUNCEMENT_DEFAULT",
-            }
-            msg_tab.params = {
-                theDead:GetDisplayName()
-            }
-            -- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.GHOST_DEATH_ANNOUNCEMENT_DEFAULT
-        end
-    end
+		if STRINGS.UI.HUD["GHOST_DEATH_ANNOUNCEMENT_" .. gender] then
+			msg_tab.content = {
+				"$%s ",
+				"UI.HUD.GHOST_DEATH_ANNOUNCEMENT_" .. gender,
+			}
+			msg_tab.params = {
+				theDead:GetDisplayName(),
+			}
+			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD["GHOST_DEATH_ANNOUNCEMENT_"..gender]
+		else
+			msg_tab.content = {
+				"$%s ",
+				"UI.HUD.GHOST_DEATH_ANNOUNCEMENT_DEFAULT",
+			}
+			msg_tab.params = {
+				theDead:GetDisplayName(),
+			}
+			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.GHOST_DEATH_ANNOUNCEMENT_DEFAULT
+		end
+	end
 
-    return EncodeStrCode(msg_tab)
+	return EncodeStrCode(msg_tab)
 end
-
 
 local STRCODE_REVIERS = {}
 STRCODE_REVIERS[STRINGS.NAMES.POCKETWATCH_REVIVE] = "NAMES.POCKETWATCH_REVIVE"
@@ -274,29 +275,32 @@ STRCODE_REVIERS[STRINGS.NAMES.RESURRECTIONSTONE] = "NAMES.RESURRECTIONSTONE"
 STRCODE_REVIERS[STRINGS.NAMES.RESURRECTIONSTATUE] = "NAMES.RESURRECTIONSTATUE"
 STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL] = "NAMES.MULTIPLAYER_PORTAL"
 STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK] = "NAMES.MULTIPLAYER_PORTAL_MOONROCK"
-STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS] = "NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS"
+STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS] =
+	"NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS"
 
 function GetNewRezAnnouncementString(theRezzed, source)
-    if not theRezzed or not source then return "" end
-    local strcode_source = source == STRINGS.NAMES.SHENANIGANS and STRCODE_HEADER .. "NAMES.SHENANIGANS"
-            or STRCODE_REVIERS[source] and STRCODE_HEADER .. STRCODE_REVIERS[source]
-            or source
-    -- print("GetNewRezAnnouncementString", strcode_source)
-    -- local message = theRezzed:GetDisplayName().." "..STRINGS.UI.HUD.REZ_ANNOUNCEMENT.." "..source.."."
-    local msg_tab = {
-        strtype = "format",
-        content = {
-            "$%s ",
-            "UI.HUD.REZ_ANNOUNCEMENT",
-            "$ %s."
-        },
-        params = {
-            theRezzed:GetDisplayName(),
-            strcode_source
-        }
-    }
-    -- return message
-    return EncodeStrCode(msg_tab)
+	if not theRezzed or not source then
+		return ""
+	end
+	local strcode_source = source == STRINGS.NAMES.SHENANIGANS and STRCODE_HEADER .. "NAMES.SHENANIGANS"
+		or STRCODE_REVIERS[source] and STRCODE_HEADER .. STRCODE_REVIERS[source]
+		or source
+	-- print("GetNewRezAnnouncementString", strcode_source)
+	-- local message = theRezzed:GetDisplayName().." "..STRINGS.UI.HUD.REZ_ANNOUNCEMENT.." "..source.."."
+	local msg_tab = {
+		strtype = "format",
+		content = {
+			"$%s ",
+			"UI.HUD.REZ_ANNOUNCEMENT",
+			"$ %s.",
+		},
+		params = {
+			theRezzed:GetDisplayName(),
+			strcode_source,
+		},
+	}
+	-- return message
+	return EncodeStrCode(msg_tab)
 end
 
 --------------------------------------------------------------------------------
@@ -416,12 +420,18 @@ STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_ANALYSIS_OVER[2]] = "WAGSTAFF_NPC_ANALYSIS_O
 STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_ANALYSIS_OVER[3]] = "WAGSTAFF_NPC_ANALYSIS_OVER.3"
 STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_ANALYSIS_OVER[4]] = "WAGSTAFF_NPC_ANALYSIS_OVER.4"
 
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[1]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.1"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[2]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.2"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[1]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.1"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[2]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.2"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[1]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.1"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[2]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[1]] =
+	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[2]] =
+	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[1]] =
+	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[2]] =
+	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[1]] =
+	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[2]] =
+	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.2"
 
 STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTOHINT[1]] = "WAGSTAFF_GOTTOHINT.1"
 STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTOHINT[2]] = "WAGSTAFF_GOTTOHINT.2"
@@ -430,14 +440,14 @@ STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTOHINT[4]] = "WAGSTAFF_GOTTOHINT.4"
 STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTOHINT[5]] = "WAGSTAFF_GOTTOHINT.5"
 
 local function npc_strcodespeaker_postinit(inst)
-    local talker = inst.components.talker
-    if talker then
-        talker:MakeStringCodeSpeaker()
-    end
+	local talker = inst.components.talker
+	if talker then
+		talker:MakeStringCodeSpeaker()
+	end
 end
 
-for _, prefab in ipairs({"wagstaff_npc", "wagstaff_npc_pstboss", "alterguardian_contained"}) do
-    AddPrefabPostInit(prefab, npc_strcodespeaker_postinit)
+for _, prefab in ipairs({ "wagstaff_npc", "wagstaff_npc_pstboss", "alterguardian_contained" }) do
+	AddPrefabPostInit(prefab, npc_strcodespeaker_postinit)
 end
 
 --------------------------------------------------------------------------------
@@ -520,7 +530,8 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.FILL_MEATRACKS.HIGH[1]] = "HERMITC
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.LOW[1]] = "HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.LOW.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.MED[1]] = "HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.MED.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH[1]] = "HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH[1]] =
+	"HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_GREETING[0][1]] = "HERMITCRAB_GREETING.0.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_GREETING[0][2]] = "HERMITCRAB_GREETING.0.2"
@@ -666,8 +677,8 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_STORE_UNLOCK_4[2]] = "HERMITCRAB_STORE_UNLOCK_
 STRCODE_TALKER[STRINGS.HERMITCRAB_STORE_UNLOCK_5[1]] = "HERMITCRAB_STORE_UNLOCK_5.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_STORE_UNLOCK_5[2]] = "HERMITCRAB_STORE_UNLOCK_5.2"
 
-STRCODE_TALKER[STRINGS.HERMITCRAB_PLANTED_LUREPLANT_DIED.LOW[1]] =  "HERMITCRAB_PLANTED_LUREPLANT_DIED.LOW.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_PLANTED_LUREPLANT_DIED.MED[1]] =  "HERMITCRAB_PLANTED_LUREPLANT_DIED.MED.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_PLANTED_LUREPLANT_DIED.LOW[1]] = "HERMITCRAB_PLANTED_LUREPLANT_DIED.LOW.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_PLANTED_LUREPLANT_DIED.MED[1]] = "HERMITCRAB_PLANTED_LUREPLANT_DIED.MED.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_PLANTED_LUREPLANT_DIED.HIGH[1]] = "HERMITCRAB_PLANTED_LUREPLANT_DIED.HIGH.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_GO_HOME[1]] = "HERMITCRAB_GO_HOME.1"
@@ -681,8 +692,8 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_PANICFIRE[1]] = "HERMITCRAB_PANICFIRE.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_FIGHT[1][1]] = "HERMITCRAB_FIGHT.1.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_FIGHT[1][2]] = "HERMITCRAB_FIGHT.1.2"
 
-STRCODE_TALKER[STRINGS.HERMITCRAB_ATTEMPT_TRADE.LOW[1]] =  "HERMITCRAB_ATTEMPT_TRADE.LOW.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_ATTEMPT_TRADE.MED[1]] =  "HERMITCRAB_ATTEMPT_TRADE.MED.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ATTEMPT_TRADE.LOW[1]] = "HERMITCRAB_ATTEMPT_TRADE.LOW.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ATTEMPT_TRADE.MED[1]] = "HERMITCRAB_ATTEMPT_TRADE.MED.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ATTEMPT_TRADE.HIGH[1]] = "HERMITCRAB_ATTEMPT_TRADE.HIGH.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ATTEMPT_TRADE.HIGH[2]] = "HERMITCRAB_ATTEMPT_TRADE.HIGH.2"
 
@@ -721,16 +732,20 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE[3]] = "HERMIT
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE[4]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE.4"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE[5]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE.5"
 
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE[1]] =
+	"HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BADCAST[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BADCAST.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY[2]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY.2"
 
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW[1]] =
+	"HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED[1]] =
+	"HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH[1]] =
+	"HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_LEVEL10_PLAYERGOOD[1]] = "HERMITCRAB_LEVEL10_PLAYERGOOD.1"
 
@@ -776,43 +791,61 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_TOOL_SLIP] = "HERMITCRAB_ANNOUNCE_TOO
 --------------------------------------------------------------------------------
 
 local function IsHoldingItem(inst)
-    return inst.components.trophyscale.item_data ~= nil and not inst:HasTag("burnt")
+	return inst.components.trophyscale.item_data ~= nil and not inst:HasTag("burnt")
 end
 
 local function trophyscale_fish_getdesc(inst, viewer)
-    if inst:HasTag("burnt") then
-        return GetDescriptionCode(viewer, inst, "BURNT")
-    elseif inst:HasTag("fire") then
-        return GetDescriptionCode(viewer, inst, "BURNING")
-    elseif IsHoldingItem(inst) then
-        local data = inst.components.trophyscale.item_data
-        local heavy_postfix =  (data.is_heavy and "_HEAVY" or "")
+	if inst:HasTag("burnt") then
+		return GetDescriptionCode(viewer, inst, "BURNT")
+	elseif inst:HasTag("fire") then
+		return GetDescriptionCode(viewer, inst, "BURNING")
+	elseif IsHoldingItem(inst) then
+		local data = inst.components.trophyscale.item_data
+		local heavy_postfix = (data.is_heavy and "_HEAVY" or "")
 
-        if data.prefab_override_owner ~= nil then
-            -- return subfmt(GetDescription(viewer, inst, "HAS_ITEM"..heavy_postfix), {weight = data.weight or "",
-            --  owner = STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner] ~= nil and STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner]
-            --  or STRINGS.UI.HUD.TROPHYSCALE_UNKNOWN_OWNER})
+		if data.prefab_override_owner ~= nil then
+			-- return subfmt(GetDescription(viewer, inst, "HAS_ITEM"..heavy_postfix), {weight = data.weight or "",
+			--  owner = STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner] ~= nil and STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner]
+			--  or STRINGS.UI.HUD.TROPHYSCALE_UNKNOWN_OWNER})
 
-            return GetDescriptionCode(viewer, inst, "HAS_ITEM"..heavy_postfix, "subfmt", {weight = data.weight or "",
-                owner = STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner] ~= nil and STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER." .. data.prefab_override_owner
-                or STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER"})
-        else
-            local name = data.owner_userid == nil and STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER" or data.owner_name
-            -- return data.owner_userid ~= nil and data.owner_userid == viewer.userid and subfmt(GetDescription(viewer, inst, "OWNER"..heavy_postfix), {weight = data.weight or "", owner = name or ""}) or
-            --  subfmt(GetDescription(viewer, inst, "HAS_ITEM"..heavy_postfix), {weight = data.weight or "", owner = name or ""})
-            return data.owner_userid ~= nil and data.owner_userid == viewer.userid
-                and GetDescriptionCode(viewer, inst, "OWNER"..heavy_postfix, "subfmt", {weight = data.weight or "", owner = name or ""})
-                or GetDescriptionCode(viewer, inst, "HAS_ITEM"..heavy_postfix, "subfmt", {weight = data.weight or "", owner = name or ""})
-        end
-    end
+			return GetDescriptionCode(viewer, inst, "HAS_ITEM" .. heavy_postfix, "subfmt", {
+				weight = data.weight or "",
+				owner = STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner] ~= nil
+						and STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER." .. data.prefab_override_owner
+					or STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER",
+			})
+		else
+			local name = data.owner_userid == nil and STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER"
+				or data.owner_name
+			-- return data.owner_userid ~= nil and data.owner_userid == viewer.userid and subfmt(GetDescription(viewer, inst, "OWNER"..heavy_postfix), {weight = data.weight or "", owner = name or ""}) or
+			--  subfmt(GetDescription(viewer, inst, "HAS_ITEM"..heavy_postfix), {weight = data.weight or "", owner = name or ""})
+			return data.owner_userid ~= nil
+					and data.owner_userid == viewer.userid
+					and GetDescriptionCode(
+						viewer,
+						inst,
+						"OWNER" .. heavy_postfix,
+						"subfmt",
+						{ weight = data.weight or "", owner = name or "" }
+					)
+				or GetDescriptionCode(
+					viewer,
+					inst,
+					"HAS_ITEM" .. heavy_postfix,
+					"subfmt",
+					{ weight = data.weight or "", owner = name or "" }
+				)
+		end
+	end
 
-    return GetDescriptionCode(viewer, inst) or nil
+	return GetDescriptionCode(viewer, inst) or nil
 end
 
 AddPrefabPostInit("trophyscale_fish", function(inst)
-    if not TheWorld.ismastersim then return end
-    inst.components.inspectable.getspecialdescription = trophyscale_fish_getdesc
-
+	if not TheWorld.ismastersim then
+		return
+	end
+	inst.components.inspectable.getspecialdescription = trophyscale_fish_getdesc
 end)
 
 --------------------------------------------------------------------------------
@@ -820,53 +853,60 @@ end)
 --------------------------------------------------------------------------------
 
 local function trophyscale_oversizedveggies_getdesc(inst, viewer)
-    if inst:HasTag("burnt") then
-        return GetDescriptionCode(viewer, inst, "BURNT")
-    elseif inst:HasTag("fire") then
-        return GetDescriptionCode(viewer, inst, "BURNING")
-    elseif IsHoldingItem(inst) then
-        local data = inst.components.trophyscale.item_data
+	if inst:HasTag("burnt") then
+		return GetDescriptionCode(viewer, inst, "BURNT")
+	elseif inst:HasTag("fire") then
+		return GetDescriptionCode(viewer, inst, "BURNING")
+	elseif IsHoldingItem(inst) then
+		local data = inst.components.trophyscale.item_data
 
-        if data.weight == nil or data.weight <= 0 then
-            return GetDescriptionCode(viewer, inst, "HAS_ITEM_LIGHT")
-        end
+		if data.weight == nil or data.weight <= 0 then
+			return GetDescriptionCode(viewer, inst, "HAS_ITEM_LIGHT")
+		end
 
-        local heavy_postfix =  (data.is_heavy and "_HEAVY" or "")
-        return GetDescriptionCode(viewer, inst, "HAS_ITEM"..heavy_postfix, "subfmt", {weight = data.weight or "", day = data.day or ""})
-    end
+		local heavy_postfix = (data.is_heavy and "_HEAVY" or "")
+		return GetDescriptionCode(
+			viewer,
+			inst,
+			"HAS_ITEM" .. heavy_postfix,
+			"subfmt",
+			{ weight = data.weight or "", day = data.day or "" }
+		)
+	end
 
-    return GetDescriptionCode(viewer, inst) or nil
+	return GetDescriptionCode(viewer, inst) or nil
 end
 
 AddPrefabPostInit("trophyscale_oversizedveggies", function(inst)
-    if not TheWorld.ismastersim then return end
-    inst.components.inspectable.getspecialdescription = trophyscale_oversizedveggies_getdesc
-
+	if not TheWorld.ismastersim then
+		return
+	end
+	inst.components.inspectable.getspecialdescription = trophyscale_oversizedveggies_getdesc
 end)
 
 --------------------------------------------------------------------------------
 --------------------------- YOTC_CARRAT_RACE_FINISH ----------------------------
 --------------------------------------------------------------------------------
 
-
 local function yotc_carrat_race_finish_getdesc(inst, viewer)
-    if inst:HasTag("burnt") then
-        return GetDescriptionCode(viewer, inst, "BURNT")
-    elseif inst._active and inst._winner ~= nil then
-        if inst._winner.userid ~= nil and inst._winner.userid == viewer.userid then
-            return GetDescriptionCode(viewer, inst, "I_WON")
-        elseif inst._winner.name ~= nil then
-            return GetDescriptionCode(viewer, inst, "SOMEONE_ELSE_WON", "subfmt", { winner = inst._winner.name })
-        end
-    end
+	if inst:HasTag("burnt") then
+		return GetDescriptionCode(viewer, inst, "BURNT")
+	elseif inst._active and inst._winner ~= nil then
+		if inst._winner.userid ~= nil and inst._winner.userid == viewer.userid then
+			return GetDescriptionCode(viewer, inst, "I_WON")
+		elseif inst._winner.name ~= nil then
+			return GetDescriptionCode(viewer, inst, "SOMEONE_ELSE_WON", "subfmt", { winner = inst._winner.name })
+		end
+	end
 
-    return GetDescriptionCode(viewer, inst) or nil
+	return GetDescriptionCode(viewer, inst) or nil
 end
 
 AddPrefabPostInit("yotc_carrat_race_finish", function(inst)
-    if not TheWorld.ismastersim then return end
-    inst.components.inspectable.getspecialdescription = yotc_carrat_race_finish_getdesc
-
+	if not TheWorld.ismastersim then
+		return
+	end
+	inst.components.inspectable.getspecialdescription = yotc_carrat_race_finish_getdesc
 end)
 
 --------------------------------------------------------------------------------
@@ -874,22 +914,23 @@ end)
 --------------------------------------------------------------------------------
 
 AddStategraphPostInit("wilson", function(self)
-    -- local onenter = self.states["use_pocket_scale"].onenter
-    self.states["use_pocket_scale"].timeline[1] =
-
-        TimeEvent(30 * FRAMES, function(inst)
-            local weight = inst.sg.statemem.target ~= nil and inst.sg.statemem.target.components.weighable:GetWeight() or nil
-            if weight ~= nil and inst:PerformBufferedAction() then
-                local announce_str = inst.sg.statemem.target.components.weighable:GetWeightPercent() >= TUNING.WEIGHABLE_HEAVY_WEIGHT_PERCENT and "ANNOUNCE_WEIGHT_HEAVY" or "ANNOUNCE_WEIGHT"
-                local str = GetStringCode(inst, announce_str, nil, "subfmt", {weight = string.format("%0.2f", weight)})
-                inst.components.talker:Say(str)
-            else
-                inst.AnimState:ClearOverrideBuild(inst.sg.statemem.target_build)
-                inst:ClearBufferedAction()
-                inst.AnimState:SetTime(51 * FRAMES)
-            end
-        end)
-
+	-- local onenter = self.states["use_pocket_scale"].onenter
+	self.states["use_pocket_scale"].timeline[1] = TimeEvent(30 * FRAMES, function(inst)
+		local weight = inst.sg.statemem.target ~= nil and inst.sg.statemem.target.components.weighable:GetWeight()
+			or nil
+		if weight ~= nil and inst:PerformBufferedAction() then
+			local announce_str = inst.sg.statemem.target.components.weighable:GetWeightPercent()
+						>= TUNING.WEIGHABLE_HEAVY_WEIGHT_PERCENT
+					and "ANNOUNCE_WEIGHT_HEAVY"
+				or "ANNOUNCE_WEIGHT"
+			local str = GetStringCode(inst, announce_str, nil, "subfmt", { weight = string.format("%0.2f", weight) })
+			inst.components.talker:Say(str)
+		else
+			inst.AnimState:ClearOverrideBuild(inst.sg.statemem.target_build)
+			inst:ClearBufferedAction()
+			inst.AnimState:SetTime(51 * FRAMES)
+		end
+	end)
 end)
 
 --------------------------------------------------------------------------------
@@ -897,45 +938,51 @@ end)
 --------------------------------------------------------------------------------
 
 local function get_blueprint_string_ret(inst)
-    local ret = inst.is_rare
-        and {
-            strtype = "subfmt",
-            content = "NAMES.BLUEPRINT_RARE",
-            params = { item = STRINGS.NAMES[string.upper(inst.recipetouse)] and STRCODE_HEADER .. "NAMES." .. string.upper(inst.recipetouse) or STRCODE_HEADER .. "NAMES.UNKNOWN" }
-        }
+	local ret = inst.is_rare
+			and {
+				strtype = "subfmt",
+				content = "NAMES.BLUEPRINT_RARE",
+				params = {
+					item = STRINGS.NAMES[string.upper(inst.recipetouse)]
+							and STRCODE_HEADER .. "NAMES." .. string.upper(inst.recipetouse)
+						or STRCODE_HEADER .. "NAMES.UNKNOWN",
+				},
+			}
+		or {
+			content = {
+				-- "$angri ", -- Test String
+				STRINGS.NAMES[string.upper(inst.recipetouse)] and "NAMES." .. string.upper(inst.recipetouse)
+					or "NAMES.UNKNOWN",
+				"$ ",
+				"NAMES.BLUEPRINT",
+			},
+		}
 
-        or {
-            content = {
-                -- "$angri ", -- Test String
-                STRINGS.NAMES[string.upper(inst.recipetouse)] and "NAMES." .. string.upper(inst.recipetouse) or "NAMES.UNKNOWN",
-                "$ ",
-                "NAMES.BLUEPRINT"
-            }
-        }
-
-    return EncodeStrCode(ret)
+	return EncodeStrCode(ret)
 end
 
 local function blueprint_postinit(inst)
-    if not TheWorld.ismastersim then return end
+	if not TheWorld.ismastersim then
+		return
+	end
 
-    inst.components.named:SetName(get_blueprint_string_ret(inst))
+	inst.components.named:SetName(get_blueprint_string_ret(inst))
 
-    local onload = inst.OnLoad
-    inst.OnLoad = function(inst, data)
-        onload(inst, data)
-        inst.components.named:SetName(get_blueprint_string_ret(inst))
-        inst.drawnameoverride = get_blueprint_string_ret(inst)
-    end
+	local onload = inst.OnLoad
+	inst.OnLoad = function(inst, data)
+		onload(inst, data)
+		inst.components.named:SetName(get_blueprint_string_ret(inst))
+		inst.drawnameoverride = get_blueprint_string_ret(inst)
+	end
 
-    local onhaunt = inst.components.hauntable.onhaunt
-    inst.components.hauntable:SetOnHauntFn(function(self, ...)
-        onhaunt(self, ...)
-        inst.components.named:SetName(get_blueprint_string_ret(inst))
-        inst.drawnameoverride = get_blueprint_string_ret(inst)
-    end)
+	local onhaunt = inst.components.hauntable.onhaunt
+	inst.components.hauntable:SetOnHauntFn(function(self, ...)
+		onhaunt(self, ...)
+		inst.components.named:SetName(get_blueprint_string_ret(inst))
+		inst.drawnameoverride = get_blueprint_string_ret(inst)
+	end)
 
-    inst.drawnameoverride = get_blueprint_string_ret(inst)
+	inst.drawnameoverride = get_blueprint_string_ret(inst)
 end
 
 AddPrefabPostInit("blueprint", blueprint_postinit)
@@ -945,112 +992,117 @@ AddPrefabPostInit("blueprint", blueprint_postinit)
 --------------------------------------------------------------------------------
 
 local function minisign_displaynamefn(inst)
-    return #inst._imagename:value() > 0
-        and subfmt(STRINGS.NAMES.MINISIGN_DRAWN, { item = IsStrCode(inst._imagename:value()) and ResolveStrCode(SubStrCode(inst._imagename:value())) or inst._imagename:value() })
-        or STRINGS.NAMES.MINISIGN
+	return #inst._imagename:value() > 0
+			and subfmt(STRINGS.NAMES.MINISIGN_DRAWN, {
+				item = IsStrCode(inst._imagename:value()) and ResolveStrCode(SubStrCode(inst._imagename:value()))
+					or inst._imagename:value(),
+			})
+		or STRINGS.NAMES.MINISIGN
 end
 
 local function minisign_postinit(inst)
-    inst.displaynamefn = minisign_displaynamefn
+	inst.displaynamefn = minisign_displaynamefn
 end
 
 local minisigns = {
-    "minisign",
-    "minisign_drawn",
+	"minisign",
+	"minisign_drawn",
 }
 
 for _, sign in ipairs(minisigns) do
-    AddPrefabPostInit(sign, minisign_postinit)
+	AddPrefabPostInit(sign, minisign_postinit)
 end
 
 require("components/drawingtool")
 ACTIONS.DRAW.stroverridefn = function(act)
-    local item = FindEntityToDraw(act.target, act.invobject)
-    local drawnameoverride = item and item.drawnameoverride
-    return item ~= nil
-        and subfmt(STRINGS.ACTIONS.DRAWITEM,
-                { item = drawnameoverride
-                    and (IsStrCode(drawnameoverride) and ResolveStrCode(SubStrCode(drawnameoverride)) or drawnameoverride)
-                    or item:GetBasicDisplayName() })
-        or nil
+	local item = FindEntityToDraw(act.target, act.invobject)
+	local drawnameoverride = item and item.drawnameoverride
+	return item ~= nil
+			and subfmt(STRINGS.ACTIONS.DRAWITEM, {
+				item = drawnameoverride and (IsStrCode(drawnameoverride) and ResolveStrCode(
+					SubStrCode(drawnameoverride)
+				) or drawnameoverride) or item:GetBasicDisplayName(),
+			})
+		or nil
 end
 
 local function common_drawnameoverride_fn(inst)
-    local name = inst.nameoverride or inst.prefab
-    inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode({content = "NAMES." .. string.upper(name)})
+	local name = inst.nameoverride or inst.prefab
+	inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode({ content = "NAMES." .. string.upper(name) })
 end
 
 local function spicedfoods_drawnameoverride_fn(inst)
-    local spicename = string.gsub(inst.prefab, (inst.nameoverride or "") .. "_", "")
-    spicename = string.upper(spicename)
-    local drawnameoverride = {
-        strtype = "subfmt",
-        content = "NAMES." .. spicename .. "_FOOD",
-        params = {
-            food = STRCODE_HEADER .. "NAMES." .. string.upper(inst.nameoverride)
-        }
-    }
-    -- subfmt(STRINGS.NAMES[data.spice.."_FOOD"], { food = STRINGS.NAMES[string.upper(inst.nameoverride)] })
-    inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode(drawnameoverride)
+	local spicename = string.gsub(inst.prefab, (inst.nameoverride or "") .. "_", "")
+	spicename = string.upper(spicename)
+	local drawnameoverride = {
+		strtype = "subfmt",
+		content = "NAMES." .. spicename .. "_FOOD",
+		params = {
+			food = STRCODE_HEADER .. "NAMES." .. string.upper(inst.nameoverride),
+		},
+	}
+	-- subfmt(STRINGS.NAMES[data.spice.."_FOOD"], { food = STRINGS.NAMES[string.upper(inst.nameoverride)] })
+	inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode(drawnameoverride)
 end
 
 local function add_drawname_override(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
 
-    if not TheWorld.ismastersim then return end
+	if
+		inst:HasTag("_inventoryitem")
+		and not (inst:HasTag("INLIMBO") or inst:HasTag("notdrawable"))
+		and inst.displaynamefn == nil
+		and inst.name_author_netid == nil
+	then
+		inst:DoTaskInTime(0, common_drawnameoverride_fn)
+	end
 
-    if inst:HasTag("_inventoryitem")
-    and not (inst:HasTag("INLIMBO") or inst:HasTag("notdrawable"))
-    and inst.displaynamefn == nil
-    and inst.name_author_netid == nil
-    then
-        inst:DoTaskInTime(0, common_drawnameoverride_fn)
-    end
-
-    if inst:HasTag("spicedfood") then
-        inst:DoTaskInTime(0, spicedfoods_drawnameoverride_fn)
-    end
-
+	if inst:HasTag("spicedfood") then
+		inst:DoTaskInTime(0, spicedfoods_drawnameoverride_fn)
+	end
 end
 
 AddPrefabPostInitAny(add_drawname_override)
-
-
 
 --------------------------------------------------------------------------------
 ------------------------------------ SKETCH ------------------------------------
 --------------------------------------------------------------------------------
 
 local function get_sketch_string_fn(inst)
-    local ret = {
-        strtype = "subfmt",
-        content = "NAMES." .. string.upper(inst.prefab),
-        params = {
-            item = STRCODE_HEADER .. "NAMES." .. string.upper(inst:GetRecipeName())
-        }
-    }
+	local ret = {
+		strtype = "subfmt",
+		content = "NAMES." .. string.upper(inst.prefab),
+		params = {
+			item = STRCODE_HEADER .. "NAMES." .. string.upper(inst:GetRecipeName()),
+		},
+	}
 
-    return EncodeStrCode(ret)
+	return EncodeStrCode(ret)
 end
 
 local function sketch_postinit(inst)
-    if not TheWorld.ismastersim then return end
+	if not TheWorld.ismastersim then
+		return
+	end
 
-    local sketch_string = get_sketch_string_fn(inst)
-    inst.components.named:SetName(sketch_string)
-    inst.drawnameoverride = sketch_string
+	local sketch_string = get_sketch_string_fn(inst)
+	inst.components.named:SetName(sketch_string)
+	inst.drawnameoverride = sketch_string
 
-    local onload = inst.OnLoad
-    inst.OnLoad = function(inst, data)
-        onload(inst, data)
-        local onload_sketch_string = get_sketch_string_fn(inst)
-        inst.components.named:SetName(onload_sketch_string)
-        inst.drawnameoverride = onload_sketch_string
-    end
+	local onload = inst.OnLoad
+	inst.OnLoad = function(inst, data)
+		onload(inst, data)
+		local onload_sketch_string = get_sketch_string_fn(inst)
+		inst.components.named:SetName(onload_sketch_string)
+		inst.drawnameoverride = onload_sketch_string
+	end
 end
 
-local sketch_prefabs = {"sketch", "tacklesketch"}
+local sketch_prefabs = { "sketch", "tacklesketch" }
 for i = 1, #sketch_prefabs do
-    AddPrefabPostInit(sketch_prefabs[i], sketch_postinit)
+	AddPrefabPostInit(sketch_prefabs[i], sketch_postinit)
 end
 
 --------------------------------------------------------------------------------
@@ -1058,100 +1110,104 @@ end
 --------------------------------------------------------------------------------
 
 local function rename_possiblenames(inst)
-    inst.components.named:PickNewName()
+	inst.components.named:PickNewName()
 end
 
 local function insert_possiblenames(table, index, strcode)
-    if table and #table > 0 then
-        local lenth = #table
-        STRCODE_POSSIBLENAMES[index] = STRCODE_POSSIBLENAMES[index] or {}
-        for i = 1, lenth do
-            STRCODE_POSSIBLENAMES[index][table[i]] = STRCODE_POSSIBLENAMES[index][table[i]] or {}
-            STRCODE_POSSIBLENAMES[index][table[i]][#STRCODE_POSSIBLENAMES[index][table[i]] + 1] = strcode .. tostring(i)
-        end
-    end
+	if table and #table > 0 then
+		local lenth = #table
+		STRCODE_POSSIBLENAMES[index] = STRCODE_POSSIBLENAMES[index] or {}
+		for i = 1, lenth do
+			STRCODE_POSSIBLENAMES[index][table[i]] = STRCODE_POSSIBLENAMES[index][table[i]] or {}
+			STRCODE_POSSIBLENAMES[index][table[i]][#STRCODE_POSSIBLENAMES[index][table[i]] + 1] = strcode .. tostring(i)
+		end
+	end
 end
 
 local possiblenames_prefabs = {
-    -- ["mooseegg"] = {"NAMES.MOOSEEGG", "NAMES.MOOSENEST"},
-    ["moose"] = "NAMES.MOOSE",
-    ["bunnyman"] = "BUNNYMANNAMES.",
-    ["carnival_crowkid"] = "CROWNAMES.",
-    ["pigman"] = "PIGNAMES.",
-    ["pigguard"] = "PIGNAMES.",
-    ["moonpig"] = "PIGNAMES.",
+	-- ["mooseegg"] = {"NAMES.MOOSEEGG", "NAMES.MOOSENEST"},
+	["moose"] = "NAMES.MOOSE",
+	["bunnyman"] = "BUNNYMANNAMES.",
+	["carnival_crowkid"] = "CROWNAMES.",
+	["pigman"] = "PIGNAMES.",
+	["pigguard"] = "PIGNAMES.",
+	["moonpig"] = "PIGNAMES.",
 }
 
 local function do_possiblenames_postinit(prefab, strcode, override_table)
-    AddPrefabPostInit(prefab, function(inst)
-        if not TheWorld.ismastersim then
-            return
-        end
+	AddPrefabPostInit(prefab, function(inst)
+		if not TheWorld.ismastersim then
+			return
+		end
 
-        insert_possiblenames(override_table or inst.components.named.possiblenames, prefab, strcode)
-        rename_possiblenames(inst)
+		insert_possiblenames(override_table or inst.components.named.possiblenames, prefab, strcode)
+		rename_possiblenames(inst)
 
-        local onload = inst.OnLoad
-        inst.OnLoad = function(inst, data)
-            if onload then onload(inst, data) end
-            rename_possiblenames(inst)
-        end
-
-    end)
+		local onload = inst.OnLoad
+		inst.OnLoad = function(inst, data)
+			if onload then
+				onload(inst, data)
+			end
+			rename_possiblenames(inst)
+		end
+	end)
 end
 
 for prefab, strcode in pairs(possiblenames_prefabs) do
-    do_possiblenames_postinit(prefab, strcode)
+	do_possiblenames_postinit(prefab, strcode)
 end
 
 -- local override_moose_strings
 scheduler:ExecuteInTime(0, function()
-    local moose_languages = {"zh", "zht", "chs"}
-    for i = 1, #moose_languages do
-        if LanguageTranslator.defaultlang == moose_languages[i] then
-            STRINGS.NAMES.MOOSE1        = "麋鹿鸭"
-            STRINGS.NAMES.MOOSE2        = "麋鹿鹅"
-            STRINGS.NAMES.MOOSEEGG1     = "麋鹿鸭蛋"
-            STRINGS.NAMES.MOOSEEGG2     = "麋鹿鹅蛋"
-            STRINGS.NAMES.MOOSENEST1    = "麋鹿鸭巢"
-            STRINGS.NAMES.MOOSENEST2    = "麋鹿鹅巢"
-            -- print("Moose Strings Hack!")
-        end
-    end
+	local moose_languages = { "zh", "zht", "chs" }
+	for i = 1, #moose_languages do
+		if LanguageTranslator.defaultlang == moose_languages[i] then
+			STRINGS.NAMES.MOOSE1 = "麋鹿鸭"
+			STRINGS.NAMES.MOOSE2 = "麋鹿鹅"
+			STRINGS.NAMES.MOOSEEGG1 = "麋鹿鸭蛋"
+			STRINGS.NAMES.MOOSEEGG2 = "麋鹿鹅蛋"
+			STRINGS.NAMES.MOOSENEST1 = "麋鹿鸭巢"
+			STRINGS.NAMES.MOOSENEST2 = "麋鹿鹅巢"
+			-- print("Moose Strings Hack!")
+		end
+	end
 end)
 
-do_possiblenames_postinit("mooseegg", "NAMES.MOOSEEGG", {STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"]})
-do_possiblenames_postinit("mooseegg", "NAMES.MOOSENEST", {STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"]})
+do_possiblenames_postinit("mooseegg", "NAMES.MOOSEEGG", { STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"] })
+do_possiblenames_postinit("mooseegg", "NAMES.MOOSENEST", { STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"] })
 
 -- Fix string hack after loading.
 AddPrefabPostInit("mooseegg", function(inst)
-    if not TheWorld.ismastersim then return end
-    local onloadpostpass = inst.OnLoadPostPass
-    inst.OnLoadPostPass = function(inst, ents, data, ...)
-        if onloadpostpass then
-            onloadpostpass(inst, ents, data, ...)
-        end
-        if data.has_egg and not data.EggHatched then
-            if inst.components.timer:TimerExists("HatchTimer") then
-                inst:DoTaskInTime(3 * FRAMES, function(inst)
-                    inst.components.named.possiblenames = {STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"]}
-                    rename_possiblenames(inst)
-                end)
-            end
-        else
-            inst:DoTaskInTime(3 * FRAMES, function(inst)
-                inst.components.named.possiblenames = {STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"]}
-                rename_possiblenames(inst)
-            end)
-        end
-    end
+	if not TheWorld.ismastersim then
+		return
+	end
+	local onloadpostpass = inst.OnLoadPostPass
+	inst.OnLoadPostPass = function(inst, ents, data, ...)
+		if onloadpostpass then
+			onloadpostpass(inst, ents, data, ...)
+		end
+		if data.has_egg and not data.EggHatched then
+			if inst.components.timer:TimerExists("HatchTimer") then
+				inst:DoTaskInTime(3 * FRAMES, function(inst)
+					inst.components.named.possiblenames = { STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"] }
+					rename_possiblenames(inst)
+				end)
+			end
+		else
+			inst:DoTaskInTime(3 * FRAMES, function(inst)
+				inst.components.named.possiblenames = { STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"] }
+				rename_possiblenames(inst)
+			end)
+		end
+	end
 end)
 
-
 AddPrefabPostInit("moose", function(inst)
-    if not TheWorld.ismastersim then return end
-    inst:DoTaskInTime(3 * FRAMES, function(inst)
-        inst.components.named.possiblenames = {STRINGS.NAMES["MOOSE1"], STRINGS.NAMES["MOOSE2"]}
-        rename_possiblenames(inst)
-    end)
+	if not TheWorld.ismastersim then
+		return
+	end
+	inst:DoTaskInTime(3 * FRAMES, function(inst)
+		inst.components.named.possiblenames = { STRINGS.NAMES["MOOSE1"], STRINGS.NAMES["MOOSE2"] }
+		rename_possiblenames(inst)
+	end)
 end)

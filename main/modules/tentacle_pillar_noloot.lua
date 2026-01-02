@@ -1,3 +1,3 @@
 GLOBAL.setfenv(1, GLOBAL)
 
-SetSharedLootTable("tentacle_pillar",{})
+SetSharedLootTable("tentacle_pillar", {})
