@@ -1,3 +1,4 @@
 .manifest
 .DS_Store
 dst_fixed.code-workspace
+.luarc.json
