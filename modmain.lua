@@ -84,7 +84,6 @@ local asscleaner = {
 	"dummytarget_dps",
 	"fix_staff_lunarplant",
 	-- "getmapaction_pos", -- Cancel for debugging.
-	"wx78_delay_remove_grueimmunity",
 }
 
 for _, v in ipairs(asscleaner) do
